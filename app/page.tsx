@@ -1,93 +1,173 @@
 "use client";
 
-import { BarChart3, LineChart, TrendingDown, TrendingUp } from "lucide-react";
+import { ExternalLink, Smartphone } from "lucide-react";
 import { useState } from "react";
-import SalesChart from "@/components/SalesChart";
-import SalesLineChart from "@/components/SalesLineChart";
 
-export default function Home() {
-	const [chartType, setChartType] = useState<"bar" | "line">("bar");
+const MOBILE_RATIOS = [
+	{ name: "iPhone X", width: 375, height: 812 },
+	{ name: "Pixel 7", width: 412, height: 915 },
+	{ name: "iPhone 14 Pro Max", width: 430, height: 932 },
+	{ name: "Galaxy S20 Ultra", width: 412, height: 915 },
+];
+
+export default function GalleryPage() {
+	const [selectedRatio, setSelectedRatio] = useState(MOBILE_RATIOS[0]);
 
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 dark:bg-black p-4 sm:p-8 relative overflow-hidden">
-			{/* Background decoration */}
-			<div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-violet-50 to-transparent dark:from-violet-950/20 dark:to-transparent -z-10" />
-
-			<div className="w-full max-w-lg space-y-8 z-10">
-				<div className="text-center space-y-2">
-					<div className="inline-flex items-center justify-center p-1 bg-white dark:bg-zinc-900 rounded-full shadow-sm mb-4 border border-zinc-100 dark:border-zinc-800">
-						<button
-							type="button"
-							onClick={() => setChartType("bar")}
-							className={`
-                flex items-center gap-2 px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200
-                ${
-									chartType === "bar"
-										? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-sm"
-										: "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
-								}
-              `}
-						>
-							<BarChart3 className="w-3.5 h-3.5" />
-							Daily Sales
-						</button>
-						<button
-							type="button"
-							onClick={() => setChartType("line")}
-							className={`
-                flex items-center gap-2 px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200
-                ${
-									chartType === "line"
-										? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-sm"
-										: "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
-								}
-              `}
-						>
-							<LineChart className="w-3.5 h-3.5" />
-							Fruit Trends
-						</button>
-					</div>
-					<h1 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-						Sales Dashboard
-					</h1>
-					<p className="text-lg text-zinc-500 dark:text-zinc-400">
-						Performance overview for this week
-					</p>
-				</div>
-
-				<div className="transition-all duration-300 ease-in-out">
-					{chartType === "bar" ? <SalesChart /> : <SalesLineChart />}
-				</div>
-
-				<div className="grid grid-cols-2 gap-4">
-					<div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 transition-transform hover:scale-[1.02]">
-						<div className="flex items-center justify-between mb-2">
-							<div className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-								Apple Sales
-							</div>
-							<div className="p-1.5 bg-violet-100 dark:bg-violet-900/30 rounded-lg">
-								<TrendingDown className="w-4 h-4 text-violet-600 dark:text-violet-400" />
-							</div>
-						</div>
-						<div className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-							705
-						</div>
-						<div className="text-xs text-zinc-500 mt-1">-12% vs last week</div>
+		<main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-8 font-sans">
+			<div className="max-w-7xl mx-auto space-y-8">
+				{/* Header */}
+				<div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+					<div>
+						<h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+							Mobile Visualization Gallery
+						</h1>
+						<p className="text-zinc-500 dark:text-zinc-400 mt-1">
+							Preview mobile-optimized charts across different device ratios.
+						</p>
 					</div>
 
-					<div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 transition-transform hover:scale-[1.02]">
-						<div className="flex items-center justify-between mb-2">
-							<div className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-								Banana Sales
-							</div>
-							<div className="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
-								<TrendingUp className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+					<div className="flex items-center gap-3 bg-white dark:bg-zinc-900 p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm">
+						<Smartphone className="w-5 h-5 text-zinc-500" />
+						<select
+							value={selectedRatio.name}
+							onChange={(e) => {
+								const ratio = MOBILE_RATIOS.find(
+									(r) => r.name === e.target.value,
+								);
+								if (ratio) setSelectedRatio(ratio);
+							}}
+							className="bg-transparent border-none text-sm font-medium text-zinc-900 dark:text-zinc-100 focus:ring-0 cursor-pointer"
+						>
+							{MOBILE_RATIOS.map((ratio) => (
+								<option key={ratio.name} value={ratio.name}>
+									{ratio.name} ({ratio.width}x{ratio.height})
+								</option>
+							))}
+						</select>
+					</div>
+				</div>
+
+				{/* Gallery Grid */}
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+					{/* Bar Chart Card */}
+					<div className="space-y-4">
+						<div className="flex items-center justify-between">
+							<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+								Daily Sales (Bar Chart)
+							</h2>
+							<a
+								href="/apple-banana.svg"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
+							>
+								Original SVG
+								<ExternalLink className="w-3 h-3" />
+							</a>
+						</div>
+
+						<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
+							<div
+								className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
+								style={{
+									width: selectedRatio.width,
+									height: selectedRatio.height,
+									transform: "scale(0.8)", // Scale down slightly to fit better
+									transformOrigin: "top center",
+									marginBottom: -selectedRatio.height * 0.2, // Compensate for scale
+								}}
+							>
+								{/* Notch */}
+								<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
+
+								<iframe
+									src="/preview/bar"
+									className="w-full h-full border-none bg-white dark:bg-black"
+									title="Bar Chart Preview"
+								/>
 							</div>
 						</div>
-						<div className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-							1,025
+					</div>
+
+					{/* Line Chart Card */}
+					<div className="space-y-4">
+						<div className="flex items-center justify-between">
+							<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+								Fruit Trends (Line Chart)
+							</h2>
+							<a
+								href="/Fruit Sales Line Chart.svg"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
+							>
+								Original SVG
+								<ExternalLink className="w-3 h-3" />
+							</a>
 						</div>
-						<div className="text-xs text-zinc-500 mt-1">+8% vs last week</div>
+
+						<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
+							<div
+								className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
+								style={{
+									width: selectedRatio.width,
+									height: selectedRatio.height,
+									transform: "scale(0.8)", // Scale down slightly to fit better
+									transformOrigin: "top center",
+									marginBottom: -selectedRatio.height * 0.2, // Compensate for scale
+								}}
+							>
+								{/* Notch */}
+								<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
+
+								<iframe
+									src="/preview/line"
+									className="w-full h-full border-none bg-white dark:bg-black"
+									title="Line Chart Preview"
+								/>
+							</div>
+						</div>
+					</div>
+
+					{/* Pie Chart Card */}
+					<div className="space-y-4">
+						<div className="flex items-center justify-between">
+							<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+								Fruit Distribution (Pie Chart)
+							</h2>
+							<a
+								href="/Fruit Sales Pie Chart.svg"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
+							>
+								Original SVG
+								<ExternalLink className="w-3 h-3" />
+							</a>
+						</div>
+
+						<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
+							<div
+								className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
+								style={{
+									width: selectedRatio.width,
+									height: selectedRatio.height,
+									transform: "scale(0.8)", // Scale down slightly to fit better
+									transformOrigin: "top center",
+									marginBottom: -selectedRatio.height * 0.2, // Compensate for scale
+								}}
+							>
+								{/* Notch */}
+								<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
+
+								<iframe
+									src="/preview/pie"
+									className="w-full h-full border-none bg-white dark:bg-black"
+									title="Pie Chart Preview"
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
