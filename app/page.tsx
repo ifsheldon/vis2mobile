@@ -1,7 +1,13 @@
-import { TrendingDown, TrendingUp } from "lucide-react";
+"use client";
+
+import { BarChart3, LineChart, TrendingDown, TrendingUp } from "lucide-react";
+import { useState } from "react";
 import SalesChart from "@/components/SalesChart";
+import SalesLineChart from "@/components/SalesLineChart";
 
 export default function Home() {
+	const [chartType, setChartType] = useState<"bar" | "line">("bar");
+
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 dark:bg-black p-4 sm:p-8 relative overflow-hidden">
 			{/* Background decoration */}
@@ -9,10 +15,37 @@ export default function Home() {
 
 			<div className="w-full max-w-lg space-y-8 z-10">
 				<div className="text-center space-y-2">
-					<div className="inline-flex items-center justify-center p-2 bg-white dark:bg-zinc-900 rounded-full shadow-sm mb-4 border border-zinc-100 dark:border-zinc-800">
-						<span className="text-xs font-medium px-2 text-zinc-600 dark:text-zinc-400">
-							Weekly Report
-						</span>
+					<div className="inline-flex items-center justify-center p-1 bg-white dark:bg-zinc-900 rounded-full shadow-sm mb-4 border border-zinc-100 dark:border-zinc-800">
+						<button
+							type="button"
+							onClick={() => setChartType("bar")}
+							className={`
+                flex items-center gap-2 px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200
+                ${
+									chartType === "bar"
+										? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-sm"
+										: "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
+								}
+              `}
+						>
+							<BarChart3 className="w-3.5 h-3.5" />
+							Daily Sales
+						</button>
+						<button
+							type="button"
+							onClick={() => setChartType("line")}
+							className={`
+                flex items-center gap-2 px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200
+                ${
+									chartType === "line"
+										? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-sm"
+										: "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
+								}
+              `}
+						>
+							<LineChart className="w-3.5 h-3.5" />
+							Fruit Trends
+						</button>
 					</div>
 					<h1 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
 						Sales Dashboard
@@ -22,7 +55,9 @@ export default function Home() {
 					</p>
 				</div>
 
-				<SalesChart />
+				<div className="transition-all duration-300 ease-in-out">
+					{chartType === "bar" ? <SalesChart /> : <SalesLineChart />}
+				</div>
 
 				<div className="grid grid-cols-2 gap-4">
 					<div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 transition-transform hover:scale-[1.02]">
