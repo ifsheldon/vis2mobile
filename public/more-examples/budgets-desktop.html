@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="icon" type="image/png" href="image/cicero-icon-32x32.png" sizes="16x16" />
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <style>
+    html,
+    body,
+    div,
+    input,
+    span,
+    textarea,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    svg,
+    text {
+      font-family: "Arial", sans-serif !important;
+    }
+
+    pre.code {
+      white-space: pre-wrap;
+      font-size: 12px;
+    }
+
+    pre.code::before {
+      counter-reset: listing;
+    }
+
+    pre.code code {
+      counter-increment: listing;
+    }
+
+    pre.code code::before {
+      content: counter(listing);
+      display: inline-block;
+      width: 2.5em;
+      /* now works */
+      padding-left: auto;
+      /* now works */
+      margin-left: auto;
+      /* now works */
+      text-align: left;
+      /* now works */
+      color: #aaaaaa;
+    }
+
+    pre.code annotate {
+      color: #00aa00;
+      padding-left: 1em;
+    }
+
+    #fronto-view,
+    .fronto-view-transform {
+      border-radius: .25rem;
+      background-color: white;
+      overflow: scroll;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      width: fit-content;
+      padding-left: 20px;
+      padding-right: 20px;
+      border: 1px solid rgba(0, 0, 0, .125);
+    }
+
+    .card-header {
+      font-size: 0.8rem;
+    }
+
+    .card-header strong {
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 pt-3">
+        <div class="card collapse" id="desktop-view-spec">
+          <div class="card-body pb-0">
+            <pre class="code">
+<code>{</code>
+<code>  "name": "budgets",</code><annotate>// name of the view</annotate>
+<code>  "layout": {</code><annotate>// layout object</annotate>
+<code>    "composition": "single",</code><annotate>// single view composition</annotate>
+<code>    "width": 750,</code><annotate>// the width of the entire view</annotate>
+<code>    "height": 280,</code><annotate>// the height of the entire view</annotate>
+<code>    "row": [</code><annotate>// row shelf</annotate>
+<code>      {</code><annotate>// first row element</annotate>
+<code>        "field": "sector",</code><annotate>// field name</annotate>
+<code>        "sort": {</code><annotate>// sort by</annotate>
+<code>          "order": [</code><annotate>// a specific order</annotate>
+<code>            "Small-business aid",</code>
+<code>            "Other measures",</code>
+<code>            "Business tax breaks",</code>
+<code>            "Stimulus checks",</code>
+<code>            "Health care",</code>
+<code>            "Unemployment benefits",</code>
+<code>            "State and local aid",</code>
+<code>            "Safety net and other tax cuts"</code>
+<code>          ]</code>
+<code>        }</code>
+<code>      }</code>
+<code>    ],</code>
+<code>    "column": [</code><annotate>// column shelf</annotate>
+<code>      {</code><annotate>// the irst column element</annotate>
+<code>        "field": "plan",</code><annotate>// field name</annotate>
+<code>        "sort": {</code><annotate>// sort by</annotate>
+<code>          "order": [</code><annotate>// a specific order</annotate>
+<code>            "Republican plan",</code>
+<code>            "Already passed",</code>
+<code>            "Democratic plan"</code>
+<code>          ]</code>
+<code>        }</code>
+<code>      },</code>
+<code>      "amount"</code><annotate>// the second column element (just by name)</annotate>
+<code>    ]</code>
+<code>  },</code>
+<code>  "layer": [</code><annotate>// layers</annotate>
+<code>    {</code><annotate>// the first layer</annotate>
+<code>      "mark": {</code><annotate>// mark type and properties</annotate>
+<code>        "type": "bar",</code><annotate>// mark type</annotate>
+<code>        "color": {</code><annotate>// mark color (fill) property</annotate>
+<code>          "field": "plan",</code><annotate>// providing a field name makes an encoding channel</annotate>
+<code>          "scale": {</code><annotate>// encoding scale details</annotate>
+<code>            "domain": [</code><annotate>// domain order</annotate>
+<code>              "Republican plan",</code>
+<code>              "Already passed",</code>
+<code>              "Democratic plan"</code>
+<code>            ],</code>
+<code>            "range": [</code><annotate>// mannual range (color) value</annotate>
+<code>              "pink",</code>
+<code>              "lightgray",</code>
+<code>              "skyblue"</code>
+<code>            ]</code>
+<code>          }</code>
+<code>        },</code>
+<code>        "stroke": {</code><annotate>// mark stroke color property</annotate>
+<code>          "field": "plan",</code><annotate>// details are as same as the color channel</annotate>
+<code>          "scale": {</code>
+<code>            "domain": [</code>
+<code>              "Republican plan",</code>
+<code>              "Already passed",</code>
+<code>              "Democratic plan"</code>
+<code>            ],</code>
+<code>            "range": [</code>
+<code>              "lightcoral",</code>
+<code>              "gray",</code>
+<code>              "dodgerblue"</code>
+<code>            ]</code>
+<code>          }</code>
+<code>        }</code>
+<code>      },</code>
+<code>      "text": [</code><annotate>// text elements</annotate>
+<code>        {</code><annotate>// the first text element</annotate>
+<code>          "type": "on-axis",</code><annotate>// axis labels; maps to the horizontal axis header</annotate>
+<code>          "field": "plan",</code><annotate>// field of the axis</annotate>
+<code>          "anchor": "start",</code><annotate>// text element anchoring (reference for positioning)</annotate>
+<code>          "padding": 30,</code><annotate>// offset from the visualization elements</annotate>
+<code>          "items": [</code><annotate>// text items, each item = each row</annotate>
+<code>            {</code><annotate>// the first text item, style details</annotate>
+<code>              "align": "left",</code>
+<code>              "fontSize": 14,</code>
+<code>              "fontWeight": "700"</code>
+<code>            },</code>
+<code>            {</code><annotate>// the second text item, style details</annotate>
+<code>              "expression": "'$' + round(sum('amount') / 1000, 1) + ' trillion'",</code><annotate>// particular expression (summary statistics--sum for 'amount' field) with text formatting</annotate>
+<code>              "align": "left",</code>
+<code>              "fontSize": 12,</code>
+<code>              "fontWeight": "100"</code>
+<code>            }</code>
+<code>          ]</code>
+<code>        },</code>
+<code>        {</code><annotate>// the second text element</annotate>
+<code>          "type": "on-axis",</code><annotate>// axis labels</annotate>
+<code>          "field": "sector",</code><annotate>// field of the axis; maps to the vertical axis</annotate>
+<code>          "padding": 10,</code><annotate>// offset from the visualization elements</annotate>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "width": 100,</code>
+<code>              "fontSize": 14,</code>
+<code>              "fontWeight": 100,</code>
+<code>              "align": "left"</code>
+<code>            }</code>
+<code>          ]</code>
+<code>        },</code>
+<code>        {</code><annotate>// the third text elements</annotate>
+<code>          "type": "on-mark",</code><annotate>// mark labels</annotate>
+<code>          "field": "amount",</code><annotate>// field; for mark labels, it's reference field for label values</annotate>
+<code>          "orient": "middle-right",</code><annotate>// reference point to the mark objects</annotate>
+<code>          "width": 85,</code><annotate>// Set the width of each mark label</annotate>
+<code>          "dx": 5,</code><annotate>x position translate value</annotate>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontSize": 13,</code>
+<code>              "fontWeight": 200,</code>
+<code>              "color": "#333333",</code>
+<code>              "expression": "(isFirst('sector', datum) ? '$' + format(datum.value, ',d') + ' billion' : format(datum.value, ',d'))"</code><annotate>// if it is the first item in terms of 'sector' field, then it has format of $,d billion; otherwise just ,d number format</annotate>
+<code>            }</code>
+<code>          ],</code>
+<code>          "conditions": [</code><annotate>// special conditions</annotate>
+<code>            {</code>
+<code>              "data": {</code><annotate>// for the specified data point</annotate>
+<code>                "plan": "Already passed",</code>
+<code>                "amount": 1010</code>
+<code>              },</code>
+<code>              "options": {</code><annotate>// change the following values</annotate>
+<code>                "orient": "middle-left",</code><annotate>// reference point to the mark object</annotate>
+<code>                "anchor": {</code>
+<code>                  "anchorAlign": "end"</code><annotate>// reference point from the text object</annotate>
+<code>                },</code>
+<code>                "dx": -5</code><annotate>// x position translate value</annotate>
+<code>              }</code>
+<code>            }</code>
+<code>          ]</code>
+<code>        }</code>
+<code>      ]</code>
+<code>    }</code>
+<code>  ],</code>
+<code>  "data": [</code><annotate>// dataset for the visualization</annotate>
+<code>    {</code>
+<code>      "sector": "Small-business aid",</code>
+<code>      "amount": 200,</code>
+<code>      "plan": "Republican plan",</code>
+<code>      "special_label": true</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Small-business aid",</code>
+<code>      "amount": 1010,</code>
+<code>      "plan": "Already passed",</code>
+<code>      "special_label": true</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Small-business aid",</code>
+<code>      "amount": 0,</code>
+<code>      "plan": "Democratic plan",</code>
+<code>      "special_label": true</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Other measures",</code>
+<code>      "amount": 81,</code>
+<code>      "plan": "Republican plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Other measures",</code>
+<code>      "amount": 627,</code>
+<code>      "plan": "Already passed"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Other measures",</code>
+<code>      "amount": 302,</code>
+<code>      "plan": "Democratic plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Business tax breaks",</code>
+<code>      "amount": 203,</code>
+<code>      "plan": "Republican plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Business tax breaks",</code>
+<code>      "amount": 346,</code>
+<code>      "plan": "Already passed"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Business tax breaks",</code>
+<code>      "amount": 36,</code>
+<code>      "plan": "Democratic plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Stimulus checks",</code>
+<code>      "amount": 300,</code>
+<code>      "plan": "Republican plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Stimulus checks",</code>
+<code>      "amount": 293,</code>
+<code>      "plan": "Already passed"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Stimulus checks",</code>
+<code>      "amount": 436,</code>
+<code>      "plan": "Democratic plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Health care",</code>
+<code>      "amount": 111,</code>
+<code>      "plan": "Republican plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Health care",</code>
+<code>      "amount": 277,</code>
+<code>      "plan": "Already passed"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Health care",</code>
+<code>      "amount": 382,</code>
+<code>      "plan": "Democratic plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Unemployment benefits",</code>
+<code>      "amount": 110,</code>
+<code>      "plan": "Republican plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Unemployment benefits",</code>
+<code>      "amount": 274,</code>
+<code>      "plan": "Already passed"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Unemployment benefits",</code>
+<code>      "amount": 437,</code>
+<code>      "plan": "Democratic plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "State and local aid",</code>
+<code>      "amount": 105,</code>
+<code>      "plan": "Republican plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "State and local aid",</code>
+<code>      "amount": 256,</code>
+<code>      "plan": "Already passed"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "State and local aid",</code>
+<code>      "amount": 1118,</code>
+<code>      "plan": "Democratic plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Safety net and other tax cuts",</code>
+<code>      "amount": 18,</code>
+<code>      "plan": "Republican plan"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Safety net and other tax cuts",</code>
+<code>      "amount": 83,</code>
+<code>      "plan": "Already passed"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "sector": "Safety net and other tax cuts",</code>
+<code>      "amount": 736,</code>
+<code>      "plan": "Democratic plan"</code>
+<code>    }</code>
+<code>  ]</code>
+<code>}</code>
+</pre>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 pt-3">
+        <div id="fronto-view" class="mb-3" style="position: relative; width: 860px; height: 385px">
+          <div id="title-budgets" data-role="fronto-title">
+            <div style="position: relative; font-size: 14px;"></div>
+          </div>
+          <div id="view-budgets" data-role="fronto-view" class="vega-embed"
+            style="left: 48%; transform: translate(-50%); position:absolute;">
+            <div class="chart-wrapper" role="graphics-document" aria-roledescription="visualization"
+              aria-label="Vega visualization" style="cursor: default; position: relative;"><svg
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                class="marks" width="822" height="348" viewBox="0 0 822 348" style="background-color: white;">
+                <g fill="none" stroke-miterlimit="10" transform="translate(205,63)">
+                  <g class="mark-group role-frame root" role="graphics-object"
+                    aria-roledescription="group mark container">
+                    <g transform="translate(0,0)">
+                      <path class="background" aria-hidden="true" d="M0,0h0v0h0Z"></path>
+                      <g>
+                        <g class="mark-group role-row-header budgets_row_header" role="graphics-object"
+                          aria-roledescription="group mark container">
+                          <g transform="translate(-1,0)">
+                            <path class="background" aria-hidden="true" d="M0,0h0v280h0Z"></path>
+                            <g>
+                              <g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis"
+                                aria-label="Y-axis for a discrete scale with 8 values: Small-business aid, Other measures, Business tax breaks, Stimulus checks, Health care, ending with Safety net and other tax cuts">
+                                <g transform="translate(0.5,0.5)">
+                                  <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none">
+                                  </path>
+                                  <g>
+                                    <g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="end"
+                                        transform="translate(-10,21)" font-family="sans-serif" font-size="14px"
+                                        fill="#000" fill-opacity="0.5" opacity="0">$-y-n80441!@@@@@@@…</text><text
+                                        text-anchor="end" transform="translate(-10,56)" font-family="sans-serif"
+                                        font-size="14px" fill="#000" fill-opacity="0.5"
+                                        opacity="0">$-y-n14499!@@@@@@@…</text><text text-anchor="end"
+                                        transform="translate(-10,91)" font-family="sans-serif" font-size="14px"
+                                        fill="#000" fill-opacity="0.5" opacity="0">$-y-p93713!@@@@@@@…</text><text
+                                        text-anchor="end" transform="translate(-10,126)" font-family="sans-serif"
+                                        font-size="14px" fill="#000" fill-opacity="0.5"
+                                        opacity="0">$-y-p23155!@@@@@@@…</text><text text-anchor="end"
+                                        transform="translate(-10,161)" font-family="sans-serif" font-size="14px"
+                                        fill="#000" fill-opacity="0.5" opacity="0">$-y-n27222!@@@@@@@…</text><text
+                                        text-anchor="end" transform="translate(-10,196)" font-family="sans-serif"
+                                        font-size="14px" fill="#000" fill-opacity="0.5"
+                                        opacity="0">$-y-n81124!@@@@@@@…</text><text text-anchor="end"
+                                        transform="translate(-10,231)" font-family="sans-serif" font-size="14px"
+                                        fill="#000" fill-opacity="0.5" opacity="0">$-y-p93284!@@@@@@@…</text><text
+                                        text-anchor="end" transform="translate(-10,266)" font-family="sans-serif"
+                                        font-size="14px" fill="#000" fill-opacity="0.5"
+                                        opacity="0">$-y-n61435!@@@@@@@…</text></g>
+                                  </g>
+                                  <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                                  </path>
+                                </g>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                        </g>
+                        <g class="mark-group role-column-header budgets_column_header" role="graphics-object"
+                          aria-roledescription="group mark container">
+                          <g transform="translate(0,0)">
+                            <path class="background" aria-hidden="true" d="M0,0h190v0h-190Z"></path>
+                            <g>
+                              <g class="mark-group role-title">
+                                <g transform="translate(0,-44)">
+                                  <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none">
+                                  </path>
+                                  <g>
+                                    <g class="mark-text role-title-text" role="graphics-symbol"
+                                      aria-roledescription="title" aria-label="Title text '$-c-n42284!@@'"
+                                      pointer-events="none"><text text-anchor="start" transform="translate(0,-3)"
+                                        font-family="sans-serif" font-size="14px" fill="#000"
+                                        opacity="0">$-c-n42284!@@</text></g>
+                                  </g>
+                                  <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                                  </path>
+                                </g>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                          <g transform="translate(211,0)">
+                            <path class="background" aria-hidden="true" d="M0,0h190v0h-190Z"></path>
+                            <g>
+                              <g class="mark-group role-title">
+                                <g transform="translate(0,-44)">
+                                  <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none">
+                                  </path>
+                                  <g>
+                                    <g class="mark-text role-title-text" role="graphics-symbol"
+                                      aria-roledescription="title" aria-label="Title text '$-c-p4856!@@'"
+                                      pointer-events="none"><text text-anchor="start" transform="translate(0,-3)"
+                                        font-family="sans-serif" font-size="14px" fill="#000"
+                                        opacity="0">$-c-p4856!@@</text></g>
+                                  </g>
+                                  <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                                  </path>
+                                </g>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                          <g transform="translate(422,0)">
+                            <path class="background" aria-hidden="true" d="M0,0h190v0h-190Z"></path>
+                            <g>
+                              <g class="mark-group role-title">
+                                <g transform="translate(0,-44)">
+                                  <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none">
+                                  </path>
+                                  <g>
+                                    <g class="mark-text role-title-text" role="graphics-symbol"
+                                      aria-roledescription="title" aria-label="Title text '$-c-n69470!@@'"
+                                      pointer-events="none"><text text-anchor="start" transform="translate(0,-3)"
+                                        font-family="sans-serif" font-size="14px" fill="#000"
+                                        opacity="0">$-c-n69470!@@</text></g>
+                                  </g>
+                                  <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                                  </path>
+                                </g>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                        </g>
+                        <g class="mark-group role-column-footer budgets_column_footer" role="graphics-object"
+                          aria-roledescription="group mark container">
+                          <g transform="translate(0,280)">
+                            <path class="background" aria-hidden="true" d="M0,0h190v0h-190Z"></path>
+                            <g>
+                              <g class="mark-group role-axis">
+                                <g transform="translate(0.5,0.5)">
+                                  <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none">
+                                  </path>
+                                  <g></g>
+                                  <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                                  </path>
+                                </g>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                          <g transform="translate(211,280)">
+                            <path class="background" aria-hidden="true" d="M0,0h190v0h-190Z"></path>
+                            <g>
+                              <g class="mark-group role-axis">
+                                <g transform="translate(0.5,0.5)">
+                                  <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none">
+                                  </path>
+                                  <g></g>
+                                  <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                                  </path>
+                                </g>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                          <g transform="translate(422,280)">
+                            <path class="background" aria-hidden="true" d="M0,0h190v0h-190Z"></path>
+                            <g>
+                              <g class="mark-group role-axis">
+                                <g transform="translate(0.5,0.5)">
+                                  <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none">
+                                  </path>
+                                  <g></g>
+                                  <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                                  </path>
+                                </g>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                        </g>
+                        <g class="mark-group role-scope budgets_cell" role="graphics-object"
+                          aria-roledescription="group mark container">
+                          <g transform="translate(0,0)">
+                            <path class="background" aria-hidden="true" d="M0,0h190v280h-190Z" fill="transparent">
+                            </path>
+                            <g>
+                              <g class="mark-rect role-mark budgets_child_marks" role="graphics-object"
+                                aria-roledescription="rect mark container">
+                                <path aria-label="amount: 200; sector: Small-business aid; plan: Republican plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,1.75h31.666666666666664v31.5h-31.666666666666664Z" fill="pink"
+                                  stroke="lightcoral"></path>
+                                <path aria-label="amount: 81; sector: Other measures; plan: Republican plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,36.75h12.825000000000001v31.5h-12.825000000000001Z" fill="pink"
+                                  stroke="lightcoral"></path>
+                                <path aria-label="amount: 203; sector: Business tax breaks; plan: Republican plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,71.75h32.141666666666666v31.5h-32.141666666666666Z" fill="pink"
+                                  stroke="lightcoral"></path>
+                                <path aria-label="amount: 300; sector: Stimulus checks; plan: Republican plan"
+                                  role="graphics-symbol" aria-roledescription="bar" d="M0,106.75h47.5v31.5h-47.5Z"
+                                  fill="pink" stroke="lightcoral"></path>
+                                <path aria-label="amount: 111; sector: Health care; plan: Republican plan"
+                                  role="graphics-symbol" aria-roledescription="bar" d="M0,141.75h17.575v31.5h-17.575Z"
+                                  fill="pink" stroke="lightcoral"></path>
+                                <path aria-label="amount: 110; sector: Unemployment benefits; plan: Republican plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,176.75h17.416666666666664v31.5h-17.416666666666664Z" fill="pink"
+                                  stroke="lightcoral"></path>
+                                <path aria-label="amount: 105; sector: State and local aid; plan: Republican plan"
+                                  role="graphics-symbol" aria-roledescription="bar" d="M0,211.75h16.625v31.5h-16.625Z"
+                                  fill="pink" stroke="lightcoral"></path>
+                                <path
+                                  aria-label="amount: 18; sector: Safety net and other tax cuts; plan: Republican plan"
+                                  role="graphics-symbol" aria-roledescription="bar" d="M0,246.75h2.85v31.5h-2.85Z"
+                                  fill="pink" stroke="lightcoral"></path>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                          <g transform="translate(211,0)">
+                            <path class="background" aria-hidden="true" d="M0,0h190v280h-190Z" fill="transparent">
+                            </path>
+                            <g>
+                              <g class="mark-rect role-mark budgets_child_marks" role="graphics-object"
+                                aria-roledescription="rect mark container">
+                                <path aria-label="amount: 1010; sector: Small-business aid; plan: Already passed"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,1.75h159.91666666666666v31.5h-159.91666666666666Z" fill="lightgray"
+                                  stroke="gray"></path>
+                                <path aria-label="amount: 627; sector: Other measures; plan: Already passed"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,36.75h99.27499999999999v31.5h-99.27499999999999Z" fill="lightgray"
+                                  stroke="gray"></path>
+                                <path aria-label="amount: 346; sector: Business tax breaks; plan: Already passed"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,71.75h54.78333333333333v31.5h-54.78333333333333Z" fill="lightgray"
+                                  stroke="gray"></path>
+                                <path aria-label="amount: 293; sector: Stimulus checks; plan: Already passed"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,106.75h46.391666666666666v31.5h-46.391666666666666Z" fill="lightgray"
+                                  stroke="gray"></path>
+                                <path aria-label="amount: 277; sector: Health care; plan: Already passed"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,141.75h43.858333333333334v31.5h-43.858333333333334Z" fill="lightgray"
+                                  stroke="gray"></path>
+                                <path aria-label="amount: 274; sector: Unemployment benefits; plan: Already passed"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,176.75h43.38333333333333v31.5h-43.38333333333333Z" fill="lightgray"
+                                  stroke="gray"></path>
+                                <path aria-label="amount: 256; sector: State and local aid; plan: Already passed"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,211.75h40.53333333333334v31.5h-40.53333333333334Z" fill="lightgray"
+                                  stroke="gray"></path>
+                                <path
+                                  aria-label="amount: 83; sector: Safety net and other tax cuts; plan: Already passed"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,246.75h13.141666666666667v31.5h-13.141666666666667Z" fill="lightgray"
+                                  stroke="gray"></path>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                          <g transform="translate(422,0)">
+                            <path class="background" aria-hidden="true" d="M0,0h190v280h-190Z" fill="transparent">
+                            </path>
+                            <g>
+                              <g class="mark-rect role-mark budgets_child_marks" role="graphics-object"
+                                aria-roledescription="rect mark container">
+                                <path aria-label="amount: 0; sector: Small-business aid; plan: Democratic plan"
+                                  role="graphics-symbol" aria-roledescription="bar" d="M0,1.75h0v31.5h0Z" fill="skyblue"
+                                  stroke="dodgerblue"></path>
+                                <path aria-label="amount: 302; sector: Other measures; plan: Democratic plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,36.75h47.81666666666666v31.5h-47.81666666666666Z" fill="skyblue"
+                                  stroke="dodgerblue"></path>
+                                <path aria-label="amount: 36; sector: Business tax breaks; plan: Democratic plan"
+                                  role="graphics-symbol" aria-roledescription="bar" d="M0,71.75h5.7v31.5h-5.7Z"
+                                  fill="skyblue" stroke="dodgerblue"></path>
+                                <path aria-label="amount: 436; sector: Stimulus checks; plan: Democratic plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,106.75h69.03333333333333v31.5h-69.03333333333333Z" fill="skyblue"
+                                  stroke="dodgerblue"></path>
+                                <path aria-label="amount: 382; sector: Health care; plan: Democratic plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,141.75h60.483333333333334v31.5h-60.483333333333334Z" fill="skyblue"
+                                  stroke="dodgerblue"></path>
+                                <path aria-label="amount: 437; sector: Unemployment benefits; plan: Democratic plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,176.75h69.19166666666668v31.5h-69.19166666666668Z" fill="skyblue"
+                                  stroke="dodgerblue"></path>
+                                <path aria-label="amount: 1118; sector: State and local aid; plan: Democratic plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,211.75h177.01666666666665v31.5h-177.01666666666665Z" fill="skyblue"
+                                  stroke="dodgerblue"></path>
+                                <path
+                                  aria-label="amount: 736; sector: Safety net and other tax cuts; plan: Democratic plan"
+                                  role="graphics-symbol" aria-roledescription="bar"
+                                  d="M0,246.75h116.53333333333333v31.5h-116.53333333333333Z" fill="skyblue"
+                                  stroke="dodgerblue"></path>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                          </g>
+                        </g>
+                      </g>
+                      <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+              <form class="vega-bindings"></form>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-0"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 237.667px; top: 80.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">$200 billion</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-1"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 491.917px; top: 80.5px; transform: translateX(-5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">$1,010 billion</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-2"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 628px; top: 80.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">$0 billion</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-3"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 218.825px; top: 115.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">81</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-4"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 516.275px; top: 115.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">627</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-5"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 675.817px; top: 115.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">302</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-6"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 238.142px; top: 150.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">203</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-7"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 471.783px; top: 150.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">346</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-8"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 633.7px; top: 150.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">36</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-9"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 253.5px; top: 185.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">300</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-10"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 463.392px; top: 185.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">293</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-11"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 697.033px; top: 185.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">436</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-12"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 223.575px; top: 220.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">111</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-13"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 460.858px; top: 220.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">277</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-14"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 688.483px; top: 220.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">382</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-15"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 223.417px; top: 255.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">110</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-16"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 460.383px; top: 255.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">274</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-17"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 697.192px; top: 255.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">437</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-18"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 222.625px; top: 290.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">105</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-19"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 457.533px; top: 290.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">256</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-20"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 805.017px; top: 290.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">1,118</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-21"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 208.85px; top: 325.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">18</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-22"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 430.142px; top: 325.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">83</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-amount-23"
+                style="display: block; box-sizing: border-box; width: 85px; height: auto; position: absolute; left: 744.533px; top: 325.5px; transform: translateX(5px) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; color: rgb(51, 51, 51); font-weight: 200;">736</div>
+              </annotation>
+            </div>
+            <replacement data-role="text-replacement" class="fronto-label-c"
+              style="position: absolute; line-height: 100%; top: 2px; left: 205px;">
+              <div class="$-c-n42284!@@">
+                <div style="font-size: 14px; font-weight: 700; text-align: left;">Republican plan</div>
+                <div style="font-size: 12px; font-weight: 100; text-align: left;">$1.1 trillion</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-c"
+              style="position: absolute; line-height: 100%; top: 2px; left: 416px;">
+              <div class="$-c-p4856!@@">
+                <div style="font-size: 14px; font-weight: 700; text-align: left;">Already passed</div>
+                <div style="font-size: 12px; font-weight: 100; text-align: left;">$3.2 trillion</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-c"
+              style="position: absolute; line-height: 100%; top: 2px; left: 627px;">
+              <div class="$-c-n69470!@@">
+                <div style="font-size: 14px; font-weight: 700; text-align: left;">Democratic plan</div>
+                <div style="font-size: 12px; font-weight: 100; text-align: left;">$3.4 trillion</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 77.5px; left: 194.5px;">
+              <div class="$-y-n80441!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@">
+                <div style="width: 180px; font-size: 14px; font-weight: 100; text-align: right;">Small-business aid
+                </div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 112.5px; left: 194.5px;">
+              <div class="$-y-n14499!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@">
+                <div style="width: 180px; font-size: 14px; font-weight: 100; text-align: right;">Other measures</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 147.5px; left: 194.5px;">
+              <div class="$-y-p93713!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@">
+                <div style="width: 180px; font-size: 14px; font-weight: 100; text-align: right;">Business tax breaks
+                </div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 182.5px; left: 194.5px;">
+              <div class="$-y-p23155!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@">
+                <div style="width: 180px; font-size: 14px; font-weight: 100; text-align: right;">Stimulus checks</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 217.5px; left: 194.5px;">
+              <div class="$-y-n27222!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@">
+                <div style="width: 180px; font-size: 14px; font-weight: 100; text-align: right;">Health care</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 252.5px; left: 194.5px;">
+              <div class="$-y-n81124!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@">
+                <div style="width: 180px; font-size: 14px; font-weight: 100; text-align: right;">Unemployment benefits
+                </div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 287.5px; left: 194.5px;">
+              <div class="$-y-p93284!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@">
+                <div style="width: 180px; font-size: 14px; font-weight: 100; text-align: right;">State and local aid
+                </div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 322.5px; left: 194.5px;">
+              <div class="$-y-n61435!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@">
+                <div style="width: 180px; font-size: 14px; font-weight: 100; text-align: right;">Safety net and other
+                  tax cuts</div>
+              </div>
+            </replacement>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
