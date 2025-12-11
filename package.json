@@ -8,7 +8,7 @@
 		"start": "next start",
 		"lint": "bunx biome lint --write",
 		"format": "bunx biome format --write",
-		"check": "bunx biome check"
+		"check": "bunx biome check --write"
 	},
 	"dependencies": {
 		"lucide-react": "^0.556.0",
