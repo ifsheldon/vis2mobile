@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="icon" type="image/png" href="image/cicero-icon-32x32.png" sizes="16x16" />
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <style>
+    html,
+    body,
+    div,
+    input,
+    span,
+    textarea,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    svg,
+    text {
+      font-family: "Arial", sans-serif !important;
+    }
+
+    pre.code {
+      white-space: pre-wrap;
+      font-size: 12px;
+    }
+
+    pre.code::before {
+      counter-reset: listing;
+    }
+
+    pre.code code {
+      counter-increment: listing;
+    }
+
+    pre.code code::before {
+      content: counter(listing);
+      display: inline-block;
+      width: 2.5em;
+      /* now works */
+      padding-left: auto;
+      /* now works */
+      margin-left: auto;
+      /* now works */
+      text-align: left;
+      /* now works */
+      color: #aaaaaa;
+    }
+
+    pre.code annotate {
+      color: #00aa00;
+      padding-left: 1em;
+    }
+
+    #fronto-view,
+    .fronto-view-transform {
+      border-radius: .25rem;
+      background-color: white;
+      overflow: scroll;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      width: fit-content;
+      padding-left: 20px;
+      padding-right: 20px;
+      border: 1px solid rgba(0, 0, 0, .125);
+    }
+
+    div[data-role=fronto-view] {
+      position: absolute;
+    }
+
+    .card-header {
+      font-size: 0.8rem;
+    }
+
+    .card-header strong {
+      font-weight: 500;
+    }
+  </style>
+  <title>Disaster Cost (Desktop → Mobile)</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 pt-3">
+        <div class="card collapse" id="desktop-view-spec">
+          <div class="card-body pb-0">
+            <pre class="code">
+<code>{</code>
+<code>  "name": "cost",</code>
+<code>  "layout": {</code>
+<code>    "composition": "single",</code><annotate>// single view composition</annotate>
+<code>    "width": 1024,</code>
+<code>    "height": 612,</code>
+<code>    "row": [</code><annotate>// row element</annotate>
+<code>      {</code>
+<code>        "field": "cost"</code>
+<code>      }</code>
+<code>    ],</code>
+<code>    "column": [</code><annotate>// column element</annotate>
+<code>      {</code>
+<code>        "field": "year",</code>
+<code>        "type": "ordinal"</code>
+<code>      }</code>
+<code>    ],</code>
+<code>    "vaxis": {</code><annotate>// vertical axis grid design</annotate>
+<code>      "grid": true,</code>
+<code>      "gridDash": [</code>
+<code>        2,</code>
+<code>        4</code>
+<code>      ]</code>
+<code>    }</code>
+<code>  },</code>
+<code>  "layer": [</code><annotate>// layers</annotate>
+<code>    {</code>
+<code>      "mark": {</code><annotate>// mark type and property</annotate>
+<code>        "type": "bar",</code><annotate>// bar mark</annotate>
+<code>        "color": {</code><annotate>// color-nominal</annotate>
+<code>          "field": "labeled",</code>
+<code>          "scale": {</code>
+<code>            "range": [</code>
+<code>              "#e3dcd1",</code>
+<code>              "crimson"</code>
+<code>            ]</code>
+<code>          }</code>
+<code>        },</code>
+<code>        "stroke": {</code><annotate>// static stroke color</annotate>
+<code>          "value": "white"</code>
+<code>        }</code>
+<code>      },</code>
+<code>      "text": [</code><annotate>// text elements</annotate>
+<code>        {</code>
+<code>          "type": "on-axis",</code><annotate>// axis label for 'cost' field, values 50, ..., 300</annotate>
+<code>          "field": "cost",</code>
+<code>          "values": [</code>
+<code>            50,</code>
+<code>            100,</code>
+<code>            150,</code>
+<code>            200,</code>
+<code>            250,</code>
+<code>            300</code>
+<code>          ],</code>
+<code>          "anchor": "start",</code>
+<code>          "orient": "left",</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "align": "right",</code>
+<code>              "fontSize": 14,</code>
+<code>              "fontWeight": 100,</code>
+<code>              "custom": {</code><annotate>// to express special format for the value of 300; can also use an expression</annotate>
+<code>                "300": "$300 billion"</code>
+<code>              },</code>
+<code>              "fill": "white"</code>
+<code>            }</code>
+<code>          ]</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-axis",</code><annotate>// axis label for 'year' field, values 1980, 1985, ..., 2015</annotate>
+<code>          "field": "year",</code>
+<code>          "values": [</code>
+<code>            "1980",</code>
+<code>            "1985",</code>
+<code>            "1990",</code>
+<code>            "1995",</code>
+<code>            "2000",</code>
+<code>            "2005",</code>
+<code>            "2010",</code>
+<code>            "2015"</code>
+<code>          ],</code>
+<code>          "angle": 0,</code><annotate>// To prevent rotation</annotate>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontSize": 14,</code>
+<code>              "fontWeight": 100,</code>
+<code>              "align": "center"</code>
+<code>            }</code>
+<code>          ],</code>
+<code>          "tick": {</code><annotate>// axis label tick</annotate>
+<code>            "ticks": true,</code>
+<code>            "offset": 3</code>
+<code>          }</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-mark",</code><annotate>// mark label for 'label' field</annotate>
+<code>          "field": "label",</code>
+<code>          "orient": "top-right",</code>
+<code>          "anchorAlign": "start",</code>
+<code>          "values": [</code>
+<code>            "Hurricane Katrina",</code>
+<code>            "Hurricane Maria",</code>
+<code>            "Hurricane Harvey",</code>
+<code>            "Hurricane Irma",</code>
+<code>            "California wildfires"</code>
+<code>          ],</code>
+<code>          "width": 120,</code>
+<code>          "dx": 10,</code>
+<code>          "dy": 10,</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontSize": 12,</code>
+<code>              "fontWeight": 100</code>
+<code>            },</code>
+<code>            {</code>
+<code>              "fontSize": 12,</code>
+<code>              "fontWeight": 700,</code>
+<code>              "expression": "('$' + datum.cost + ' billion')"</code>
+<code>            }</code>
+<code>          ]</code>
+<code>        }</code>
+<code>      ]</code>
+<code>    }</code>
+<code>  ],</code>
+<code>  "nondata": {</code><annotate>// non-data elements</annotate>
+<code>    "items": [</code>
+<code>      {</code>
+<code>        "type": "text",</code><annotate>// non-data annotation</annotate>
+<code>        "name": "in-title",</code>
+<code>        "x": 250,</code><annotate>// positioning</annotate>
+<code>        "y": 275,</code>
+<code>        "dx": "-50%",</code>
+<code>        "dy": "-50%",</code>
+<code>        "width": 180,</code><annotate>// sizing</annotate>
+<code>        "fill": "white",</code>
+<code>        "text": [</code>
+<code>          {</code>
+<code>            "text": "Total cost of major natural disasters",</code>
+<code>            "align": "center",</code>
+<code>            "fontSize": 14,</code>
+<code>            "fontWeight": 700,</code>
+<code>            "lineHeight": 130</code>
+<code>          },</code>
+<code>          {</code>
+<code>            "text": "For disasters causing more than $1 billion in losses",</code>
+<code>            "align": "center",</code>
+<code>            "fontSize": 13,</code>
+<code>            "lineHeight": 140</code>
+<code>          }</code>
+<code>        ]</code>
+<code>      }</code>
+<code>    ]</code>
+<code>  },</code>
+<code>  "data": [</code><annotate>// dataset for the visualization</annotate>
+<code>    {</code>
+<code>      "year": 1980,</code>
+<code>      "cost": 40,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 0</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1981,</code>
+<code>      "cost": 5,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 1</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1982,</code>
+<code>      "cost": 25,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 2</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1983,</code>
+<code>      "cost": 35,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 3</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1984,</code>
+<code>      "cost": 10,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 4</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1985,</code>
+<code>      "cost": 25,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 5</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1986,</code>
+<code>      "cost": 15,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 6</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1987,</code>
+<code>      "cost": 0,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 7</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1988,</code>
+<code>      "cost": 45,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 8</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1989,</code>
+<code>      "cost": 35,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 9</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1990,</code>
+<code>      "cost": 20,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 10</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1991,</code>
+<code>      "cost": 30,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 11</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1992,</code>
+<code>      "cost": 60,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 12</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1993,</code>
+<code>      "cost": 50,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 13</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1994,</code>
+<code>      "cost": 20,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 14</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1995,</code>
+<code>      "cost": 25,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 15</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1996,</code>
+<code>      "cost": 20,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 16</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1997,</code>
+<code>      "cost": 15,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 17</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1998,</code>
+<code>      "cost": 35,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 18</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 1999,</code>
+<code>      "cost": 30,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 19</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2000,</code>
+<code>      "cost": 20,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 20</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2001,</code>
+<code>      "cost": 30,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 21</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2002,</code>
+<code>      "cost": 25,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 22</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2003,</code>
+<code>      "cost": 35,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 23</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2004,</code>
+<code>      "cost": 75,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 24</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2005,</code>
+<code>      "cost": 161,</code>
+<code>      "labeled": true,</code>
+<code>      "label": "Hurricane Katrina",</code>
+<code>      "_index_": 25</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2005,</code>
+<code>      "cost": 60,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 26</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2006,</code>
+<code>      "cost": 30,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 27</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2007,</code>
+<code>      "cost": 25,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 28</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2008,</code>
+<code>      "cost": 75,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 29</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2009,</code>
+<code>      "cost": 25,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 30</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2010,</code>
+<code>      "cost": 25,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 31</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2011,</code>
+<code>      "cost": 75,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 32</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2012,</code>
+<code>      "cost": 125,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 33</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2013,</code>
+<code>      "cost": 40,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 34</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2014,</code>
+<code>      "cost": 30,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 35</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2015,</code>
+<code>      "cost": 40,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 36</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2016,</code>
+<code>      "cost": 45,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 37</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "cost": 125,</code>
+<code>      "labeled": true,</code>
+<code>      "label": "Hurricane Harvey",</code>
+<code>      "_index_": 38</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "cost": 90,</code>
+<code>      "labeled": true,</code>
+<code>      "label": "Hurricane Maria",</code>
+<code>      "_index_": 39</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "cost": 50,</code>
+<code>      "labeled": true,</code>
+<code>      "label": "Hurricane Irma",</code>
+<code>      "_index_": 40</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "cost": 18,</code>
+<code>      "labeled": true,</code>
+<code>      "label": "California wildfires",</code>
+<code>      "_index_": 41</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "cost": 25,</code>
+<code>      "labeled": false,</code>
+<code>      "_index_": 42</code>
+<code>    }</code>
+<code>  ]</code>
+<code>}</code>
+</pre>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 pt-3">
+        <div id="fronto-view" class="mb-3" style="position: relative; width: 1200px; height: 650px;">
+          <div id="title-cost" data-role="fronto-title">
+            <div style="position: relative; font-size: 14px;"></div>
+          </div>
+          <div id="view-cost" data-role="fronto-view" class="vega-embed"
+            style="position: absolute; left: 46%; transform: translate(-50%);">
+            <div class="chart-wrapper fit-x fit-y" role="graphics-document" aria-roledescription="visualization"
+              aria-label="Vega visualization" style="cursor: default; position: relative;"><svg
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                class="marks" width="1034" height="622" viewBox="0 0 1034 622" style="background-color: white;">
+                <g fill="none" stroke-miterlimit="10" transform="translate(78,23)">
+                  <g class="mark-group role-frame root" role="graphics-object"
+                    aria-roledescription="group mark container">
+                    <g transform="translate(0,0)">
+                      <path class="background" aria-hidden="true" d="M0,0h951v570h-951Z" fill="transparent"></path>
+                      <g>
+                        <g class="mark-group role-axis" aria-hidden="true">
+                          <g transform="translate(0.5,0.5)">
+                            <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path>
+                            <g>
+                              <g class="mark-rule role-axis-grid" pointer-events="none">
+                                <line transform="translate(0,475)" x2="951" y2="0" stroke="#ddd" stroke-width="1"
+                                  stroke-dasharray="2,4" opacity="1"></line>
+                                <line transform="translate(0,380)" x2="951" y2="0" stroke="#ddd" stroke-width="1"
+                                  stroke-dasharray="2,4" opacity="1"></line>
+                                <line transform="translate(0,285)" x2="951" y2="0" stroke="#ddd" stroke-width="1"
+                                  stroke-dasharray="2,4" opacity="1"></line>
+                                <line transform="translate(0,190)" x2="951" y2="0" stroke="#ddd" stroke-width="1"
+                                  stroke-dasharray="2,4" opacity="1"></line>
+                                <line transform="translate(0,95)" x2="951" y2="0" stroke="#ddd" stroke-width="1"
+                                  stroke-dasharray="2,4" opacity="1"></line>
+                                <line transform="translate(0,0)" x2="951" y2="0" stroke="#ddd" stroke-width="1"
+                                  stroke-dasharray="2,4" opacity="1"></line>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                            </path>
+                          </g>
+                        </g>
+                        <g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis"
+                          aria-label="X-axis for a discrete scale with 38 values: 1980, 1981, 1982, 1983, 1984, ending with 2017">
+                          <g transform="translate(0.5,573.5)">
+                            <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path>
+                            <g>
+                              <g class="mark-rule role-axis-tick" pointer-events="none">
+                                <line transform="translate(12,0)" x2="0" y2="5" stroke="#888" stroke-width="1"
+                                  opacity="1"></line>
+                                <line transform="translate(137,0)" x2="0" y2="5" stroke="#888" stroke-width="1"
+                                  opacity="1"></line>
+                                <line transform="translate(262,0)" x2="0" y2="5" stroke="#888" stroke-width="1"
+                                  opacity="1"></line>
+                                <line transform="translate(387,0)" x2="0" y2="5" stroke="#888" stroke-width="1"
+                                  opacity="1"></line>
+                                <line transform="translate(513,0)" x2="0" y2="5" stroke="#888" stroke-width="1"
+                                  opacity="1"></line>
+                                <line transform="translate(638,0)" x2="0" y2="5" stroke="#888" stroke-width="1"
+                                  opacity="1"></line>
+                                <line transform="translate(763,0)" x2="0" y2="5" stroke="#888" stroke-width="1"
+                                  opacity="1"></line>
+                                <line transform="translate(888,0)" x2="0" y2="5" stroke="#888" stroke-width="1"
+                                  opacity="1"></line>
+                              </g>
+                              <g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="middle"
+                                  transform="translate(12.013157894736823,18)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p16455</text><text text-anchor="middle"
+                                  transform="translate(137.14473684210526,18)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p16460</text><text text-anchor="middle"
+                                  transform="translate(262.2763157894737,18)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p16486</text><text text-anchor="middle"
+                                  transform="translate(387.4078947368421,18)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p16491</text><text text-anchor="middle"
+                                  transform="translate(512.5394736842105,18)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p37349</text><text text-anchor="middle"
+                                  transform="translate(637.671052631579,18)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p37354</text><text text-anchor="middle"
+                                  transform="translate(762.8026315789474,18)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p37380</text><text text-anchor="middle"
+                                  transform="translate(887.9342105263158,18)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p37385</text></g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                            </path>
+                          </g>
+                        </g>
+                        <g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis"
+                          aria-label="Y-axis for a linear scale with values from 0 to 300">
+                          <g transform="translate(0.5,0.5)">
+                            <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path>
+                            <g>
+                              <g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="end"
+                                  transform="translate(-2,479)" font-family="sans-serif" font-size="14px" fill="#000"
+                                  fill-opacity="0.5" opacity="0">$-y-p1691</text><text text-anchor="end"
+                                  transform="translate(-2,384.00000000000006)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-y-p48625</text><text text-anchor="end"
+                                  transform="translate(-2,289)" font-family="sans-serif" font-size="14px" fill="#000"
+                                  fill-opacity="0.5" opacity="0">$-y-p48780</text><text text-anchor="end"
+                                  transform="translate(-2,194.00000000000003)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-y-p49586</text><text text-anchor="end"
+                                  transform="translate(-2,98.99999999999999)" font-family="sans-serif" font-size="14px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-y-p49741</text><text text-anchor="end"
+                                  transform="translate(-2,4)" font-family="sans-serif" font-size="14px" fill="#000"
+                                  fill-opacity="0.5" opacity="0">$-y-p50547</text></g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                            </path>
+                          </g>
+                        </g>
+                        <g class="mark-rect role-mark mark_0_marks" role="graphics-object"
+                          aria-roledescription="rect mark container">
+                          <path aria-label="year: 1980; cost: 40; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M1.251315789473665,494h22.523684210526316v76h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1981; cost: 5; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M26.27763157894735,560.5h22.523684210526316v9.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1982; cost: 25; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M51.303947368421035,522.5h22.523684210526316v47.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1983; cost: 35; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M76.33026315789472,503.5h22.523684210526316v66.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1984; cost: 10; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M101.3565789473684,551h22.523684210526316v19h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1985; cost: 25; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M126.38289473684209,522.5h22.523684210526316v47.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1986; cost: 15; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M151.40921052631577,541.5h22.523684210526316v28.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1987; cost: 0; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M176.43552631578945,570h22.523684210526316v0h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1988; cost: 45; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M201.46184210526314,484.5h22.523684210526316v85.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1989; cost: 35; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M226.48815789473684,503.5h22.523684210526316v66.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1990; cost: 20; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M251.51447368421051,532h22.523684210526316v38h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1991; cost: 30; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M276.5407894736842,513h22.523684210526316v57h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1992; cost: 60; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M301.5671052631579,456h22.523684210526316v114h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1993; cost: 50; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M326.5934210526316,475h22.523684210526316v95h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1994; cost: 20; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M351.6197368421052,532h22.523684210526316v38h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1995; cost: 25; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M376.6460526315789,522.5h22.523684210526316v47.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1996; cost: 20; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M401.6723684210526,532h22.523684210526316v38h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1997; cost: 15; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M426.6986842105263,541.5h22.523684210526316v28.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 1998; cost: 35; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar" d="M451.725,503.5h22.523684210526316v66.5h-22.523684210526316Z"
+                            fill="#e3dcd1" stroke="white"></path>
+                          <path aria-label="year: 1999; cost: 30; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M476.75131578947367,513h22.523684210526316v57h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2000; cost: 20; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M501.77763157894736,532h22.523684210526316v38h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2001; cost: 30; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M526.8039473684211,513h22.523684210526316v57h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2002; cost: 25; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M551.8302631578947,522.5h22.523684210526316v47.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2003; cost: 35; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M576.8565789473685,503.5h22.523684210526316v66.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2004; cost: 75; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M601.8828947368421,427.5h22.523684210526316v142.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2005; cost: 161; labeled: true" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M626.9092105263157,264.1h22.523684210526316v305.9h-22.523684210526316Z" fill="crimson"
+                            stroke="white"></path>
+                          <path aria-label="year: 2005; cost: 60; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M626.9092105263157,150.1h22.523684210526316v114.00000000000003h-22.523684210526316Z"
+                            fill="#e3dcd1" stroke="white"></path>
+                          <path aria-label="year: 2006; cost: 30; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M651.9355263157895,513h22.523684210526316v57h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2007; cost: 25; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M676.9618421052631,522.5h22.523684210526316v47.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2008; cost: 75; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M701.9881578947368,427.5h22.523684210526316v142.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2009; cost: 25; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M727.0144736842105,522.5h22.523684210526316v47.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2010; cost: 25; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M752.0407894736842,522.5h22.523684210526316v47.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2011; cost: 75; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M777.0671052631579,427.5h22.523684210526316v142.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2012; cost: 125; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M802.0934210526316,332.49999999999994h22.523684210526316v237.50000000000006h-22.523684210526316Z"
+                            fill="#e3dcd1" stroke="white"></path>
+                          <path aria-label="year: 2013; cost: 40; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M827.1197368421052,494h22.523684210526316v76h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2014; cost: 30; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M852.146052631579,513h22.523684210526316v57h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2015; cost: 40; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M877.1723684210526,494h22.523684210526316v76h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2016; cost: 45; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M902.1986842105264,484.5h22.523684210526316v85.5h-22.523684210526316Z" fill="#e3dcd1"
+                            stroke="white"></path>
+                          <path aria-label="year: 2017; cost: 125; labeled: true" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M927.225,332.49999999999994h22.523684210526316v237.50000000000006h-22.523684210526316Z"
+                            fill="crimson" stroke="white"></path>
+                          <path aria-label="year: 2017; cost: 90; labeled: true" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M927.225,161.5h22.523684210526316v170.99999999999994h-22.523684210526316Z" fill="crimson"
+                            stroke="white"></path>
+                          <path aria-label="year: 2017; cost: 50; labeled: true" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M927.225,66.50000000000001h22.523684210526316v94.99999999999999h-22.523684210526316Z"
+                            fill="crimson" stroke="white"></path>
+                          <path aria-label="year: 2017; cost: 18; labeled: true" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M927.225,32.29999999999998h22.523684210526316v34.20000000000003h-22.523684210526316Z"
+                            fill="crimson" stroke="white"></path>
+                          <path aria-label="year: 2017; cost: 25; labeled: false" role="graphics-symbol"
+                            aria-roledescription="bar"
+                            d="M927.225,-15.19999999999997h22.523684210526316v47.49999999999996h-22.523684210526316Z"
+                            fill="#e3dcd1" stroke="white"></path>
+                        </g>
+                      </g>
+                      <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+              <form class="vega-bindings"></form>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-label-25"
+                style="display: block; box-sizing: border-box; width: 120px; height: auto; position: absolute; left: 728.433px; top: 286.1px; transform: translateX(10px) translateY(10px); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 12px; font-weight: 100;">Hurricane Katrina</div>
+                <div style="font-size: 12px; font-weight: 700;">$161 billion</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-label-38"
+                style="display: block; box-sizing: border-box; width: 120px; height: auto; position: absolute; left: 1028.75px; top: 354.5px; transform: translateX(10px) translateY(10px); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 12px; font-weight: 100;">Hurricane Harvey</div>
+                <div style="font-size: 12px; font-weight: 700;">$125 billion</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-label-39"
+                style="display: block; box-sizing: border-box; width: 120px; height: auto; position: absolute; left: 1028.75px; top: 183.5px; transform: translateX(10px) translateY(10px); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 12px; font-weight: 100;">Hurricane Maria</div>
+                <div style="font-size: 12px; font-weight: 700;">$90 billion</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-label-40"
+                style="display: block; box-sizing: border-box; width: 120px; height: auto; position: absolute; left: 1028.75px; top: 88.5px; transform: translateX(10px) translateY(10px); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 12px; font-weight: 100;">Hurricane Irma</div>
+                <div style="font-size: 12px; font-weight: 700;">$50 billion</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-label-41"
+                style="display: block; box-sizing: border-box; width: 120px; height: auto; position: absolute; left: 1028.75px; top: 54.3px; transform: translateX(10px) translateY(-10px); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 12px; font-weight: 100;">California wildfires</div>
+                <div style="font-size: 12px; font-weight: 700;">$18 billion</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="in-title"
+                style="display: block; box-sizing: border-box; width: 180px; height: auto; position: absolute; left: 250px; top: 275px; transform: translateX(-50%) translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="text-align: center; font-size: 14px; font-weight: 700; line-height: 130%;">Total cost of
+                  major natural disasters</div>
+                <div style="text-align: center; font-size: 13px; font-weight: 400; line-height: 140%;">For disasters
+                  causing more than $1 billion in losses</div>
+              </annotation>
+            </div>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 495.5px; left: 76.5px;">
+              <div class="$-y-p1691">
+                <div style="font-size: 14px; font-weight: 100; background-color: white; text-align: right;">50</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 400.5px; left: 76.5px;">
+              <div class="$-y-p48625">
+                <div style="font-size: 14px; font-weight: 100; background-color: white; text-align: right;">100</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 305.5px; left: 76.5px;">
+              <div class="$-y-p48780">
+                <div style="font-size: 14px; font-weight: 100; background-color: white; text-align: right;">150</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 210.5px; left: 76.5px;">
+              <div class="$-y-p49586">
+                <div style="font-size: 14px; font-weight: 100; background-color: white; text-align: right;">200</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 115.5px; left: 76.5px;">
+              <div class="$-y-p49741">
+                <div style="font-size: 14px; font-weight: 100; background-color: white; text-align: right;">250</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-y"
+              style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 20.5px; left: 76.5px;">
+              <div class="$-y-p50547">
+                <div style="font-size: 14px; font-weight: 100; background-color: white; text-align: right;">$300 billion
+                </div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 600.5px; left: 90.5132px;">
+              <div class="$-x-p16455" style="transform: rotate(0deg);">
+                <div style="font-size: 14px; font-weight: 100; text-align: center;">1980</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 600.5px; left: 215.645px;">
+              <div class="$-x-p16460" style="transform: rotate(0deg);">
+                <div style="font-size: 14px; font-weight: 100; text-align: center;">1985</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 600.5px; left: 340.776px;">
+              <div class="$-x-p16486" style="transform: rotate(0deg);">
+                <div style="font-size: 14px; font-weight: 100; text-align: center;">1990</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 600.5px; left: 465.908px;">
+              <div class="$-x-p16491" style="transform: rotate(0deg);">
+                <div style="font-size: 14px; font-weight: 100; text-align: center;">1995</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 600.5px; left: 591.039px;">
+              <div class="$-x-p37349" style="transform: rotate(0deg);">
+                <div style="font-size: 14px; font-weight: 100; text-align: center;">2000</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 600.5px; left: 716.171px;">
+              <div class="$-x-p37354" style="transform: rotate(0deg);">
+                <div style="font-size: 14px; font-weight: 100; text-align: center;">2005</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 600.5px; left: 841.303px;">
+              <div class="$-x-p37380" style="transform: rotate(0deg);">
+                <div style="font-size: 14px; font-weight: 100; text-align: center;">2010</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 600.5px; left: 966.434px;">
+              <div class="$-x-p37385" style="transform: rotate(0deg);">
+                <div style="font-size: 14px; font-weight: 100; text-align: center;">2015</div>
+              </div>
+            </replacement>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+</html>
