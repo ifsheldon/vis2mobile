@@ -50,6 +50,42 @@ export default function GalleryPage() {
 
 				{/* Gallery Grid */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+					{/* Kennedy Chart Card */}
+					<div className="space-y-4">
+						<div className="flex items-center justify-between">
+							<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+								Justice Kennedy (Mobile)
+							</h2>
+							<a
+								href="/more-examples/kennedy-desktop.html"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
+							>
+								Original HTML
+								<ExternalLink className="w-3 h-3" />
+							</a>
+						</div>
+
+						<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
+							<div
+								className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
+								style={{
+									width: selectedRatio.width,
+									height: selectedRatio.height,
+								}}
+							>
+								{/* Notch */}
+								<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
+
+								<iframe
+									src="/preview/kennedy"
+									className="w-full h-full border-none bg-white dark:bg-black"
+									title="Kennedy Chart Preview"
+								/>
+							</div>
+						</div>
+					</div>
 					{/* Disaster Cost Chart Card */}
 					<div className="space-y-4">
 						<div className="flex items-center justify-between">
