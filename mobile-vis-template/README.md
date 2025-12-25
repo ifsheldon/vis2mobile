@@ -7,7 +7,6 @@ You should implement the mobile version of the visualization in the `src/compone
 Carefully read the following files for instructions and more information:
 
 - `transform-plan.md`: the detailed plan for transforming the visualization to a mobile version. YOU SHOULD FOLLOW THIS PLAN.
-- `AGENTS.md`: Technical instructions for agents. Read this before implementing a new visualization. YOU SHOULD FOLLOW THE TECHNICAL INSTRUCTIONS DURING IMPLEMENTATION.
 - `mobile-vis-design-action-space.md`: high-level description of the space for the actions that an agent can take to transform the visualization to a mobile version
 - `original_visualization`:
   - `desktop.{html|svg}`: the original source code of the visualization that is tailored for desktop.
@@ -20,6 +19,28 @@ Carefully read the following files for instructions and more information:
 - You can write any Python/JS code to do data extraction from the original source code if you want. Store the extracted data in a JSON file.
 - Run `uv run screenshot.py` to take a screenshot of the mobile version that you implemented. The screenshot will be saved to `mobile-version.png`.
 - You can also use PlayWright MCP to check the rendered mobile version as well.
+
+## Technical Requirements
+
+- ALWAYS use bun as the package manager and script runner for js. Never use npm or yarn.
+  - Run `bun add <package_name>` to install dependencies.
+  - Run `bun remove <package_name>` to remove dependencies.
+  - Run `bun run <script_name>` to run scripts.
+  - Run `bunx` instead of `npx`.
+- For Python dependencies, ALWAYS use `uv`.
+  - Run `uv add <package_name>` to install dependencies.
+  - Run `uv remove <package_name>` to remove dependencies.
+  - Run `uv run python <script_name>` to run Python scripts.
+- Use typescript and tailwindcss.
+- Use biome as the linter and formatter, run `bun run lint/format/check` after you finish implementing a feature. Fix any issues found.
+- You can install new dependencies with bun as you want, but you need to ask for permission first.
+- Files that you are allowed to modify:
+  - `src/components/Visualization.tsx`: you should implement visualization of the mobile version here
+  - `package.json`: you can modify dependencies here
+  - `pyproject.toml`: you can modify Python dependencies here
+  - `*.css`: you can modify or create stylesheets
+  - You can create new files in the `src` directory as you want.
+- DO NOT DELETE OR MODIFY ANYTHING ELSE UNLESS YOU ARE TOLD TO DO SO.
 
 ## HARD REQUIREMENT
 
