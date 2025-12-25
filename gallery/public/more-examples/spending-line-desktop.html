@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="image/cicero-icon-32x32.png" sizes="16x16" />
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+    <style>
+      html,
+      body,
+      div,
+      input,
+      span,
+      textarea,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      svg,
+      text {
+        font-family: "Arial", sans-serif !important;
+      }
+      pre.code {
+        white-space: pre-wrap;
+        font-size: 12px;
+      }
+      pre.code::before {
+        counter-reset: listing;
+      }
+      pre.code code {
+        counter-increment: listing;
+      }
+      pre.code code::before {
+        content: counter(listing);
+        display: inline-block;
+        width: 2.5em; /* now works */
+        padding-left: auto; /* now works */
+        margin-left: auto; /* now works */
+        text-align: left; /* now works */
+        color: #aaaaaa;
+      }
+      pre.code annotate {
+        color: #00aa00;
+        padding-left: 1em;
+      }
+      #fronto-view,
+      .fronto-view-transform {
+        border-radius: .25rem;
+        background-color: white;
+        overflow: scroll;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        width: fit-content;
+        padding-left: 20px;
+        padding-right: 20px;
+        border: 1px solid rgba(0,0,0,.125);
+      }
+      div[data-role=fronto-view] {
+        position: absolute;
+      }
+      .card-header {
+        font-size: 0.8rem;
+      }
+      .card-header strong {
+        font-weight: 500;
+      }
+    </style>
+    <title>COVID Spending (Line; Desktop → Mobile)</title>
+  </head>
+  <body>
+    <header class="container" id="header">
+      <div class="row">
+        <div class="col-12 py-2">
+          <a href="index.html">&lt; Back to the list</a>
+          <h1 class="h3 m-0">COVID Spending (Line; Desktop → Mobile)</h1>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 pt-3">
+          <p>A line chart about changes to how people have been spending money since the COVID-19 outbreak. This example covers transformation strategies for the axis labels.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 pt-3">
+          <h5>Desktop view</h5>
+        </div>
+        <div class="col-12 pt-3">
+          <h6>
+            Design specification <a class="pl-3" data-bs-toggle="collapse" href="#desktop-view-spec" role="button" aria-expanded="false" aria-controls="desktop-view-spec">View <i class="bi bi-arrow-down"></i></a>
+          </h6>
+          <div class="card collapse" id="desktop-view-spec">
+            <div class="card-body pb-0">
+<pre class="code">
+<code>{</code>
+<code>  "name": "spending",</code>
+<code>  "layout": {</code>
+<code>    "stroke": true,</code>
+<code>    "strokeColor": "#dddddd",</code>
+<code>    "width": 800,</code>
+<code>    "height": 500,</code>
+<code>    "composition": "single",</code>
+<code>    "column": [</code>
+<code>      {</code>
+<code>        "field": "date",</code>
+<code>        "type": "temporal"</code>
+<code>      }</code>
+<code>    ],</code>
+<code>    "row": [</code>
+<code>      {</code>
+<code>        "field": "value",</code>
+<code>        "type": "quantitative"</code>
+<code>      }</code>
+<code>    ],</code>
+<code>    "haxis": {</code>
+<code>      "domain": true,</code>
+<code>      "domainColor": "#dddddd",</code>
+<code>      "grid": true,</code>
+<code>      "gridColor": "#dddddd"</code>
+<code>    },</code>
+<code>    "vaxis": {</code>
+<code>      "domain": true,</code>
+<code>      "domainColor": "#dddddd",</code>
+<code>      "grid": true,</code>
+<code>      "gridColor": "#dddddd"</code>
+<code>    }</code>
+<code>  },</code>
+<code>  "layer": [</code>
+<code>    {</code>
+<code>      "mark": {</code>
+<code>        "type": "line",</code>
+<code>        "interpolate": "monotone",</code>
+<code>        "strokeWidth": {</code>
+<code>          "value": 5</code>
+<code>        },</code>
+<code>        "color": {</code>
+<code>          "field": "category",</code>
+<code>          "scale": {</code>
+<code>            "domain": [</code>
+<code>              "Groceries",</code>
+<code>              "Health and beauty",</code>
+<code>              "Entertainment",</code>
+<code>              "Restaurants",</code>
+<code>              "Transportation",</code>
+<code>              "Shopping",</code>
+<code>              "Travel"</code>
+<code>            ],</code>
+<code>            "range": [</code>
+<code>              "#3ea990",</code>
+<code>              "#7da9a4",</code>
+<code>              "#ae9e9b",</code>
+<code>              "#bc9489",</code>
+<code>              "#cb8873",</code>
+<code>              "#d97b5c",</code>
+<code>              "#f46230"</code>
+<code>            ]</code>
+<code>          }</code>
+<code>        }</code>
+<code>      },</code>
+<code>      "text": [</code>
+<code>        {</code>
+<code>          "type": "on-axis",</code>
+<code>          "field": "date",</code>
+<code>          "values": [</code>
+<code>            "2020-01-08",</code>
+<code>            "2020-01-20",</code>
+<code>            "2020-03-01",</code>
+<code>            "2020-03-19",</code>
+<code>            "2020-04-01"</code>
+<code>          ],</code>
+<code>          "tick": {</code>
+<code>            "ticks": true,</code>
+<code>            "color": "#cccccc"</code>
+<code>          },</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "condition": [</code>
+<code>                "2020-01-08",</code>
+<code>                "2020-03-01",</code>
+<code>                "2020-04-01"</code>
+<code>              ],</code>
+<code>              "format": "%b. %-d",</code>
+<code>              "formatType": "datetime",</code>
+<code>              "fontSize": 14,</code>
+<code>              "color": "#cccccc"</code>
+<code>            },</code>
+<code>            {</code>
+<code>              "condition": [</code>
+<code>                "2020-01-20",</code>
+<code>                "2020-03-19"</code>
+<code>              ],</code>
+<code>              "format": "%b. %-d",</code>
+<code>              "formatType": "datetime",</code>
+<code>              "fontSize": 14,</code>
+<code>              "fontWeight": 700</code>
+<code>            },</code>
+<code>            {</code>
+<code>              "width": 100,</code>
+<code>              "condition": [</code>
+<code>                "2020-01-20"</code>
+<code>              ],</code>
+<code>              "value": "Fist U.S. coronavirus case",</code>
+<code>              "fontSize": 14</code>
+<code>            },</code>
+<code>            {</code>
+<code>              "width": 110,</code>
+<code>              "condition": [</code>
+<code>                "2020-03-19"</code>
+<code>              ],</code>
+<code>              "value": "California issues country's first stay-at-home order",</code>
+<code>              "fontSize": 14</code>
+<code>            }</code>
+<code>          ]</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-axis",</code>
+<code>          "field": "value",</code>
+<code>          "values": [</code>
+<code>            -1,</code>
+<code>            -0.5,</code>
+<code>            0,</code>
+<code>            0.5</code>
+<code>          ],</code>
+<code>          "padding": 10,</code>
+<code>          "align": "right",</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "format": "+.0%",</code>
+<code>              "expr": "(datum.label == 0 ? '' : (datum.label > 0 ? '+' : '-')) + datum.label",</code>
+<code>              "fontSize": 14,</code>
+<code>              "color": "#cccccc"</code>
+<code>            }</code>
+<code>          ]</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-mark",</code>
+<code>          "field": "category",</code>
+<code>          "width": 100,</code>
+<code>          "dx": 5,</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "align": "left",</code>
+<code>              "fontSize": 14,</code>
+<code>              "fontWeight": "700",</code>
+<code>              "lineHeight": 100,</code>
+<code>              "marginBottom": 5,</code>
+<code>              "color": "$mark"</code>
+<code>            }</code>
+<code>          ]</code>
+<code>        }</code>
+<code>      ],</code>
+<code>      "tooltip": {</code>
+<code>        "visibility": "on-mark",</code>
+<code>        "fields": [</code>
+<code>          {</code>
+<code>            "field": "category"</code>
+<code>          }</code>
+<code>        ]</code>
+<code>      }</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "mark": {</code>
+<code>        "type": "circle",</code>
+<code>        "size": {</code>
+<code>          "value": 90</code>
+<code>        },</code>
+<code>        "opacity": {</code>
+<code>          "value": 1</code>
+<code>        },</code>
+<code>        "color": {</code>
+<code>          "field": "category",</code>
+<code>          "scale": {</code>
+<code>            "domain": [</code>
+<code>              "Groceries",</code>
+<code>              "Health and beauty",</code>
+<code>              "Entertainment",</code>
+<code>              "Restaurants",</code>
+<code>              "Transportation",</code>
+<code>              "Shopping",</code>
+<code>              "Travel"</code>
+<code>            ],</code>
+<code>            "range": [</code>
+<code>              "#3ea990",</code>
+<code>              "#7da9a4",</code>
+<code>              "#ae9e9b",</code>
+<code>              "#bc9489",</code>
+<code>              "#cb8873",</code>
+<code>              "#d97b5c",</code>
+<code>              "#f46230"</code>
+<code>            ]</code>
+<code>          }</code>
+<code>        }</code>
+<code>      },</code>
+<code>      "transform": [</code>
+<code>        {</code>
+<code>          "filter": "datum.date == dateParse('2020-04-01')"</code>
+<code>        }</code>
+<code>      ]</code>
+<code>    }</code>
+<code>  ],</code>
+<code>  "title": {</code>
+<code>    "width": 700,</code>
+<code>    "align": "center",</code>
+<code>    "items": [</code>
+<code>      {</code>
+<code>        "text": "Change in credit and debit card spending",</code>
+<code>        "align": "center",</code>
+<code>        "fontSize": 20,</code>
+<code>        "fontWeight": 700,</code>
+<code>        "offset": 20</code>
+<code>      }</code>
+<code>    ]</code>
+<code>  },</code>
+<code>  "nondata": {</code>
+<code>    "items": [</code>
+<code>      {</code>
+<code>        "type": "text",</code>
+<code>        "name": "text-assist-upward",</code>
+<code>        "x": 25,</code>
+<code>        "y": 140,</code>
+<code>        "dx": 0,</code>
+<code>        "width": 50,</code>
+<code>        "text": {</code>
+<code>          "text": "$arrow-up$<br/>More spending",</code>
+<code>          "align": "right",</code>
+<code>          "fontSize": 13,</code>
+<code>          "lineHeight": 140,</code>
+<code>          "fontColor": "#cccccc"</code>
+<code>        }</code>
+<code>      },</code>
+<code>      {</code>
+<code>        "type": "text",</code>
+<code>        "name": "text-assist-downward",</code>
+<code>        "x": 25,</code>
+<code>        "y": 225,</code>
+<code>        "width": 50,</code>
+<code>        "text": {</code>
+<code>          "text": "Less spending<br/>$arrow-down$",</code>
+<code>          "align": "right",</code>
+<code>          "fontSize": 13,</code>
+<code>          "lineHeight": 140,</code>
+<code>          "fontColor": "#cccccc"</code>
+<code>        }</code>
+<code>      }</code>
+<code>    ]</code>
+<code>  },</code>
+<code>  "data": [</code>
+<code>    {</code>
+<code>      "date": "2020-01-08",</code>
+<code>      "date_text": "January 8, 2020",</code>
+<code>      "value": 0.0000001,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-15",</code>
+<code>      "date_text": "January 15, 2020",</code>
+<code>      "value": 0.00001948057484,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-22",</code>
+<code>      "date_text": "January 22, 2020",</code>
+<code>      "value": -0.0151689254,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-29",</code>
+<code>      "date_text": "January 29, 2020",</code>
+<code>      "value": -0.03511067424,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-05",</code>
+<code>      "date_text": "February 5, 2020",</code>
+<code>      "value": 0.02339388132,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-12",</code>
+<code>      "date_text": "February 12, 2020",</code>
+<code>      "value": 0.04364916594,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-19",</code>
+<code>      "date_text": "February 19, 2020",</code>
+<code>      "value": 0.01238221206,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-26",</code>
+<code>      "date_text": "February 26, 2020",</code>
+<code>      "value": 0.01119674652,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-04",</code>
+<code>      "date_text": "March 4, 2020",</code>
+<code>      "value": 0.08274813095,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-11",</code>
+<code>      "date_text": "March 11, 2020",</code>
+<code>      "value": 0.1516048952,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-18",</code>
+<code>      "date_text": "March 18, 2020",</code>
+<code>      "value": 0.4105352919,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-25",</code>
+<code>      "date_text": "March 25, 2020",</code>
+<code>      "value": 0.4396332885,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-04-01",</code>
+<code>      "date_text": "April 1, 2020",</code>
+<code>      "value": 0.1371888215,</code>
+<code>      "category": "Groceries"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-08",</code>
+<code>      "date_text": "January 8, 2020",</code>
+<code>      "value": 0.0000001,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-15",</code>
+<code>      "date_text": "January 15, 2020",</code>
+<code>      "value": -0.05503383,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-22",</code>
+<code>      "date_text": "January 22, 2020",</code>
+<code>      "value": -0.08340414276,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-29",</code>
+<code>      "date_text": "January 29, 2020",</code>
+<code>      "value": -0.09739717236,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-05",</code>
+<code>      "date_text": "February 5, 2020",</code>
+<code>      "value": -0.013983605,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-12",</code>
+<code>      "date_text": "February 12, 2020",</code>
+<code>      "value": 0.003749074,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-19",</code>
+<code>      "date_text": "February 19, 2020",</code>
+<code>      "value": -0.043150098,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-26",</code>
+<code>      "date_text": "February 26, 2020",</code>
+<code>      "value": -0.033018074,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-04",</code>
+<code>      "date_text": "March 4, 2020",</code>
+<code>      "value": 0.080791618,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-11",</code>
+<code>      "date_text": "March 11, 2020",</code>
+<code>      "value": 0.09799929,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-18",</code>
+<code>      "date_text": "March 18, 2020",</code>
+<code>      "value": 0.028241623,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-25",</code>
+<code>      "date_text": "March 25, 2020",</code>
+<code>      "value": -0.048250468,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-04-01",</code>
+<code>      "date_text": "April 1, 2020",</code>
+<code>      "value": 0.0000001,</code>
+<code>      "category": "Health and beauty"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-08",</code>
+<code>      "date_text": "January 8, 2020",</code>
+<code>      "value": 0.0000001,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-15",</code>
+<code>      "date_text": "January 15, 2020",</code>
+<code>      "value": -0.14137686,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-22",</code>
+<code>      "date_text": "January 22, 2020",</code>
+<code>      "value": -0.156452665,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-29",</code>
+<code>      "date_text": "January 29, 2020",</code>
+<code>      "value": -0.160575356,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-05",</code>
+<code>      "date_text": "February 5, 2020",</code>
+<code>      "value": -0.160226738,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-12",</code>
+<code>      "date_text": "February 12, 2020",</code>
+<code>      "value": -0.12352617,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-19",</code>
+<code>      "date_text": "February 19, 2020",</code>
+<code>      "value": -0.085734832,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-26",</code>
+<code>      "date_text": "February 26, 2020",</code>
+<code>      "value": -0.082306385,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-04",</code>
+<code>      "date_text": "March 4, 2020",</code>
+<code>      "value": -0.043338236,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-11",</code>
+<code>      "date_text": "March 11, 2020",</code>
+<code>      "value": -0.038458738,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-18",</code>
+<code>      "date_text": "March 18, 2020",</code>
+<code>      "value": -0.152686141,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-25",</code>
+<code>      "date_text": "March 25, 2020",</code>
+<code>      "value": -0.241046999,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-04-01",</code>
+<code>      "date_text": "April 1, 2020",</code>
+<code>      "value": -0.31529887,</code>
+<code>      "category": "Entertainment"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-08",</code>
+<code>      "date_text": "January 8, 2020",</code>
+<code>      "value": 0.0000001,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-15",</code>
+<code>      "date_text": "January 15, 2020",</code>
+<code>      "value": -0.023076466,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-22",</code>
+<code>      "date_text": "January 22, 2020",</code>
+<code>      "value": -0.013947434,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-29",</code>
+<code>      "date_text": "January 29, 2020",</code>
+<code>      "value": -0.005165228,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-05",</code>
+<code>      "date_text": "February 5, 2020",</code>
+<code>      "value": 0.005844618,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-12",</code>
+<code>      "date_text": "February 12, 2020",</code>
+<code>      "value": 0.035088322,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-19",</code>
+<code>      "date_text": "February 19, 2020",</code>
+<code>      "value": 0.080400292,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-26",</code>
+<code>      "date_text": "February 26, 2020",</code>
+<code>      "value": 0.090775817,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-04",</code>
+<code>      "date_text": "March 4, 2020",</code>
+<code>      "value": 0.091548377,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-11",</code>
+<code>      "date_text": "March 11, 2020",</code>
+<code>      "value": 0.109985847,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-18",</code>
+<code>      "date_text": "March 18, 2020",</code>
+<code>      "value": 0.00392837,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-25",</code>
+<code>      "date_text": "March 25, 2020",</code>
+<code>      "value": -0.210426521,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-04-01",</code>
+<code>      "date_text": "April 1, 2020",</code>
+<code>      "value": -0.322017366,</code>
+<code>      "category": "Restaurants"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-08",</code>
+<code>      "date_text": "January 8, 2020",</code>
+<code>      "value": 0.0000001,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-15",</code>
+<code>      "date_text": "January 15, 2020",</code>
+<code>      "value": -0.116202456,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-22",</code>
+<code>      "date_text": "January 22, 2020",</code>
+<code>      "value": -0.156525644,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-29",</code>
+<code>      "date_text": "January 29, 2020",</code>
+<code>      "value": -0.19456499,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-05",</code>
+<code>      "date_text": "February 5, 2020",</code>
+<code>      "value": -0.192867532,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-12",</code>
+<code>      "date_text": "February 12, 2020",</code>
+<code>      "value": -0.130319654,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-19",</code>
+<code>      "date_text": "February 19, 2020",</code>
+<code>      "value": -0.089365211,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-26",</code>
+<code>      "date_text": "February 26, 2020",</code>
+<code>      "value": -0.102171713,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-04",</code>
+<code>      "date_text": "March 4, 2020",</code>
+<code>      "value": -0.078215203,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-11",</code>
+<code>      "date_text": "March 11, 2020",</code>
+<code>      "value": -0.05672383,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-18",</code>
+<code>      "date_text": "March 18, 2020",</code>
+<code>      "value": -0.203825827,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-25",</code>
+<code>      "date_text": "March 25, 2020",</code>
+<code>      "value": -0.432594654,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-04-01",</code>
+<code>      "date_text": "April 1, 2020",</code>
+<code>      "value": -0.578998828,</code>
+<code>      "category": "Shopping"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-08",</code>
+<code>      "date_text": "January 8, 2020",</code>
+<code>      "value": 0.0000001,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-15",</code>
+<code>      "date_text": "January 15, 2020",</code>
+<code>      "value": -0.008393458,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-22",</code>
+<code>      "date_text": "January 22, 2020",</code>
+<code>      "value": -0.008140312,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-29",</code>
+<code>      "date_text": "January 29, 2020",</code>
+<code>      "value": -0.01713353,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-05",</code>
+<code>      "date_text": "February 5, 2020",</code>
+<code>      "value": 0.00942337,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-12",</code>
+<code>      "date_text": "February 12, 2020",</code>
+<code>      "value": 0.036202099,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-19",</code>
+<code>      "date_text": "February 19, 2020",</code>
+<code>      "value": 0.033704293,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-26",</code>
+<code>      "date_text": "February 26, 2020",</code>
+<code>      "value": 0.048508603,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-04",</code>
+<code>      "date_text": "March 4, 2020",</code>
+<code>      "value": 0.100802723,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-11",</code>
+<code>      "date_text": "March 11, 2020",</code>
+<code>      "value": 0.115441461,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-18",</code>
+<code>      "date_text": "March 18, 2020",</code>
+<code>      "value": 0.001055256,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-25",</code>
+<code>      "date_text": "March 25, 2020",</code>
+<code>      "value": -0.222458254,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-04-01",</code>
+<code>      "date_text": "April 1, 2020",</code>
+<code>      "value": -0.432538734,</code>
+<code>      "category": "Transportation"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-08",</code>
+<code>      "date_text": "January 8, 2020",</code>
+<code>      "value": 0.0000001,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-15",</code>
+<code>      "date_text": "January 15, 2020",</code>
+<code>      "value": 0.016539395,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-22",</code>
+<code>      "date_text": "January 22, 2020",</code>
+<code>      "value": 0.013165188,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-01-29",</code>
+<code>      "date_text": "January 29, 2020",</code>
+<code>      "value": -0.001377965,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-05",</code>
+<code>      "date_text": "February 5, 2020",</code>
+<code>      "value": -0.020675581,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-12",</code>
+<code>      "date_text": "February 12, 2020",</code>
+<code>      "value": 0.014049271,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-19",</code>
+<code>      "date_text": "February 19, 2020",</code>
+<code>      "value": 0.07332885,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-02-26",</code>
+<code>      "date_text": "February 26, 2020",</code>
+<code>      "value": 0.097250078,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-04",</code>
+<code>      "date_text": "March 4, 2020",</code>
+<code>      "value": 0.082129205,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-11",</code>
+<code>      "date_text": "March 11, 2020",</code>
+<code>      "value": -0.000830732,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-18",</code>
+<code>      "date_text": "March 18, 2020",</code>
+<code>      "value": -0.236042745,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-03-25",</code>
+<code>      "date_text": "March 25, 2020",</code>
+<code>      "value": -0.572854901,</code>
+<code>      "category": "Travel"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "date": "2020-04-01",</code>
+<code>      "date_text": "April 1, 2020",</code>
+<code>      "value": -0.792851324,</code>
+<code>      "category": "Travel"</code>
+<code>    }</code>
+<code>  ]</code>
+<code>}</code>
+</pre>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 pt-3">
+          <h6>View</h6>
+          <div id="fronto-view" class="mb-3" style="position: relative; width: 850px; height: 655px;"><div id="title-spending" data-role="fronto-title"><div style="position: relative; font-size: 14px;"><div data-role="title" style="width: 700px; margin-left: auto; margin-right: auto; margin-bottom: 20px; font-size: 20px; line-height: 120%; color: rgb(34, 34, 34); text-align: center; font-weight: 700;">Change in credit and debit card spending</div></div></div><div id="view-spending" data-role="fronto-view" class="vega-embed" style="left: 50%; transform: translate(-50%);"><div class="chart-wrapper fit-x fit-y" role="graphics-document" aria-roledescription="visualization" aria-label="Vega visualization" style="cursor: default; position: relative;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="marks" width="810" height="510" viewBox="0 0 810 510" style="background-color: white;"><g fill="none" stroke-miterlimit="10" transform="translate(86,5)"><g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0.5,0.5h597v479h-597Z" fill="transparent" stroke="#dddddd"></path><g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,479.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(85,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(377,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(505,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(597,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,479)" x2="597" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(0,329)" x2="597" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(0,180)" x2="597" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(0,30)" x2="597" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis for a time scale with values from Tuesday, 07 January 2020, 7:00:00 PM to Tuesday, 31 March 2020, 8:00:00 PM"><g transform="translate(0.5,479.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-tick" pointer-events="none"><line transform="translate(0,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(85,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(377,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(505,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(597,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line></g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="start" transform="translate(0,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-0</text><text text-anchor="middle" transform="translate(85.28571428571428,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-0.25</text><text text-anchor="middle" transform="translate(376.6785714285714,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-0.5</text><text text-anchor="middle" transform="translate(504.60714285714283,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-0.75</text><text text-anchor="end" transform="translate(597,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-1</text></g><g class="mark-rule role-axis-domain" pointer-events="none"><line transform="translate(0,0)" x2="597" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis for a linear scale with values from −1.0 to 0.6"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="end" transform="translate(-10,483)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p1444</text><text text-anchor="end" transform="translate(-10,333.3125)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p88319</text><text text-anchor="end" transform="translate(-10,183.625)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p48</text><text text-anchor="end" transform="translate(-10,33.9375)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p47607</text></g><g class="mark-rule role-axis-domain" pointer-events="none"><line transform="translate(0,479)" x2="0" y2="-479" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-scope mark_0_layer_0_pathgroup" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h597v479h-597Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Groceries" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C16.583333333333332,179.62206903270368,33.16666666666667,179.61916800290732,49.75,179.61916800290732C66.33333333333333,179.61916800290732,82.91666666666667,182.41334869200958,99.5,184.16619704162503C116.08333333333333,185.91904539124047,132.66666666666666,190.13625810060003,149.25,190.13625810060003C165.83333333333334,190.13625810060003,182.41666666666666,176.55124463880625,199,172.621456779825C215.58333333333334,168.69166892084374,232.16666666666666,166.55753094671252,248.75,166.55753094671252C265.3333333333333,166.55753094671252,281.9166666666667,175.68147610051258,298.5,175.91807526453755C315.0833333333333,176.15467442856252,331.6666666666667,176.272974010575,348.25,176.272974010575C364.8333333333333,176.272974010575,381.4166666666667,161.85805988202293,398,154.85227829684376C414.5833333333333,147.8464967116646,431.1666666666667,147.98094703106253,447.75,134.23828449950005C464.3333333333333,120.49562196793758,480.9166666666667,62.52847214218752,497.5,56.720996987437516C514.0833333333334,50.913521832687515,530.6666666666666,48.00978425531251,547.25,48.00978425531251C563.8333333333334,48.00978425531251,580.4166666666666,93.28194040937501,597,138.5540965634375" stroke="#3ea990" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h597v479h-597Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Health and beauty" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C16.583333333333332,185.7820993613521,33.16666666666667,191.93922866020418,49.75,196.10075285625C66.33333333333333,200.26227705229584,82.91666666666667,202.48036096893753,99.5,204.59411523877503C116.08333333333333,206.70786950861253,132.66666666666666,208.783278475275,149.25,208.783278475275C165.83333333333334,208.783278475275,182.41666666666666,187.35048893062495,199,183.81134174687497C215.58333333333334,180.272194563125,232.16666666666666,178.50262097125002,248.75,178.50262097125002C265.3333333333333,178.50262097125002,281.9166666666667,192.54306058875002,298.5,192.54306058875002C315.0833333333333,192.54306058875002,331.6666666666667,191.53196902708336,348.25,189.50978590375004C364.8333333333333,187.48760278041672,381.4166666666667,158.87237389791676,398,155.43800936125007C414.5833333333333,152.00364482458338,431.1666666666667,150.28646255625003,447.75,150.28646255625003C464.3333333333333,150.28646255625003,480.9166666666667,163.87291056416672,497.5,171.17016411437504C514.0833333333334,178.46741766458337,530.6666666666666,194.0699838575,547.25,194.0699838575C563.8333333333334,194.0699838575,580.4166666666666,186.84747696,597,179.6249700625" stroke="#7da9a4" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h597v479h-597Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Entertainment" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C16.583333333333332,199.28289405520837,33.16666666666667,218.9408180479167,49.75,221.94969746250004C66.33333333333333,224.95857687708337,82.91666666666667,225.64019617229167,99.5,226.46301658437503C116.08333333333333,227.28583699645839,132.66666666666666,227.69724720250005,149.25,227.69724720250005C165.83333333333334,227.69724720250005,182.41666666666666,227.66245803125005,199,227.59287968875003C215.58333333333334,227.52330134625,232.16666666666666,220.32248287020835,248.75,216.60564714375002C265.3333333333333,212.8888114172917,281.9166666666667,205.97612621041665,298.5,205.29186533C315.0833333333333,204.60760444958336,331.6666666666667,204.94973488979167,348.25,204.26547400937503C364.8333333333333,203.58121312895838,381.4166666666667,193.5732508783333,398,192.5993844025C414.5833333333333,191.62551792666667,431.1666666666667,191.13858468875003,447.75,191.13858468875003C464.3333333333333,191.13858468875003,480.9166666666667,215.22710335572918,497.5,225.33541346187502C514.0833333333334,235.44372356802086,530.6666666666666,243.67474770156252,547.25,251.78844532562502C563.8333333333334,259.9021429496875,580.4166666666666,266.9598710779688,597,274.01759920625005" stroke="#ae9e9b" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h597v479h-597Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Restaurants" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C16.583333333333332,183.079243535625,33.16666666666667,186.53351700875,49.75,186.53351700875C66.33333333333333,186.53351700875,82.91666666666667,184.69420919979166,99.5,183.80051305375C116.08333333333333,182.90681690770833,132.66666666666666,182.1588810604167,149.25,181.17134013250003C165.83333333333334,180.18379920458338,182.41666666666666,179.88375190812505,199,177.87526748625004C215.58333333333334,175.86678306437503,232.16666666666666,172.84045108520834,248.75,169.12043360125C265.3333333333333,165.40041611729166,281.9166666666667,157.62594444708336,298.5,155.55516258250003C315.0833333333333,153.4843807179167,331.6666666666667,152.60317988562505,348.25,152.44898978562503C364.8333333333333,152.294799685625,381.4166666666667,152.37189473562503,398,152.217704635625C414.5833333333333,152.063514535625,431.1666666666667,146.69798705437503,447.75,146.69798705437503C464.3333333333333,146.69798705437503,480.9166666666667,162.46170211958338,497.5,178.44894423125004C514.0833333333334,194.4361863429167,530.6666666666666,226.35810560520835,547.25,242.62143972437502C563.8333333333334,258.88477384354167,580.4166666666666,267.45686139489584,597,276.02894894625" stroke="#bc9489" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h597v479h-597Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Shopping" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C16.583333333333332,193.11404894625002,33.16666666666667,206.60312783000003,49.75,214.41311026500003C66.33333333333333,222.22309270000002,82.91666666666667,222.57490073645835,99.5,226.4848646725C116.08333333333333,230.39482860854167,132.66666666666666,237.87289388124998,149.25,237.87289388124998C165.83333333333334,237.87289388124998,182.41666666666666,237.7035017183333,199,237.3647173925C215.58333333333334,237.0259330666667,232.16666666666666,223.80378097447917,248.75,218.63944641625C265.3333333333333,213.47511185802082,281.9166666666667,206.37871004312504,298.5,206.37871004312504C315.0833333333333,206.37871004312504,331.6666666666667,210.21265657937502,348.25,210.21265657937502C364.8333333333333,210.21265657937502,381.4166666666667,205.30833639364585,398,203.04067639812502C414.5833333333333,200.77301640260418,431.1666666666667,196.60669660625004,447.75,196.60669660625004C464.3333333333333,196.60669660625004,480.9166666666667,221.89096896895836,497.5,240.645356958125C514.0833333333334,259.39974494729165,530.6666666666666,290.4134550121875,547.25,309.13302454125C563.8333333333334,327.8525940703125,580.4166666666666,340.40768410140623,597,352.9627741325" stroke="#d97b5c" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h597v479h-597Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Transportation" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C16.583333333333332,180.88138077562502,33.16666666666667,182.13779148875003,49.75,182.13779148875003C66.33333333333333,182.13779148875003,82.91666666666667,182.06200590500003,99.5,182.06200590500003C116.08333333333333,182.06200590500003,132.66666666666666,184.75435054375004,149.25,184.75435054375004C165.83333333333334,184.75435054375004,182.41666666666666,179.46510426156254,199,176.80387860625004C215.58333333333334,174.14265295093753,232.16666666666666,168.78699661187503,248.75,168.78699661187503C265.3333333333333,168.78699661187503,281.9166666666667,169.53477728312504,298.5,169.53477728312504C315.0833333333333,169.53477728312504,331.6666666666667,168.05743051437506,348.25,165.10273697687506C364.8333333333333,162.14804343937507,381.4166666666667,152.36883292770844,398,149.44718480187507C414.5833333333333,146.5255366760417,431.1666666666667,145.064712613125,447.75,145.064712613125C464.3333333333333,145.064712613125,480.9166666666667,162.4492948719792,497.5,179.30908273500003C514.0833333333334,196.16887059802087,530.6666666666666,224.58890633187502,547.25,246.22343979125C563.8333333333334,267.857973250625,580.4166666666666,288.4871283709375,597,309.11628349125" stroke="#cb8873" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h597v479h-597Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Travel" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C16.583333333333332,177.14924434218753,33.16666666666667,174.67351862187505,49.75,174.67351862187505C66.33333333333333,174.67351862187505,82.91666666666667,175.01023636208336,99.5,175.68367184250002C116.08333333333333,176.35710732291668,132.66666666666666,178.34901490197916,149.25,180.037528271875C165.83333333333334,181.72604164177085,182.41666666666666,185.81475206187503,199,185.81475206187503C215.58333333333334,185.81475206187503,232.16666666666666,180.10942891614587,248.75,175.41899949437504C265.3333333333333,170.7285700726042,281.9166666666667,161.8235491305209,298.5,157.67217553125005C315.0833333333333,153.5208019319792,331.6666666666667,150.51075789874997,348.25,150.51075789874997C364.8333333333333,150.51075789874997,381.4166666666667,152.019695016875,398,155.03756925312504C414.5833333333333,158.05544348937508,431.1666666666667,163.99824580395835,447.75,179.8737003925C464.3333333333333,195.74915498104167,480.9166666666667,221.7486741853125,497.5,250.290296784375C514.0833333333334,278.8319193834375,530.6666666666666,323.3410079305209,547.25,351.12343598687505C563.8333333333334,378.9058640432292,580.4166666666666,397.9453645828646,597,416.9848651225" stroke="#f46230" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g><g class="mark-text role-mark mark_0_layer_1_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of date: Mar 31, 2020; value for max date: 0.1371888215; category: Groceries; category_repl: $-tc0-Groceries" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(601,141.5540965634375)" font-family="sans-serif" font-size="11px" fill="#3ea990" stroke-width="5" opacity="0">$-tc0-Groceries</text><text aria-label="Max of date: Mar 31, 2020; value for max date: 1e-7; category: Health and beauty; category_repl: $-tc0-Health and beauty" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(601,182.6249700625)" font-family="sans-serif" font-size="11px" fill="#7da9a4" stroke-width="5" opacity="0">$-tc0-Health and beauty</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.31529887; category: Entertainment; category_repl: $-tc0-Entertainment" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(601,277.01759920625005)" font-family="sans-serif" font-size="11px" fill="#ae9e9b" stroke-width="5" opacity="0">$-tc0-Entertainment</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.322017366; category: Restaurants; category_repl: $-tc0-Restaurants" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(601,279.02894894625)" font-family="sans-serif" font-size="11px" fill="#bc9489" stroke-width="5" opacity="0">$-tc0-Restaurants</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.578998828; category: Shopping; category_repl: $-tc0-Shopping" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(601,355.9627741325)" font-family="sans-serif" font-size="11px" fill="#d97b5c" stroke-width="5" opacity="0">$-tc0-Shopping</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.432538734; category: Transportation; category_repl: $-tc0-Transportation" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(601,312.11628349125)" font-family="sans-serif" font-size="11px" fill="#cb8873" stroke-width="5" opacity="0">$-tc0-Transportation</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.792851324; category: Travel; category_repl: $-tc0-Travel" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(601,419.9848651225)" font-family="sans-serif" font-size="11px" fill="#f46230" stroke-width="5" opacity="0">$-tc0-Travel</text></g><g class="mark-symbol role-mark mark_1_marks" role="graphics-object" aria-roledescription="symbol mark container"><path aria-label="date: Mar 31, 2020; value: 0.1371888215; category: Groceries" role="graphics-symbol" aria-roledescription="circle" transform="translate(597,138.5540965634375)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#3ea990" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: 1e-7; category: Health and beauty" role="graphics-symbol" aria-roledescription="circle" transform="translate(597,179.6249700625)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#7da9a4" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.31529887; category: Entertainment" role="graphics-symbol" aria-roledescription="circle" transform="translate(597,274.01759920625005)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#ae9e9b" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.322017366; category: Restaurants" role="graphics-symbol" aria-roledescription="circle" transform="translate(597,276.02894894625)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#bc9489" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.578998828; category: Shopping" role="graphics-symbol" aria-roledescription="circle" transform="translate(597,352.9627741325)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#d97b5c" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.432538734; category: Transportation" role="graphics-symbol" aria-roledescription="circle" transform="translate(597,309.11628349125)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#cb8873" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.792851324; category: Travel" role="graphics-symbol" aria-roledescription="circle" transform="translate(597,416.9848651225)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#f46230" stroke-width="2" opacity="1"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g></g></svg><form class="vega-bindings"></form><annotation data-role="internalAnnotation" data-name="text-assist-upward" style="display: block; box-sizing: border-box; width: 50px; height: auto; position: absolute; left: 25px; top: 140px; transform: translateY(-50%); opacity: 1; font-size: 13px; line-height: 140%; color: rgb(204, 204, 204); text-align: right; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;"><i class="bi bi-arrow-up"></i><br>More spending</annotation><annotation data-role="internalAnnotation" data-name="text-assist-downward" style="display: block; box-sizing: border-box; width: 50px; height: auto; position: absolute; left: 25px; top: 225px; transform: translateY(-50%); opacity: 1; font-size: 13px; line-height: 140%; color: rgb(204, 204, 204); text-align: right; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">Less spending<br><i class="bi bi-arrow-down"></i></annotation></div><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; top: 488.5px; left: 89.5469px;"><div class="$-x-0"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">Jan. 7</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 488.5px; left: 196.098px;"><div class="$-x-0.25"><div style="font-size: 14px; font-weight: 700; text-align: left;">Jan. 19</div><div style="width: 100px; font-size: 14px; text-align: left;">Fist U.S. coronavirus case</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 488.5px; left: 465.382px;"><div class="$-x-0.5"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">Feb. 29</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 488.5px; left: 620.42px;"><div class="$-x-0.75"><div style="font-size: 14px; font-weight: 700; text-align: left;">Mar. 18</div><div style="width: 110px; font-size: 14px; text-align: left;">California issues country's first stay-at-home order</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-100%); top: 488.5px; left: 690.547px;"><div class="$-x-1"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">Mar. 31</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 481.5px; left: 76.5px;"><div class="$-y-p1444" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">−100%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 331.812px; left: 76.5px;"><div class="$-y-p88319" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">−50%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 182.125px; left: 76.5px;"><div class="$-y-p48" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">+0%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 32.4375px; left: 76.5px;"><div class="$-y-p47607" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">+50%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 132.554px; left: 687px;"><div data-dx="5" class="$-tc0-Groceries" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(62, 169, 144);">Groceries</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 173.625px; left: 687px;"><div data-dx="5" class="$-tc0-Health and beauty" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(125, 169, 164);">Health and beauty</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" moved="true" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 261.018px; left: 687px;"><div data-dx="5" class="$-tc0-Entertainment" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(174, 158, 155);">Entertainment</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" moved="true" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 277.018px; left: 687px;"><div data-dx="5" class="$-tc0-Restaurants" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(188, 148, 137);">Restaurants</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 346.963px; left: 687px;"><div data-dx="5" class="$-tc0-Shopping" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(217, 123, 92);">Shopping</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 303.116px; left: 687px;"><div data-dx="5" class="$-tc0-Transportation" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(203, 136, 115);">Transportation</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 410.985px; left: 687px;"><div data-dx="5" class="$-tc0-Travel" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(244, 98, 48);">Travel</div></div></replacement></div></div>
+        </div>
+        <div class="col-12 pt-3">
+          <h5>Cicero Specification</h5>
+          <p>Below, we provide one transformation rule at a time, and show the intermediate result on the side.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-5 pt-3">
+          <h6>Specification</h6>
+          <div class="card">
+            <div class="card-body pb-0">
+              <pre class="code">
+<code>{</code>
+<code>  "$schema": "../cicero.json",</code>
+<code>  "name": "spending-line-mobile",</code>
+<code>  "description": "This is a Cicero specification for 'COVID Spending (Line)' visualization from desktop to mobile.",</code>
+<code>  "metadata": {</code>
+<code>    "condition": "small"</code>
+<code>  },</code>
+<code>  "transformations": [</code>
+<code>  ...</code>
+<code>  ]</code>
+<code>}</code>
+</pre>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-7 pt-3">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-5 pt-3">
+          <h6>Rules: Resize the chart (disproportionately) and remove some axis labels</h6>
+          <div class="card">
+            <div class="card-header">
+              <strong>
+                Resize the chart disproportionately
+              </strong>
+            </div>
+            <div class="card-body pb-0">
+              <pre class="code">
+<code>    {</code>
+<code>      "description": "Resize the chart; with disproportionate rescaling.",</code>
+<code>      "specifier": {</code>
+<code>        "role": "view"</code>
+<code>      },</code>
+<code>      "action": "modify",</code>
+<code>      "option": {</code>
+<code>        "width": 450,</code>
+<code>        "proportionate": false</code><annotate>// expressing disproportionate size change</annotate>
+<code>      }</code>
+<code>    }</code>
+</pre></div></div>
+<div class="card">
+  <div class="card-header">
+    <strong>
+      Remove some axis values
+    </strong>
+  </div>
+  <div class="card-body pb-0">
+    <pre class="code">
+<code>    {</code>
+<code>      "comment": "Remove axis values",</code>
+<code>      "specifier": {</code>
+<code>        "role": "axis",</code>
+<code>        "field": "date",</code>
+<code>        "values": ["2020-01-20", "2020-03-01"]</code><annotate>// specify by value</annotate>
+<code>      },</code>
+<code>      "action": "remove"</code>
+<code>    }</code>
+</pre>
+            </div>
+          </div>
+          <p class="mt-2">
+            The alignment of horizontal axis labels looks not good (overlapping).
+          </p>
+        </div>
+        <div class="col-12 col-md-7 pt-3">
+          <h6>View</h6>
+          <div id="fronto-view-transform-1" class="fronto-view-transform" style="position: relative; width: 475px; height: 655px;"><div id="title-spending-line-mobile" data-role="fronto-title"><div style="position: relative; font-size: 14px;"><div data-role="title" style="width: 450px; margin-left: auto; margin-right: auto; margin-bottom: 20px; font-size: 20px; line-height: 120%; color: rgb(34, 34, 34); text-align: center; font-weight: 700;">Change in credit and debit card spending</div></div></div><div id="view-spending-line-mobile" data-role="fronto-view" class="vega-embed" style="left: 50%; transform: translate(-50%);"><div class="chart-wrapper fit-x fit-y" role="graphics-document" aria-roledescription="visualization" aria-label="Vega visualization" style="cursor: default; position: relative;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="marks" width="460" height="510" viewBox="0 0 460 510" style="background-color: white;"><g fill="none" stroke-miterlimit="10" transform="translate(86,5)"><g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0.5,0.5h247v479h-247Z" fill="transparent" stroke="#dddddd"></path><g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,479.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(209,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(247,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,479)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(0,329)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(0,180)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(0,30)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis for a time scale with values from Tuesday, 07 January 2020, 7:00:00 PM to Tuesday, 31 March 2020, 8:00:00 PM"><g transform="translate(0.5,479.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-tick" pointer-events="none"><line transform="translate(0,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(209,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(247,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line></g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="start" transform="translate(0,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-0</text><text text-anchor="middle" transform="translate(208.77380952380952,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-0.5</text><text text-anchor="end" transform="translate(247,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-1</text></g><g class="mark-rule role-axis-domain" pointer-events="none"><line transform="translate(0,0)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis for a linear scale with values from −1.0 to 0.6"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="end" transform="translate(-10,483)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p1444</text><text text-anchor="end" transform="translate(-10,333.3125)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p88319</text><text text-anchor="end" transform="translate(-10,183.625)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p48</text><text text-anchor="end" transform="translate(-10,33.9375)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p47607</text></g><g class="mark-rule role-axis-domain" pointer-events="none"><line transform="translate(0,479)" x2="0" y2="-479" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-scope mark_0_layer_0_pathgroup" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Groceries" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,179.62206903270368,13.722222222222221,179.61916800290732,20.583333333333332,179.61916800290732C27.444444444444443,179.61916800290732,34.30555555555556,182.41334869200958,41.166666666666664,184.16619704162503C48.02777777777778,185.91904539124047,54.888888888888886,190.13625810060003,61.75,190.13625810060003C68.61111111111111,190.13625810060003,75.47222222222221,176.55124463880625,82.33333333333333,172.621456779825C89.19444444444444,168.69166892084374,96.05555555555556,166.55753094671252,102.91666666666667,166.55753094671252C109.77777777777779,166.55753094671252,116.63888888888889,175.68147610051258,123.5,175.91807526453755C130.36111111111111,176.15467442856252,137.22222222222223,176.272974010575,144.08333333333334,176.272974010575C150.94444444444446,176.272974010575,157.80555555555554,161.85805988202293,164.66666666666666,154.85227829684376C171.52777777777777,147.8464967116646,178.38888888888889,147.98094703106253,185.25,134.23828449950005C192.11111111111111,120.49562196793758,198.97222222222223,62.528472142187525,205.83333333333334,56.720996987437516C212.69444444444446,50.913521832687515,219.55555555555554,48.00978425531251,226.41666666666666,48.00978425531251C233.27777777777777,48.00978425531251,240.13888888888889,93.28194040937501,247,138.5540965634375" stroke="#3ea990" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Health and beauty" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,185.7820993613521,13.722222222222221,191.93922866020418,20.583333333333332,196.10075285625C27.444444444444443,200.26227705229584,34.30555555555556,202.48036096893753,41.166666666666664,204.59411523877503C48.02777777777778,206.70786950861253,54.888888888888886,208.783278475275,61.75,208.783278475275C68.61111111111111,208.783278475275,75.47222222222221,187.35048893062495,82.33333333333333,183.81134174687497C89.19444444444444,180.272194563125,96.05555555555556,178.50262097125002,102.91666666666667,178.50262097125002C109.77777777777779,178.50262097125002,116.63888888888889,192.54306058875002,123.5,192.54306058875002C130.36111111111111,192.54306058875002,137.22222222222223,191.53196902708336,144.08333333333334,189.50978590375004C150.94444444444446,187.48760278041672,157.80555555555554,158.87237389791676,164.66666666666666,155.43800936125007C171.52777777777777,152.00364482458338,178.38888888888889,150.28646255625003,185.25,150.28646255625003C192.11111111111111,150.28646255625003,198.97222222222223,163.87291056416672,205.83333333333334,171.17016411437504C212.69444444444446,178.46741766458337,219.55555555555554,194.0699838575,226.41666666666666,194.0699838575C233.27777777777777,194.0699838575,240.13888888888889,186.84747696,247,179.6249700625" stroke="#7da9a4" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Entertainment" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,199.28289405520837,13.722222222222221,218.9408180479167,20.583333333333332,221.94969746250004C27.444444444444443,224.95857687708337,34.30555555555556,225.64019617229167,41.166666666666664,226.46301658437503C48.02777777777778,227.28583699645839,54.888888888888886,227.69724720250005,61.75,227.69724720250005C68.61111111111111,227.69724720250005,75.47222222222221,227.66245803125005,82.33333333333333,227.59287968875003C89.19444444444444,227.52330134625,96.05555555555556,220.32248287020835,102.91666666666667,216.60564714375002C109.77777777777779,212.8888114172917,116.63888888888889,205.97612621041665,123.5,205.29186533C130.36111111111111,204.60760444958336,137.22222222222223,204.94973488979167,144.08333333333334,204.26547400937503C150.94444444444446,203.58121312895838,157.80555555555554,193.5732508783333,164.66666666666666,192.5993844025C171.52777777777777,191.62551792666667,178.38888888888889,191.13858468875003,185.25,191.13858468875003C192.11111111111111,191.13858468875003,198.97222222222223,215.22710335572918,205.83333333333334,225.33541346187502C212.69444444444446,235.44372356802086,219.55555555555554,243.67474770156252,226.41666666666666,251.78844532562502C233.27777777777777,259.9021429496875,240.13888888888889,266.9598710779688,247,274.01759920625005" stroke="#ae9e9b" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Restaurants" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,183.079243535625,13.722222222222221,186.53351700875,20.583333333333332,186.53351700875C27.444444444444443,186.53351700875,34.30555555555556,184.69420919979166,41.166666666666664,183.80051305375C48.02777777777778,182.90681690770833,54.888888888888886,182.1588810604167,61.75,181.17134013250003C68.61111111111111,180.18379920458338,75.47222222222221,179.88375190812505,82.33333333333333,177.87526748625004C89.19444444444444,175.86678306437503,96.05555555555556,172.84045108520834,102.91666666666667,169.12043360125C109.77777777777779,165.40041611729166,116.63888888888889,157.62594444708336,123.5,155.55516258250003C130.36111111111111,153.4843807179167,137.22222222222223,152.60317988562505,144.08333333333334,152.44898978562503C150.94444444444446,152.294799685625,157.80555555555554,152.37189473562503,164.66666666666666,152.217704635625C171.52777777777777,152.063514535625,178.38888888888889,146.69798705437503,185.25,146.69798705437503C192.11111111111111,146.69798705437503,198.97222222222223,162.46170211958335,205.83333333333334,178.44894423125004C212.69444444444446,194.4361863429167,219.55555555555554,226.35810560520838,226.41666666666666,242.62143972437502C233.27777777777777,258.8847738435417,240.13888888888889,267.45686139489584,247,276.02894894625" stroke="#bc9489" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Shopping" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,193.11404894625002,13.722222222222221,206.60312783000003,20.583333333333332,214.41311026500003C27.444444444444443,222.22309270000002,34.30555555555556,222.57490073645835,41.166666666666664,226.4848646725C48.02777777777778,230.39482860854167,54.888888888888886,237.87289388124998,61.75,237.87289388124998C68.61111111111111,237.87289388124998,75.47222222222221,237.7035017183333,82.33333333333333,237.3647173925C89.19444444444444,237.0259330666667,96.05555555555556,223.80378097447917,102.91666666666667,218.63944641625C109.77777777777779,213.47511185802082,116.63888888888889,206.37871004312504,123.5,206.37871004312504C130.36111111111111,206.37871004312504,137.22222222222223,210.21265657937502,144.08333333333334,210.21265657937502C150.94444444444446,210.21265657937502,157.80555555555554,205.30833639364585,164.66666666666666,203.04067639812502C171.52777777777777,200.77301640260418,178.38888888888889,196.60669660625004,185.25,196.60669660625004C192.11111111111111,196.60669660625004,198.97222222222223,221.89096896895833,205.83333333333334,240.645356958125C212.69444444444446,259.39974494729165,219.55555555555554,290.4134550121875,226.41666666666666,309.13302454125C233.27777777777777,327.85259407031253,240.13888888888889,340.40768410140623,247,352.9627741325" stroke="#d97b5c" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Transportation" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,180.88138077562502,13.722222222222221,182.13779148875003,20.583333333333332,182.13779148875003C27.444444444444443,182.13779148875003,34.30555555555556,182.06200590500003,41.166666666666664,182.06200590500003C48.02777777777778,182.06200590500003,54.888888888888886,184.75435054375004,61.75,184.75435054375004C68.61111111111111,184.75435054375004,75.47222222222221,179.46510426156254,82.33333333333333,176.80387860625004C89.19444444444444,174.14265295093753,96.05555555555556,168.78699661187503,102.91666666666667,168.78699661187503C109.77777777777779,168.78699661187503,116.63888888888889,169.53477728312504,123.5,169.53477728312504C130.36111111111111,169.53477728312504,137.22222222222223,168.05743051437506,144.08333333333334,165.10273697687506C150.94444444444446,162.14804343937507,157.80555555555554,152.36883292770844,164.66666666666666,149.44718480187507C171.52777777777777,146.5255366760417,178.38888888888889,145.064712613125,185.25,145.064712613125C192.11111111111111,145.064712613125,198.97222222222223,162.4492948719792,205.83333333333334,179.30908273500003C212.69444444444446,196.16887059802085,219.55555555555554,224.58890633187502,226.41666666666666,246.22343979125C233.27777777777777,267.85797325062504,240.13888888888889,288.4871283709375,247,309.11628349125" stroke="#cb8873" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Travel" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,177.14924434218753,13.722222222222221,174.67351862187505,20.583333333333332,174.67351862187505C27.444444444444443,174.67351862187505,34.30555555555556,175.01023636208336,41.166666666666664,175.68367184250002C48.02777777777778,176.35710732291668,54.888888888888886,178.34901490197916,61.75,180.037528271875C68.61111111111111,181.72604164177085,75.47222222222221,185.81475206187503,82.33333333333333,185.81475206187503C89.19444444444444,185.81475206187503,96.05555555555556,180.10942891614587,102.91666666666667,175.41899949437504C109.77777777777779,170.7285700726042,116.63888888888889,161.8235491305209,123.5,157.67217553125005C130.36111111111111,153.5208019319792,137.22222222222223,150.51075789874997,144.08333333333334,150.51075789874997C150.94444444444446,150.51075789874997,157.80555555555554,152.019695016875,164.66666666666666,155.03756925312504C171.52777777777777,158.05544348937508,178.38888888888889,163.99824580395835,185.25,179.8737003925C192.11111111111111,195.74915498104167,198.97222222222223,221.74867418531247,205.83333333333334,250.290296784375C212.69444444444446,278.8319193834375,219.55555555555554,323.3410079305209,226.41666666666666,351.12343598687505C233.27777777777777,378.90586404322926,240.13888888888889,397.9453645828646,247,416.9848651225" stroke="#f46230" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g><g class="mark-text role-mark mark_0_layer_1_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of date: Mar 31, 2020; value for max date: 0.1371888215; category: Groceries; category_repl: $-tc0-Groceries" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,141.5540965634375)" font-family="sans-serif" font-size="11px" fill="#3ea990" stroke-width="5" opacity="0">$-tc0-Groceries</text><text aria-label="Max of date: Mar 31, 2020; value for max date: 1e-7; category: Health and beauty; category_repl: $-tc0-Health and beauty" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,182.6249700625)" font-family="sans-serif" font-size="11px" fill="#7da9a4" stroke-width="5" opacity="0">$-tc0-Health and beauty</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.31529887; category: Entertainment; category_repl: $-tc0-Entertainment" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,277.01759920625005)" font-family="sans-serif" font-size="11px" fill="#ae9e9b" stroke-width="5" opacity="0">$-tc0-Entertainment</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.322017366; category: Restaurants; category_repl: $-tc0-Restaurants" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,279.02894894625)" font-family="sans-serif" font-size="11px" fill="#bc9489" stroke-width="5" opacity="0">$-tc0-Restaurants</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.578998828; category: Shopping; category_repl: $-tc0-Shopping" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,355.9627741325)" font-family="sans-serif" font-size="11px" fill="#d97b5c" stroke-width="5" opacity="0">$-tc0-Shopping</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.432538734; category: Transportation; category_repl: $-tc0-Transportation" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,312.11628349125)" font-family="sans-serif" font-size="11px" fill="#cb8873" stroke-width="5" opacity="0">$-tc0-Transportation</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.792851324; category: Travel; category_repl: $-tc0-Travel" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,419.9848651225)" font-family="sans-serif" font-size="11px" fill="#f46230" stroke-width="5" opacity="0">$-tc0-Travel</text></g><g class="mark-symbol role-mark mark_1_marks" role="graphics-object" aria-roledescription="symbol mark container"><path aria-label="date: Mar 31, 2020; value: 0.1371888215; category: Groceries" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,138.5540965634375)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#3ea990" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: 1e-7; category: Health and beauty" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,179.6249700625)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#7da9a4" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.31529887; category: Entertainment" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,274.01759920625005)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#ae9e9b" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.322017366; category: Restaurants" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,276.02894894625)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#bc9489" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.578998828; category: Shopping" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,352.9627741325)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#d97b5c" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.432538734; category: Transportation" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,309.11628349125)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#cb8873" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.792851324; category: Travel" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,416.9848651225)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#f46230" stroke-width="2" opacity="1"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g></g></svg><form class="vega-bindings"></form><annotation data-role="internalAnnotation" data-name="text-assist-upward" style="display: block; box-sizing: border-box; width: 50px; height: auto; position: absolute; left: 25px; top: 140px; transform: translateY(-50%); opacity: 1; font-size: 13px; line-height: 140%; color: rgb(204, 204, 204); text-align: right; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;"><i class="bi bi-arrow-up"></i><br>More spending</annotation><annotation data-role="internalAnnotation" data-name="text-assist-downward" style="display: block; box-sizing: border-box; width: 50px; height: auto; position: absolute; left: 25px; top: 225px; transform: translateY(-50%); opacity: 1; font-size: 13px; line-height: 140%; color: rgb(204, 204, 204); text-align: right; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">Less spending<br><i class="bi bi-arrow-down"></i></annotation></div><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; top: 488.5px; left: 89.5469px;"><div class="$-x-0"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">Jan. 7</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 488.5px; left: 328.477px;"><div class="$-x-0.5"><div style="font-size: 14px; font-weight: 700; text-align: left;">Mar. 18</div><div style="width: 110px; font-size: 14px; text-align: left;">California issues country's first stay-at-home order</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-100%); top: 488.5px; left: 340.547px;"><div class="$-x-1"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">Mar. 31</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 481.5px; left: 76.5px;"><div class="$-y-p1444" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">−100%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 331.812px; left: 76.5px;"><div class="$-y-p88319" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">−50%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 182.125px; left: 76.5px;"><div class="$-y-p48" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">+0%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 32.4375px; left: 76.5px;"><div class="$-y-p47607" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">+50%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 132.554px; left: 337px;"><div data-dx="5" class="$-tc0-Groceries" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(62, 169, 144);">Groceries</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 173.625px; left: 337px;"><div data-dx="5" class="$-tc0-Health and beauty" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(125, 169, 164);">Health and beauty</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" moved="true" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 261.018px; left: 337px;"><div data-dx="5" class="$-tc0-Entertainment" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(174, 158, 155);">Entertainment</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" moved="true" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 277.018px; left: 337px;"><div data-dx="5" class="$-tc0-Restaurants" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(188, 148, 137);">Restaurants</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 346.963px; left: 337px;"><div data-dx="5" class="$-tc0-Shopping" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(217, 123, 92);">Shopping</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 303.116px; left: 337px;"><div data-dx="5" class="$-tc0-Transportation" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(203, 136, 115);">Transportation</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 410.985px; left: 337px;"><div data-dx="5" class="$-tc0-Travel" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(244, 98, 48);">Travel</div></div></replacement></div></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-5 pt-3">
+          <h6>Rule: Change the alignment of axis labels</h6>
+          <div class="card">
+            <div class="card-body pb-0">
+              <pre class="code">
+<code>    {</code>
+<code>      "comment": "Change the alignment of axis label",</code>
+<code>      "specifier": {</code>
+<code>        "role": "axis.label",</code>
+<code>        "field": "date",</code>
+<code>        "values": ["2020-03-19"]</code><annotate>// query by data</annotate>
+<code>      },</code>
+<code>      "action": "modify",</code>
+<code>      "option": {</code><annotate>// alignment properties</annotate>
+<code>        "textAlign": "right",</code>
+<code>        "orient": "end"</code>
+<code>      }</code>
+<code>    }</code>
+</pre>
+            </div>
+          </div>
+          <p class="mt-2">
+          </p>
+        </div>
+        <div class="col-12 col-md-7 pt-3">
+          <h6>View</h6>
+          <div id="fronto-view-transform-2" class="fronto-view-transform" style="width: 475px; height: 655px; position: relative;"><div id="title-spending-line-mobile" data-role="fronto-title"><div style="position: relative; font-size: 14px;"><div data-role="title" style="width: 450px; margin-left: auto; margin-right: auto; margin-bottom: 20px; font-size: 20px; line-height: 120%; color: rgb(34, 34, 34); text-align: center; font-weight: 700;">Change in credit and debit card spending</div></div></div><div id="view-spending-line-mobile" data-role="fronto-view" class="vega-embed" style="left: 50%; transform: translate(-50%);"><div class="chart-wrapper fit-x fit-y" role="graphics-document" aria-roledescription="visualization" aria-label="Vega visualization" style="cursor: default; position: relative;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="marks" width="460" height="510" viewBox="0 0 460 510" style="background-color: white;"><g fill="none" stroke-miterlimit="10" transform="translate(86,5)"><g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0.5,0.5h247v479h-247Z" fill="transparent" stroke="#dddddd"></path><g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,479.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(209,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(247,-479)" x2="0" y2="479" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,479)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(0,329)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(0,180)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line><line transform="translate(0,30)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis for a time scale with values from Tuesday, 07 January 2020, 7:00:00 PM to Tuesday, 31 March 2020, 8:00:00 PM"><g transform="translate(0.5,479.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-tick" pointer-events="none"><line transform="translate(0,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(209,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(247,0)" x2="0" y2="5" stroke="#cccccc" stroke-width="1" opacity="1"></line></g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="start" transform="translate(0,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-0</text><text text-anchor="middle" transform="translate(208.77380952380952,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-0.5</text><text text-anchor="end" transform="translate(247,18)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-x-1</text></g><g class="mark-rule role-axis-domain" pointer-events="none"><line transform="translate(0,0)" x2="247" y2="0" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis for a linear scale with values from −1.0 to 0.6"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="end" transform="translate(-10,483)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p1444</text><text text-anchor="end" transform="translate(-10,333.3125)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p88319</text><text text-anchor="end" transform="translate(-10,183.625)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p48</text><text text-anchor="end" transform="translate(-10,33.9375)" font-family="sans-serif" font-size="14px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p47607</text></g><g class="mark-rule role-axis-domain" pointer-events="none"><line transform="translate(0,479)" x2="0" y2="-479" stroke="#dddddd" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-scope mark_0_layer_0_pathgroup" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Groceries" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,179.62206903270368,13.722222222222221,179.61916800290732,20.583333333333332,179.61916800290732C27.444444444444443,179.61916800290732,34.30555555555556,182.41334869200958,41.166666666666664,184.16619704162503C48.02777777777778,185.91904539124047,54.888888888888886,190.13625810060003,61.75,190.13625810060003C68.61111111111111,190.13625810060003,75.47222222222221,176.55124463880625,82.33333333333333,172.621456779825C89.19444444444444,168.69166892084374,96.05555555555556,166.55753094671252,102.91666666666667,166.55753094671252C109.77777777777779,166.55753094671252,116.63888888888889,175.68147610051258,123.5,175.91807526453755C130.36111111111111,176.15467442856252,137.22222222222223,176.272974010575,144.08333333333334,176.272974010575C150.94444444444446,176.272974010575,157.80555555555554,161.85805988202293,164.66666666666666,154.85227829684376C171.52777777777777,147.8464967116646,178.38888888888889,147.98094703106253,185.25,134.23828449950005C192.11111111111111,120.49562196793758,198.97222222222223,62.528472142187525,205.83333333333334,56.720996987437516C212.69444444444446,50.913521832687515,219.55555555555554,48.00978425531251,226.41666666666666,48.00978425531251C233.27777777777777,48.00978425531251,240.13888888888889,93.28194040937501,247,138.5540965634375" stroke="#3ea990" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Health and beauty" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,185.7820993613521,13.722222222222221,191.93922866020418,20.583333333333332,196.10075285625C27.444444444444443,200.26227705229584,34.30555555555556,202.48036096893753,41.166666666666664,204.59411523877503C48.02777777777778,206.70786950861253,54.888888888888886,208.783278475275,61.75,208.783278475275C68.61111111111111,208.783278475275,75.47222222222221,187.35048893062495,82.33333333333333,183.81134174687497C89.19444444444444,180.272194563125,96.05555555555556,178.50262097125002,102.91666666666667,178.50262097125002C109.77777777777779,178.50262097125002,116.63888888888889,192.54306058875002,123.5,192.54306058875002C130.36111111111111,192.54306058875002,137.22222222222223,191.53196902708336,144.08333333333334,189.50978590375004C150.94444444444446,187.48760278041672,157.80555555555554,158.87237389791676,164.66666666666666,155.43800936125007C171.52777777777777,152.00364482458338,178.38888888888889,150.28646255625003,185.25,150.28646255625003C192.11111111111111,150.28646255625003,198.97222222222223,163.87291056416672,205.83333333333334,171.17016411437504C212.69444444444446,178.46741766458337,219.55555555555554,194.0699838575,226.41666666666666,194.0699838575C233.27777777777777,194.0699838575,240.13888888888889,186.84747696,247,179.6249700625" stroke="#7da9a4" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Entertainment" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,199.28289405520837,13.722222222222221,218.9408180479167,20.583333333333332,221.94969746250004C27.444444444444443,224.95857687708337,34.30555555555556,225.64019617229167,41.166666666666664,226.46301658437503C48.02777777777778,227.28583699645839,54.888888888888886,227.69724720250005,61.75,227.69724720250005C68.61111111111111,227.69724720250005,75.47222222222221,227.66245803125005,82.33333333333333,227.59287968875003C89.19444444444444,227.52330134625,96.05555555555556,220.32248287020835,102.91666666666667,216.60564714375002C109.77777777777779,212.8888114172917,116.63888888888889,205.97612621041665,123.5,205.29186533C130.36111111111111,204.60760444958336,137.22222222222223,204.94973488979167,144.08333333333334,204.26547400937503C150.94444444444446,203.58121312895838,157.80555555555554,193.5732508783333,164.66666666666666,192.5993844025C171.52777777777777,191.62551792666667,178.38888888888889,191.13858468875003,185.25,191.13858468875003C192.11111111111111,191.13858468875003,198.97222222222223,215.22710335572918,205.83333333333334,225.33541346187502C212.69444444444446,235.44372356802086,219.55555555555554,243.67474770156252,226.41666666666666,251.78844532562502C233.27777777777777,259.9021429496875,240.13888888888889,266.9598710779688,247,274.01759920625005" stroke="#ae9e9b" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Restaurants" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,183.079243535625,13.722222222222221,186.53351700875,20.583333333333332,186.53351700875C27.444444444444443,186.53351700875,34.30555555555556,184.69420919979166,41.166666666666664,183.80051305375C48.02777777777778,182.90681690770833,54.888888888888886,182.1588810604167,61.75,181.17134013250003C68.61111111111111,180.18379920458338,75.47222222222221,179.88375190812505,82.33333333333333,177.87526748625004C89.19444444444444,175.86678306437503,96.05555555555556,172.84045108520834,102.91666666666667,169.12043360125C109.77777777777779,165.40041611729166,116.63888888888889,157.62594444708336,123.5,155.55516258250003C130.36111111111111,153.4843807179167,137.22222222222223,152.60317988562505,144.08333333333334,152.44898978562503C150.94444444444446,152.294799685625,157.80555555555554,152.37189473562503,164.66666666666666,152.217704635625C171.52777777777777,152.063514535625,178.38888888888889,146.69798705437503,185.25,146.69798705437503C192.11111111111111,146.69798705437503,198.97222222222223,162.46170211958335,205.83333333333334,178.44894423125004C212.69444444444446,194.4361863429167,219.55555555555554,226.35810560520838,226.41666666666666,242.62143972437502C233.27777777777777,258.8847738435417,240.13888888888889,267.45686139489584,247,276.02894894625" stroke="#bc9489" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Shopping" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,193.11404894625002,13.722222222222221,206.60312783000003,20.583333333333332,214.41311026500003C27.444444444444443,222.22309270000002,34.30555555555556,222.57490073645835,41.166666666666664,226.4848646725C48.02777777777778,230.39482860854167,54.888888888888886,237.87289388124998,61.75,237.87289388124998C68.61111111111111,237.87289388124998,75.47222222222221,237.7035017183333,82.33333333333333,237.3647173925C89.19444444444444,237.0259330666667,96.05555555555556,223.80378097447917,102.91666666666667,218.63944641625C109.77777777777779,213.47511185802082,116.63888888888889,206.37871004312504,123.5,206.37871004312504C130.36111111111111,206.37871004312504,137.22222222222223,210.21265657937502,144.08333333333334,210.21265657937502C150.94444444444446,210.21265657937502,157.80555555555554,205.30833639364585,164.66666666666666,203.04067639812502C171.52777777777777,200.77301640260418,178.38888888888889,196.60669660625004,185.25,196.60669660625004C192.11111111111111,196.60669660625004,198.97222222222223,221.89096896895833,205.83333333333334,240.645356958125C212.69444444444446,259.39974494729165,219.55555555555554,290.4134550121875,226.41666666666666,309.13302454125C233.27777777777777,327.85259407031253,240.13888888888889,340.40768410140623,247,352.9627741325" stroke="#d97b5c" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Transportation" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,180.88138077562502,13.722222222222221,182.13779148875003,20.583333333333332,182.13779148875003C27.444444444444443,182.13779148875003,34.30555555555556,182.06200590500003,41.166666666666664,182.06200590500003C48.02777777777778,182.06200590500003,54.888888888888886,184.75435054375004,61.75,184.75435054375004C68.61111111111111,184.75435054375004,75.47222222222221,179.46510426156254,82.33333333333333,176.80387860625004C89.19444444444444,174.14265295093753,96.05555555555556,168.78699661187503,102.91666666666667,168.78699661187503C109.77777777777779,168.78699661187503,116.63888888888889,169.53477728312504,123.5,169.53477728312504C130.36111111111111,169.53477728312504,137.22222222222223,168.05743051437506,144.08333333333334,165.10273697687506C150.94444444444446,162.14804343937507,157.80555555555554,152.36883292770844,164.66666666666666,149.44718480187507C171.52777777777777,146.5255366760417,178.38888888888889,145.064712613125,185.25,145.064712613125C192.11111111111111,145.064712613125,198.97222222222223,162.4492948719792,205.83333333333334,179.30908273500003C212.69444444444446,196.16887059802085,219.55555555555554,224.58890633187502,226.41666666666666,246.22343979125C233.27777777777777,267.85797325062504,240.13888888888889,288.4871283709375,247,309.11628349125" stroke="#cb8873" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h247v479h-247Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="date: Jan 07, 2020; value: 1e-7; category: Travel" role="graphics-symbol" aria-roledescription="line mark" d="M0,179.6249700625C6.861111111111111,177.14924434218753,13.722222222222221,174.67351862187505,20.583333333333332,174.67351862187505C27.444444444444443,174.67351862187505,34.30555555555556,175.01023636208336,41.166666666666664,175.68367184250002C48.02777777777778,176.35710732291668,54.888888888888886,178.34901490197916,61.75,180.037528271875C68.61111111111111,181.72604164177085,75.47222222222221,185.81475206187503,82.33333333333333,185.81475206187503C89.19444444444444,185.81475206187503,96.05555555555556,180.10942891614587,102.91666666666667,175.41899949437504C109.77777777777779,170.7285700726042,116.63888888888889,161.8235491305209,123.5,157.67217553125005C130.36111111111111,153.5208019319792,137.22222222222223,150.51075789874997,144.08333333333334,150.51075789874997C150.94444444444446,150.51075789874997,157.80555555555554,152.019695016875,164.66666666666666,155.03756925312504C171.52777777777777,158.05544348937508,178.38888888888889,163.99824580395835,185.25,179.8737003925C192.11111111111111,195.74915498104167,198.97222222222223,221.74867418531247,205.83333333333334,250.290296784375C212.69444444444446,278.8319193834375,219.55555555555554,323.3410079305209,226.41666666666666,351.12343598687505C233.27777777777777,378.90586404322926,240.13888888888889,397.9453645828646,247,416.9848651225" stroke="#f46230" stroke-width="5"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g><g class="mark-text role-mark mark_0_layer_1_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of date: Mar 31, 2020; value for max date: 0.1371888215; category: Groceries; category_repl: $-tc0-Groceries" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,141.5540965634375)" font-family="sans-serif" font-size="11px" fill="#3ea990" stroke-width="5" opacity="0">$-tc0-Groceries</text><text aria-label="Max of date: Mar 31, 2020; value for max date: 1e-7; category: Health and beauty; category_repl: $-tc0-Health and beauty" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,182.6249700625)" font-family="sans-serif" font-size="11px" fill="#7da9a4" stroke-width="5" opacity="0">$-tc0-Health and beauty</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.31529887; category: Entertainment; category_repl: $-tc0-Entertainment" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,277.01759920625005)" font-family="sans-serif" font-size="11px" fill="#ae9e9b" stroke-width="5" opacity="0">$-tc0-Entertainment</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.322017366; category: Restaurants; category_repl: $-tc0-Restaurants" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,279.02894894625)" font-family="sans-serif" font-size="11px" fill="#bc9489" stroke-width="5" opacity="0">$-tc0-Restaurants</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.578998828; category: Shopping; category_repl: $-tc0-Shopping" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,355.9627741325)" font-family="sans-serif" font-size="11px" fill="#d97b5c" stroke-width="5" opacity="0">$-tc0-Shopping</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.432538734; category: Transportation; category_repl: $-tc0-Transportation" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,312.11628349125)" font-family="sans-serif" font-size="11px" fill="#cb8873" stroke-width="5" opacity="0">$-tc0-Transportation</text><text aria-label="Max of date: Mar 31, 2020; value for max date: −0.792851324; category: Travel; category_repl: $-tc0-Travel" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(251,419.9848651225)" font-family="sans-serif" font-size="11px" fill="#f46230" stroke-width="5" opacity="0">$-tc0-Travel</text></g><g class="mark-symbol role-mark mark_1_marks" role="graphics-object" aria-roledescription="symbol mark container"><path aria-label="date: Mar 31, 2020; value: 0.1371888215; category: Groceries" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,138.5540965634375)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#3ea990" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: 1e-7; category: Health and beauty" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,179.6249700625)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#7da9a4" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.31529887; category: Entertainment" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,274.01759920625005)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#ae9e9b" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.322017366; category: Restaurants" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,276.02894894625)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#bc9489" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.578998828; category: Shopping" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,352.9627741325)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#d97b5c" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.432538734; category: Transportation" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,309.11628349125)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#cb8873" stroke-width="2" opacity="1"></path><path aria-label="date: Mar 31, 2020; value: −0.792851324; category: Travel" role="graphics-symbol" aria-roledescription="circle" transform="translate(247,416.9848651225)" d="M4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,-4.743416490252569,0A4.743416490252569,4.743416490252569,0,1,1,4.743416490252569,0" fill="#f46230" stroke-width="2" opacity="1"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g></g></svg><form class="vega-bindings"></form><annotation data-role="internalAnnotation" data-name="text-assist-upward" style="display: block; box-sizing: border-box; width: 50px; height: auto; position: absolute; left: 25px; top: 140px; transform: translateY(-50%); opacity: 1; font-size: 13px; line-height: 140%; color: rgb(204, 204, 204); text-align: right; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;"><i class="bi bi-arrow-up"></i><br>More spending</annotation><annotation data-role="internalAnnotation" data-name="text-assist-downward" style="display: block; box-sizing: border-box; width: 50px; height: auto; position: absolute; left: 25px; top: 225px; transform: translateY(-50%); opacity: 1; font-size: 13px; line-height: 140%; color: rgb(204, 204, 204); text-align: right; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">Less spending<br><i class="bi bi-arrow-down"></i></annotation></div><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; top: 488.5px; left: 89.5469px;"><div class="$-x-0"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">Jan. 7</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%) translateX(-80%); top: 488.5px; left: 328.477px;"><div class="$-x-0.5" data-orient="end"><div style="font-size: 14px; font-weight: 700; text-align: right;">Mar. 18</div><div style="width: 110px; font-size: 14px; text-align: right;">California issues country's first stay-at-home order</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-100%); top: 488.5px; left: 340.547px;"><div class="$-x-1"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">Mar. 31</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 481.5px; left: 76.5px;"><div class="$-y-p1444" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">−100%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 331.812px; left: 76.5px;"><div class="$-y-p88319" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">−50%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 182.125px; left: 76.5px;"><div class="$-y-p48" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">+0%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; transform: translateX(-100%) translateY(-50%); top: 32.4375px; left: 76.5px;"><div class="$-y-p47607" style="text-align: right;"><div style="color: rgb(204, 204, 204); font-size: 14px; text-align: left;">+50%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 132.554px; left: 337px;"><div data-dx="5" class="$-tc0-Groceries" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(62, 169, 144);">Groceries</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 173.625px; left: 337px;"><div data-dx="5" class="$-tc0-Health and beauty" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(125, 169, 164);">Health and beauty</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" moved="true" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 261.018px; left: 337px;"><div data-dx="5" class="$-tc0-Entertainment" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(174, 158, 155);">Entertainment</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" moved="true" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 277.018px; left: 337px;"><div data-dx="5" class="$-tc0-Restaurants" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(188, 148, 137);">Restaurants</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 346.963px; left: 337px;"><div data-dx="5" class="$-tc0-Shopping" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(217, 123, 92);">Shopping</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 303.116px; left: 337px;"><div data-dx="5" class="$-tc0-Transportation" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(203, 136, 115);">Transportation</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tc0" style="position: absolute; line-height: 100%; transform: translateX(5px); top: 410.985px; left: 337px;"><div data-dx="5" class="$-tc0-Travel" data-callout="no"><div data-text-color="$mark" style="font-size: 14px; font-weight: 700; color: rgb(244, 98, 48);">Travel</div></div></replacement></div></div>
+        </div>
+      </div>
+    </div>
+    <footer class="container my-5">
+      <div class="row">
+        <div class="col-12" style="color: #999999;">
+          &copy; 2021 Hyeok Kim
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

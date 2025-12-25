@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="image/cicero-icon-32x32.png" sizes="16x16" />
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+    <style>
+      html,
+      body,
+      div,
+      input,
+      span,
+      textarea,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      svg,
+      text {
+        font-family: "Arial", sans-serif !important;
+      }
+      pre.code {
+        white-space: pre-wrap;
+        font-size: 12px;
+      }
+      pre.code::before {
+        counter-reset: listing;
+      }
+      pre.code code {
+        counter-increment: listing;
+      }
+      pre.code code::before {
+        content: counter(listing);
+        display: inline-block;
+        width: 2.5em; /* now works */
+        padding-left: auto; /* now works */
+        margin-left: auto; /* now works */
+        text-align: left; /* now works */
+        color: #aaaaaa;
+      }
+      pre.code annotate {
+        color: #00aa00;
+        padding-left: 1em;
+      }
+      #fronto-view,
+      .fronto-view-transform {
+        border-radius: .25rem;
+        background-color: white;
+        overflow: scroll;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        width: fit-content;
+        padding-left: 20px;
+        padding-right: 20px;
+        border: 1px solid rgba(0,0,0,.125);
+      }
+      div[data-role=fronto-view] {
+        position: absolute;
+      }
+      .card-header {
+        font-size: 0.8rem;
+      }
+      .card-header strong {
+        font-weight: 500;
+      }
+    </style>
+    <title>Bond Yields (Desktop → Mobile)</title>
+  </head>
+  <body>
+    <header class="container" id="header">
+      <div class="row">
+        <div class="col-12 py-2">
+          <a href="index.html">&lt; Back to the list</a>
+          <h1 class="h3 m-0">Bond Yeilds (Desktop → Mobile)</h1>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 pt-3">
+          <p>A line (and area) chart about changes to forcasted GDP growth rate over time. This example covers transformation strategies regarding data (filtering) and downstream changes.
+            Further descriptions are available in <a href="https://arxiv.org/abs/2104.07724" target="_blank">Kim et al. (2021)</a>.
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 pt-3">
+          <h5>Desktop view</h5>
+        </div>
+        <div class="col-12 pt-3">
+          <h6>
+            Design specification <a class="pl-3" data-bs-toggle="collapse" href="#desktop-view-spec" role="button" aria-expanded="false" aria-controls="desktop-view-spec">View <i class="bi bi-arrow-down"></i></a>
+          </h6>
+          <div class="card collapse" id="desktop-view-spec">
+            <div class="card-body pb-0">
+<pre class="code">
+<code>{</code>
+<code>  "name": "bond-yields-desktop",</code>
+<code>  "layout": {</code>
+<code>    "width": 924,</code>
+<code>    "height": 465,</code>
+<code>    "composition": "single",</code><annotate>// single view composition</annotate>
+<code>    "row": [</code>
+<code>      {</code>
+<code>        "field": "growth",</code>
+<code>        "scale": {</code>
+<code>          "zero": false,</code><annotate>// non-zero y scale</annotate>
+<code>          "domain": [</code>
+<code>            3,</code>
+<code>            5.5</code>
+<code>          ]</code>
+<code>        },</code>
+<code>        "type": "quantitative"</code>
+<code>      }</code>
+<code>    ],</code>
+<code>    "column": [</code>
+<code>      {</code>
+<code>        "field": "year"</code>
+<code>      }</code>
+<code>    ],</code>
+<code>    "vaxis": {</code><annotate>// vertical axis design</annotate>
+<code>      "grid": true,</code>
+<code>      "gridColor": "#cccccc",</code>
+<code>      "gridWidth": 1</code>
+<code>    }</code>
+<code>  },</code>
+<code>  "layer": [</code>
+<code>    {</code><annotate>// first layer</annotate>
+<code>      "transform": [</code><annotate>// local filter</annotate>
+<code>        {</code>
+<code>          "filter": "datum.cat == 'forecast'"</code>
+<code>        }</code>
+<code>      ],</code>
+<code>      "mark": {</code>
+<code>        "type": "line",</code><annotate>// line mark</annotate>
+<code>        "color": {</code><annotate>// color encoding, manual</annotate>
+<code>          "field": "forecasted_year",</code>
+<code>          "type": "nominal",</code>
+<code>          "scale": {</code>
+<code>            "domain": [</code>
+<code>              2010,</code>
+<code>              2011,</code>
+<code>              2012,</code>
+<code>              2013,</code>
+<code>              2014,</code>
+<code>              2015,</code>
+<code>              2016</code>
+<code>            ],</code>
+<code>            "range": [</code>
+<code>              "red",</code>
+<code>              "lightgray",</code>
+<code>              "lightgray",</code>
+<code>              "lightgray",</code>
+<code>              "lightgray",</code>
+<code>              "lightgray",</code>
+<code>              "red"</code>
+<code>            ]</code>
+<code>          }</code>
+<code>        }</code>
+<code>      },</code>
+<code>      "text": [</code>
+<code>        {</code>
+<code>          "type": "on-axis",</code><annotate>// axis labels</annotate>
+<code>          "field": "growth",</code>
+<code>          "values": [</code>
+<code>            3,</code>
+<code>            3.5,</code>
+<code>            4,</code>
+<code>            4.5,</code>
+<code>            5,</code>
+<code>            5.5</code>
+<code>          ],</code>
+<code>          "dy": "-5px",</code>
+<code>          "anchor": "start",</code>
+<code>          "align": "left",</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontSize": 11,</code>
+<code>              "color": "#999999",</code>
+<code>              "align": "left",</code>
+<code>              "expression": "format(datum.value, '.1f') + (datum.index == 1 ? '%' : '')"</code><annotate>// only the last element gets '%' unit</annotate>
+<code>            }</code>
+<code>          ]</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-axis",</code>
+<code>          "field": "year",</code>
+<code>          "values": [</code>
+<code>            2010,</code>
+<code>            2011,</code>
+<code>            2012,</code>
+<code>            2013,</code>
+<code>            2014,</code>
+<code>            2015,</code>
+<code>            2016,</code>
+<code>            2017,</code>
+<code>            2018,</code>
+<code>            2019,</code>
+<code>            2020,</code>
+<code>            2021</code>
+<code>          ],</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontSize": 11,</code>
+<code>              "color": "#999999",</code>
+<code>              "align": "left",</code><annotate>// only the first and mod10=0 elements get '%' unit</annotate>
+<code>              "expression": "(datum.value % 10 == 0 || datum.index == 0 ? datum.value : '\\'' + (datum.value % 100))"</code>
+<code>            }</code>
+<code>          ],</code>
+<code>          "tick": true</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-mark",</code>
+<code>          "field": "forecasted_year",</code>
+<code>          "orient": "top-right",</code>
+<code>          "anchorAlign": "end",</code>
+<code>          "values": [</code><annotate>// only year of 2010 and 2016</annotate>
+<code>            2010,</code>
+<code>            2016</code>
+<code>          ],</code>
+<code>          "dx": -130,</code>
+<code>          "dy": -100,</code>
+<code>          "items": [</code>
+<code>            {</code><annotate>// common</annotate>
+<code>              "width": 200,</code>
+<code>              "fontSize": 13,</code>
+<code>              "fontWeight": 700,</code>
+<code>              "color": "red",</code>
+<code>              "expression": "(datum.value + ' forecast for world GDP growth')"</code>
+<code>            },</code>
+<code>            {</code>
+<code>              "width": 140,</code>
+<code>              "condition": [</code><annotate>// only year of 2010</annotate>
+<code>                2010</code>
+<code>              ],</code>
+<code>              "fontSize": 13,</code>
+<code>              "fontWeight": 100,</code>
+<code>              "expression": "'In April 2010 the IMF forecast the world’s GDP growth to be 4.2% that year and 4.6% in 2015'"</code>
+<code>            },</code>
+<code>            {</code>
+<code>              "width": 140,</code>
+<code>              "condition": [</code><annotate>// only year of 2016</annotate>
+<code>                2016</code>
+<code>              ],</code>
+<code>              "fontSize": 13,</code>
+<code>              "fontWeight": 100,</code>
+<code>              "align": "right",</code>
+<code>              "expression": "'In April 2016 the IMF forecast the world’s GDP growth to be 3.9 this year and 3.2 in 2021'"</code>
+<code>            }</code>
+<code>          ],</code>
+<code>          "tick": true</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-mark",</code><annotate>// only year names</annotate>
+<code>          "field": "forecasted_year",</code>
+<code>          "orient": "bottom-right",</code>
+<code>          "anchorAlign": "center",</code>
+<code>          "dx": -50,</code>
+<code>          "dy": 20,</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontSize": 13,</code>
+<code>              "color": "$mark"</code><annotate>// color of its associating element's color</annotate>
+<code>            }</code>
+<code>          ]</code>
+<code>        }</code>
+<code>      ]</code>
+<code>    },</code>
+<code>    {</code><annotate>// second layer</annotate>
+<code>      "transform": [</code>
+<code>        {</code><annotate>// local filter</annotate>
+<code>          "filter": "datum.cat == 'actual'"</code>
+<code>        }</code>
+<code>      ],</code>
+<code>      "mark": {</code>
+<code>        "type": "area",</code>
+<code>        "color": {</code>
+<code>          "value": {</code>
+<code>            "x1": 1,</code>
+<code>            "y1": 1,</code>
+<code>            "x2": 1,</code>
+<code>            "y2": 0,</code>
+<code>            "gradient": "linear",</code>
+<code>            "stops": [</code>
+<code>              {</code>
+<code>                "offset": 0.58,</code>
+<code>                "color": "transparent"</code>
+<code>              },</code>
+<code>              {</code>
+<code>                "offset": 1,</code>
+<code>                "color": "lightgray"</code>
+<code>              }</code>
+<code>            ]</code>
+<code>          }</code>
+<code>        }</code>
+<code>      }</code>
+<code>    },</code>
+<code>    {</code><annotate>// third layer</annotate>
+<code>      "transform": [</code>
+<code>        {</code><annotate>// local filter</annotate>
+<code>          "filter": "datum.cat == 'actual'"</code>
+<code>        }</code>
+<code>      ],</code>
+<code>      "mark": {</code>
+<code>        "type": "line",</code>
+<code>        "color": {</code>
+<code>          "value": "black"</code>
+<code>        },</code>
+<code>        "strokeWidth": {</code>
+<code>          "value": 2</code>
+<code>        }</code>
+<code>      }</code>
+<code>    }</code>
+<code>  ],</code>
+<code>  "title": {</code><annotate>// chart title elements</annotate>
+<code>    "width": 965,</code>
+<code>    "align": "center",</code>
+<code>    "items": [</code>
+<code>      {</code>
+<code>        "text": "Forecasts for the world's gross domestic product, change from previous year",</code>
+<code>        "fontWeight": 700,</code>
+<code>        "fontSize": 16,</code>
+<code>        "align": "left"</code>
+<code>      },</code>
+<code>      {</code>
+<code>        "text": "Forecasts are shown for the forecasting year and the next five years. Forecasts are made in April of each year.",</code>
+<code>        "fontSize": 13,</code>
+<code>        "fontcolor": "#333333",</code>
+<code>        "align": "left"</code>
+<code>      }</code>
+<code>    ]</code>
+<code>  },</code>
+<code>  "data": [</code><annotate>// dataset for the visualization</annotate>
+<code>    {</code>
+<code>      "year": 2010,</code>
+<code>      "forecasted_year": 2010,</code>
+<code>      "growth": 5.4,</code>
+<code>      "cat": "actual"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2011,</code>
+<code>      "forecasted_year": 2011,</code>
+<code>      "growth": 4.2,</code>
+<code>      "cat": "actual"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2012,</code>
+<code>      "forecasted_year": 2012,</code>
+<code>      "growth": 3.49,</code>
+<code>      "cat": "actual"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2013,</code>
+<code>      "forecasted_year": 2013,</code>
+<code>      "growth": 3.35,</code>
+<code>      "cat": "actual"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2014,</code>
+<code>      "forecasted_year": 2014,</code>
+<code>      "growth": 3.4,</code>
+<code>      "cat": "actual"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2015,</code>
+<code>      "forecasted_year": 2015,</code>
+<code>      "growth": 3.1,</code>
+<code>      "cat": "actual"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2010,</code>
+<code>      "forecasted_year": 2010,</code>
+<code>      "growth": 4.2,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2011,</code>
+<code>      "forecasted_year": 2010,</code>
+<code>      "growth": 4.3,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2012,</code>
+<code>      "forecasted_year": 2010,</code>
+<code>      "growth": 4.45,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2013,</code>
+<code>      "forecasted_year": 2010,</code>
+<code>      "growth": 4.55,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2014,</code>
+<code>      "forecasted_year": 2010,</code>
+<code>      "growth": 4.6,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2015,</code>
+<code>      "forecasted_year": 2010,</code>
+<code>      "growth": 4.65,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2011,</code>
+<code>      "forecasted_year": 2011,</code>
+<code>      "growth": 4.4,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2012,</code>
+<code>      "forecasted_year": 2011,</code>
+<code>      "growth": 4.52,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2013,</code>
+<code>      "forecasted_year": 2011,</code>
+<code>      "growth": 4.6,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2014,</code>
+<code>      "forecasted_year": 2011,</code>
+<code>      "growth": 4.6,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2015,</code>
+<code>      "forecasted_year": 2011,</code>
+<code>      "growth": 4.75,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2016,</code>
+<code>      "forecasted_year": 2011,</code>
+<code>      "growth": 4.85,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2012,</code>
+<code>      "forecasted_year": 2012,</code>
+<code>      "growth": 3.55,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2013,</code>
+<code>      "forecasted_year": 2012,</code>
+<code>      "growth": 4.1,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2014,</code>
+<code>      "forecasted_year": 2012,</code>
+<code>      "growth": 4.4,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2015,</code>
+<code>      "forecasted_year": 2012,</code>
+<code>      "growth": 4.6,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2016,</code>
+<code>      "forecasted_year": 2012,</code>
+<code>      "growth": 4.65,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "forecasted_year": 2012,</code>
+<code>      "growth": 4.7,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2013,</code>
+<code>      "forecasted_year": 2013,</code>
+<code>      "growth": 3.3,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2014,</code>
+<code>      "forecasted_year": 2013,</code>
+<code>      "growth": 4.05,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2015,</code>
+<code>      "forecasted_year": 2013,</code>
+<code>      "growth": 4.4,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2016,</code>
+<code>      "forecasted_year": 2013,</code>
+<code>      "growth": 4.45,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "forecasted_year": 2013,</code>
+<code>      "growth": 4.5,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2018,</code>
+<code>      "forecasted_year": 2013,</code>
+<code>      "growth": 4.48,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2014,</code>
+<code>      "forecasted_year": 2014,</code>
+<code>      "growth": 3.6,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2015,</code>
+<code>      "forecasted_year": 2014,</code>
+<code>      "growth": 3.8,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2016,</code>
+<code>      "forecasted_year": 2014,</code>
+<code>      "growth": 3.95,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "forecasted_year": 2014,</code>
+<code>      "growth": 3.93,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2018,</code>
+<code>      "forecasted_year": 2014,</code>
+<code>      "growth": 3.9,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2019,</code>
+<code>      "forecasted_year": 2014,</code>
+<code>      "growth": 3.85,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2015,</code>
+<code>      "forecasted_year": 2015,</code>
+<code>      "growth": 3.45,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2016,</code>
+<code>      "forecasted_year": 2015,</code>
+<code>      "growth": 3.8,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "forecasted_year": 2015,</code>
+<code>      "growth": 3.85,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2018,</code>
+<code>      "forecasted_year": 2015,</code>
+<code>      "growth": 3.9,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2019,</code>
+<code>      "forecasted_year": 2015,</code>
+<code>      "growth": 3.95,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2020,</code>
+<code>      "forecasted_year": 2015,</code>
+<code>      "growth": 3.99,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2016,</code>
+<code>      "forecasted_year": 2016,</code>
+<code>      "growth": 3.2,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2017,</code>
+<code>      "forecasted_year": 2016,</code>
+<code>      "growth": 3.55,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2018,</code>
+<code>      "forecasted_year": 2016,</code>
+<code>      "growth": 3.65,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2019,</code>
+<code>      "forecasted_year": 2016,</code>
+<code>      "growth": 3.75,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2020,</code>
+<code>      "forecasted_year": 2016,</code>
+<code>      "growth": 3.78,</code>
+<code>      "cat": "forecast"</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "year": 2021,</code>
+<code>      "forecasted_year": 2016,</code>
+<code>      "growth": 3.85,</code>
+<code>      "cat": "forecast"</code>
+<code>    }</code>
+<code>  ]</code>
+<code>}</code>
+</pre>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 pt-3">
+          <h6>View</h6>
+          <div id="fronto-view" class="mb-3" style="position: relative; height: 600px; width: 1050px;"><div id="title-bond-yields-desktop" data-role="fronto-title"><div style="position: relative; font-size: 14px;"><div data-role="title" style="width: 965px; margin-left: auto; margin-right: auto; margin-bottom: 15px; font-size: 16px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 700;">Forecasts for the world's gross domestic product, change from previous year</div><div data-role="title" style="width: 965px; margin-left: auto; margin-right: auto; margin-bottom: 15px; font-size: 13px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400;">Forecasts are shown for the forecasting year and the next five years. Forecasts are made in April of each year.</div></div></div><div id="view-bond-yields-desktop" data-role="fronto-view" class="vega-embed" style="left: 50%; transform: translate(-50%);"><div class="chart-wrapper fit-x fit-y" role="graphics-document" aria-roledescription="visualization" aria-label="Vega visualization" style="cursor: default;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="marks" width="934" height="475" viewBox="0 0 934 475" style="background-color: white;"><g fill="none" stroke-miterlimit="10" transform="translate(7,11)"><g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h906v441h-906Z" fill="transparent"></path><g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,441)" x2="906" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,353)" x2="906" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,265)" x2="906" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,176)" x2="906" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,88)" x2="906" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,0)" x2="906" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis for a discrete scale with 12 values: 2010, 2011, 2012, 2013, 2014, ending with 2021"><g transform="translate(0.5,441.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-tick" pointer-events="none"><line transform="translate(38,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(113,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(189,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(264,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(340,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(415,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(491,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(566,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(642,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(717,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(793,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(868,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line></g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="middle" transform="translate(37.75,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37380</text><text text-anchor="middle" transform="translate(113.25,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37381</text><text text-anchor="middle" transform="translate(188.75,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37382</text><text text-anchor="middle" transform="translate(264.25,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37383</text><text text-anchor="middle" transform="translate(339.75,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37384</text><text text-anchor="middle" transform="translate(415.25,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37385</text><text text-anchor="middle" transform="translate(490.75,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37386</text><text text-anchor="middle" transform="translate(566.25,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37387</text><text text-anchor="middle" transform="translate(641.75,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37388</text><text text-anchor="middle" transform="translate(717.25,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37389</text><text text-anchor="middle" transform="translate(792.75,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37411</text><text text-anchor="middle" transform="translate(868.25,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37412</text></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis for a linear scale with values from 3.0 to 5.5"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="start" transform="translate(-2,444)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p51</text><text text-anchor="start" transform="translate(-2,355.8)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p50490</text><text text-anchor="start" transform="translate(-2,267.59999999999997)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p52</text><text text-anchor="start" transform="translate(-2,179.4)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p51451</text><text text-anchor="start" transform="translate(-2,91.19999999999997)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p53</text><text text-anchor="start" transform="translate(-2,3)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p52412</text></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-scope mark_0_layer_0_pathgroup" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h906v441h-906Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2010; growth: 4.2; forecasted_year: 2010" role="graphics-symbol" aria-roledescription="line mark" d="M37.75,229.31999999999996L113.25,211.68000000000004L188.75,185.21999999999997L264.25,167.58000000000004L339.75,158.76000000000005L415.25,149.93999999999994" stroke="red" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h906v441h-906Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2011; growth: 4.4; forecasted_year: 2011" role="graphics-symbol" aria-roledescription="line mark" d="M113.25,194.03999999999994L188.75,172.87200000000004L264.25,158.76000000000005L339.75,158.76000000000005L415.25,132.3L490.75,114.66000000000005" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h906v441h-906Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2012; growth: 3.55; forecasted_year: 2012" role="graphics-symbol" aria-roledescription="line mark" d="M188.75,343.98L264.25,246.96000000000006L339.75,194.03999999999994L415.25,158.76000000000005L490.75,149.93999999999994L566.25,141.11999999999998" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h906v441h-906Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2013; growth: 3.3; forecasted_year: 2013" role="graphics-symbol" aria-roledescription="line mark" d="M264.25,388.08000000000004L339.75,255.78000000000003L415.25,194.03999999999994L490.75,185.21999999999997L566.25,176.4L641.75,179.9279999999999" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h906v441h-906Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2014; growth: 3.6; forecasted_year: 2014" role="graphics-symbol" aria-roledescription="line mark" d="M339.75,335.16L415.25,299.88L490.75,273.41999999999996L566.25,276.948L641.75,282.24L717.25,291.05999999999995" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h906v441h-906Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2015; growth: 3.45; forecasted_year: 2015" role="graphics-symbol" aria-roledescription="line mark" d="M415.25,361.62L490.75,299.88L566.25,291.05999999999995L641.75,282.24L717.25,273.41999999999996L792.75,266.3639999999999" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h906v441h-906Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2016; growth: 3.2; forecasted_year: 2016" role="graphics-symbol" aria-roledescription="line mark" d="M490.75,405.71999999999997L566.25,343.98L641.75,326.34L717.25,308.7L792.75,303.408L868.25,291.05999999999995" stroke="red" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g><g class="mark-text role-mark mark_0_layer_1_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of year: 2015; growth for max year: 4.65; forecasted_year: 2010; forecasted_year_repl: $-tf0-2010" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(419.25,152.93999999999994)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf0-2010</text><text aria-label="Max of year: 2021; growth for max year: 3.85; forecasted_year: 2016; forecasted_year_repl: $-tf0-2016" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(872.25,294.05999999999995)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf0-2016</text></g><g class="mark-text role-mark mark_0_layer_2_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of year: 2015; growth for max year: 4.65; forecasted_year: 2010; forecasted_year_repl: $-tf1-2010" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(419.25,152.93999999999994)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf1-2010</text><text aria-label="Max of year: 2016; growth for max year: 4.85; forecasted_year: 2011; forecasted_year_repl: $-tf1-2011" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(494.75,117.66000000000005)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2011</text><text aria-label="Max of year: 2017; growth for max year: 4.7; forecasted_year: 2012; forecasted_year_repl: $-tf1-2012" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(570.25,144.11999999999998)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2012</text><text aria-label="Max of year: 2018; growth for max year: 4.48; forecasted_year: 2013; forecasted_year_repl: $-tf1-2013" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(645.75,182.9279999999999)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2013</text><text aria-label="Max of year: 2019; growth for max year: 3.85; forecasted_year: 2014; forecasted_year_repl: $-tf1-2014" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(721.25,294.05999999999995)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2014</text><text aria-label="Max of year: 2020; growth for max year: 3.99; forecasted_year: 2015; forecasted_year_repl: $-tf1-2015" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(796.75,269.3639999999999)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2015</text><text aria-label="Max of year: 2021; growth for max year: 3.85; forecasted_year: 2016; forecasted_year_repl: $-tf1-2016" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(872.25,294.05999999999995)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf1-2016</text></g><g class="mark-area role-mark mark_1_marks" role="graphics-object" aria-roledescription="area mark container" clip-path="url(#clip2)"><path aria-label="year: 2010; growth: 5.4" role="graphics-symbol" aria-roledescription="area mark" d="M37.75,17.63999999999992L113.25,229.31999999999996L188.75,354.56399999999996L264.25,379.26L339.75,370.44000000000005L415.25,423.35999999999996L415.25,970.2L339.75,970.2L264.25,970.2L188.75,970.2L113.25,970.2L37.75,970.2Z" fill="url(#gradient_0)"></path></g><g class="mark-line role-mark mark_2_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2010; growth: 5.4" role="graphics-symbol" aria-roledescription="line mark" d="M37.75,17.63999999999992L113.25,229.31999999999996L188.75,354.56399999999996L264.25,379.26L339.75,370.44000000000005L415.25,423.35999999999996" stroke="black" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g></g><defs><linearGradient id="gradient_0" x1="1" x2="1" y1="1" y2="0"><stop offset="0.58" stop-color="transparent"></stop><stop offset="1" stop-color="lightgray"></stop></linearGradient><clipPath id="clip2"><rect x="0" y="0" width="906" height="441"></rect></clipPath></defs></svg><form class="vega-bindings"></form><svg data-role="replacement-callout" width="1" height="52.00249999999994" style="position: absolute; left: 416.25px; top: 106.938px;"><line x1="0" x2="0" y1="0" y2="52.00249999999994" stroke="black"></line></svg><svg data-role="replacement-callout" width="1" height="52.013124999999945" style="position: absolute; left: 869.25px; top: 248.047px;"><line x1="0" x2="0" y1="0" y2="52.013124999999945" stroke="black"></line></svg></div><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 450px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p51" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">3.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 361.8px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p50490" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">3.5</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 273.6px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p52" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">4.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 185.4px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p51451" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">4.5</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 97.2px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p53" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">5.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 9px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p52412" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">5.5%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 45.25px;"><div class="$-x-p37380"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">2010</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 120.75px;"><div class="$-x-p37381"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'11</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 196.25px;"><div class="$-x-p37382"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'12</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 271.75px;"><div class="$-x-p37383"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'13</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 347.25px;"><div class="$-x-p37384"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'14</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 422.75px;"><div class="$-x-p37385"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'15</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 498.25px;"><div class="$-x-p37386"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'16</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 573.75px;"><div class="$-x-p37387"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'17</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 649.25px;"><div class="$-x-p37388"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'18</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 724.75px;"><div class="$-x-p37389"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'19</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 800.25px;"><div class="$-x-p37411"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">2020</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 457.5px; left: 875.75px;"><div class="$-x-p37412"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'21</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf0" style="position: absolute; line-height: 100%; transform: translateX(-130px) translateY(-130px); top: 150.94px; left: 426.25px;"><div data-dx="-130" data-dy="-130" class="$-tf0-2010" data-callout="yes" data-datum="{&quot;forecasted_year&quot;:2010}" data-mark="line" data-viewname="bond-yields-desktop"><div style="width: 240px; color: red; font-size: 13px; font-weight: 700;">2010 forecast for world GDP growth</div><div style="width: 160px; font-size: 13px; font-weight: 100;">In April 2010 the IMF forecast the world’s GDP growth to be 4.2% that year and 4.6% in 2015</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf0" style="position: absolute; line-height: 100%; transform: translateX(-130px) translateY(-130px); top: 292.06px; left: 879.25px;"><div data-dx="-130" data-dy="-130" class="$-tf0-2016" data-callout="yes" data-datum="{&quot;forecasted_year&quot;:2016}" data-mark="line" data-viewname="bond-yields-desktop"><div style="width: 240px; color: red; font-size: 13px; font-weight: 700;">2016 forecast for world GDP growth</div><div style="width: 160px; font-size: 13px; font-weight: 100;">In April 2016 the IMF forecast the world’s GDP growth to be 3.9 this year and 3.2 in 2021</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 150.94px; left: 426.25px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2010" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: red;">2010</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 115.66px; left: 501.75px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2011" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2011</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 142.12px; left: 577.25px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2012" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2012</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 180.928px; left: 652.75px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2013" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2013</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 292.06px; left: 728.25px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2014" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2014</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 267.364px; left: 803.75px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2015" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2015</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 292.06px; left: 879.25px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2016" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: red;">2016</div></div></replacement></div></div>
+        </div>
+        <div class="col-12 pt-3">
+          <h5>Cicero Specification</h5>
+          <p>Below, we provide one transformation rule at a time, and show the intermediate result on the side.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-5 pt-3">
+          <h6>Specification</h6>
+          <div class="card">
+            <div class="card-body pb-0">
+              <pre class="code">
+<code>{</code>
+<code>  "$schema": "../cicero.json",</code>
+<code>  "name": "bond-yields-mobile",</code>
+<code>  "description": "This is a Cicero specification for 'Bond Yields' visualization from desktop to mobile.",</code>
+<code>  "metadata": {</code>
+<code>    "condition": "small"</code>
+<code>  },</code>
+<code>  "transformations": [</code>
+<code>  ...</code>
+<code>  ]</code>
+<code>}</code>
+</pre>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-7 pt-3">
+          <h6>View</h6>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-5 pt-3">
+          <h6>Rules: Resize the chart and filtering</h6>
+          <div class="card">
+            <div class="card-header">
+              <strong>Resize the chart</strong>
+            </div>
+            <div class="card-body pb-0">
+              <pre class="code">
+<code>    {</code>
+<code>      "description": "Resize the chart",</code>
+<code>      "specifier": {</code>
+<code>        "role": "view"</code>
+<code>      },</code>
+<code>      "action": "modify",</code>
+<code>      "option": {</code>
+<code>        "size": [</code>
+<code>          365,</code>
+<code>          450</code>
+<code>        ]</code>
+<code>      }</code>
+<code>    }</code>
+</pre>
+</div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">
+    <strong>Filter out data points of <code>forecast_year</code> less than or equal to 2011</strong>
+  </div>
+  <div class="card-body pb-0">
+    <pre class="code">
+<code>    {</code>
+<code>      "description": "Filter out data points of forecast_year <= 2011",</code>
+<code>      "specifier": {</code>
+<code>        "role": "data",</code>
+<code>        "data": [</code><annotate>// OR</annotate>
+<code>          {</code><annotate>// datum query</annotate>
+<code>            "forecasted_year": {</code>
+<code>              "leq": 2011</code>
+<code>            }</code>
+<code>          },</code>
+<code>          {</code><annotate>// datum query</annotate>
+<code>            "year": {</code>
+<code>              "leq": 2011</code>
+<code>            }</code>
+<code>          }</code>
+<code>        ]</code>
+<code>      },</code>
+<code>      "action": "remove"</code>
+<code>    }</code>
+</pre>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-7 pt-3">
+          <h6>View</h6>
+          <div id="fronto-view-transform-1" class="fronto-view-transform" style="position: relative; height: 600px; width: 500px;"><div id="title-bond-yields-mobile" data-role="fronto-title"><div style="position: relative; font-size: 14px;"><div data-role="title" style="width: 365px; margin-left: auto; margin-right: auto; margin-bottom: 15px; font-size: 16px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 700;">Forecasts for the world's gross domestic product, change from previous year</div><div data-role="title" style="width: 365px; margin-left: auto; margin-right: auto; margin-bottom: 15px; font-size: 13px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400;">Forecasts are shown for the forecasting year and the next five years. Forecasts are made in April of each year.</div></div></div><div id="view-bond-yields-mobile" data-role="fronto-view" class="vega-embed" style="left: 50%; transform: translate(-50%);"><div class="chart-wrapper fit-x fit-y" role="graphics-document" aria-roledescription="visualization" aria-label="Vega visualization" style="cursor: default;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="marks" width="375" height="460" viewBox="0 0 375 460" style="background-color: white;"><g fill="none" stroke-miterlimit="10" transform="translate(15,11)"><g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h319v426h-319Z" fill="transparent"></path><g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,426)" x2="319" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,341)" x2="319" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,256)" x2="319" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,170)" x2="319" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,85)" x2="319" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,0)" x2="319" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis for a discrete scale with 10 values: 2012, 2013, 2014, 2015, 2016, ending with 2021"><g transform="translate(0.5,426.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-tick" pointer-events="none"><line transform="translate(16,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(48,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(80,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(112,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(144,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(175,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(207,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(239,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(271,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(303,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line></g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="middle" transform="translate(15.950000000000017,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37382</text><text text-anchor="middle" transform="translate(47.850000000000016,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37383</text><text text-anchor="middle" transform="translate(79.75000000000001,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37384</text><text text-anchor="middle" transform="translate(111.65,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37385</text><text text-anchor="middle" transform="translate(143.55,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37386</text><text text-anchor="middle" transform="translate(175.45000000000002,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37387</text><text text-anchor="middle" transform="translate(207.35,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37388</text><text text-anchor="middle" transform="translate(239.25,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37389</text><text text-anchor="middle" transform="translate(271.15,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37411</text><text text-anchor="middle" transform="translate(303.04999999999995,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37412</text></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis for a linear scale with values from 3.0 to 5.5"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="start" transform="translate(-2,429)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p51</text><text text-anchor="start" transform="translate(-2,343.8)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p50490</text><text text-anchor="start" transform="translate(-2,258.6)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p52</text><text text-anchor="start" transform="translate(-2,173.4)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p51451</text><text text-anchor="start" transform="translate(-2,88.19999999999997)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p53</text><text text-anchor="start" transform="translate(-2,3)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p52412</text></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-scope mark_0_layer_0_pathgroup" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h319v426h-319Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2012; growth: 3.55; forecasted_year: 2012" role="graphics-symbol" aria-roledescription="line mark" d="M15.950000000000017,332.28000000000003L47.850000000000016,238.56000000000006L79.75000000000001,187.43999999999994L111.65,153.36000000000004L143.55,144.83999999999995L175.45000000000002,136.32" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h319v426h-319Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2013; growth: 3.3; forecasted_year: 2013" role="graphics-symbol" aria-roledescription="line mark" d="M47.850000000000016,374.88000000000005L79.75000000000001,247.08000000000004L111.65,187.43999999999994L143.55,178.91999999999996L175.45000000000002,170.4L207.35,173.8079999999999" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h319v426h-319Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2014; growth: 3.6; forecasted_year: 2014" role="graphics-symbol" aria-roledescription="line mark" d="M79.75000000000001,323.76L111.65,289.68L143.55,264.11999999999995L175.45000000000002,267.52799999999996L207.35,272.64L239.25,281.15999999999997" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h319v426h-319Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2015; growth: 3.45; forecasted_year: 2015" role="graphics-symbol" aria-roledescription="line mark" d="M111.65,349.32L143.55,289.68L175.45000000000002,281.15999999999997L207.35,272.64L239.25,264.11999999999995L271.15,257.3039999999999" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h319v426h-319Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2016; growth: 3.2; forecasted_year: 2016" role="graphics-symbol" aria-roledescription="line mark" d="M143.55,391.91999999999996L175.45000000000002,332.28000000000003L207.35,315.24L239.25,298.2L271.15,293.088L303.04999999999995,281.15999999999997" stroke="red" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g><g class="mark-text role-mark mark_0_layer_1_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of year: 2021; growth for max year: 3.85; forecasted_year: 2016; forecasted_year_repl: $-tf0-2016" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(307.04999999999995,284.15999999999997)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf0-2016</text></g><g class="mark-text role-mark mark_0_layer_2_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of year: 2017; growth for max year: 4.7; forecasted_year: 2012; forecasted_year_repl: $-tf1-2012" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(179.45000000000002,139.32)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2012</text><text aria-label="Max of year: 2018; growth for max year: 4.48; forecasted_year: 2013; forecasted_year_repl: $-tf1-2013" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(211.35,176.8079999999999)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2013</text><text aria-label="Max of year: 2019; growth for max year: 3.85; forecasted_year: 2014; forecasted_year_repl: $-tf1-2014" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(243.25,284.15999999999997)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2014</text><text aria-label="Max of year: 2020; growth for max year: 3.99; forecasted_year: 2015; forecasted_year_repl: $-tf1-2015" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(275.15,260.3039999999999)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2015</text><text aria-label="Max of year: 2021; growth for max year: 3.85; forecasted_year: 2016; forecasted_year_repl: $-tf1-2016" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(307.04999999999995,284.15999999999997)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf1-2016</text></g><g class="mark-area role-mark mark_1_marks" role="graphics-object" aria-roledescription="area mark container" clip-path="url(#clip1)"><path aria-label="year: 2012; growth: 3.49" role="graphics-symbol" aria-roledescription="area mark" d="M15.950000000000017,342.50399999999996L47.850000000000016,366.36L79.75000000000001,357.84000000000003L111.65,408.96L111.65,937.2L79.75000000000001,937.2L47.850000000000016,937.2L15.950000000000017,937.2Z" fill="url(#gradient_2)"></path></g><g class="mark-line role-mark mark_2_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2012; growth: 3.49" role="graphics-symbol" aria-roledescription="line mark" d="M15.950000000000017,342.50399999999996L47.850000000000016,366.36L79.75000000000001,357.84000000000003L111.65,408.96" stroke="black" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g></g><defs><linearGradient id="gradient_2" x1="1" x2="1" y1="1" y2="0"><stop offset="0.58" stop-color="transparent"></stop><stop offset="1" stop-color="lightgray"></stop></linearGradient><clipPath id="clip1"><rect x="0" y="0" width="319" height="426"></rect></clipPath></defs></svg><form class="vega-bindings"></form><svg data-role="replacement-callout" width="1" height="52.00374999999997" style="position: absolute; left: 312.047px; top: 238.156px;"><line x1="0" x2="0" y1="0" y2="52.00374999999997" stroke="black"></line></svg></div><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 435px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p51" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">3.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 349.8px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p50490" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">3.5</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 264.6px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p52" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">4.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 179.4px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p51451" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">4.5</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 94.2px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p53" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">5.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 9px; transform: translateY(-50%); left: 5.5px;"><div class="$-y-p52412" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">5.5%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 31.45px;"><div class="$-x-p37382"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">2012</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 63.35px;"><div class="$-x-p37383"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'13</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 95.25px;"><div class="$-x-p37384"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'14</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 127.15px;"><div class="$-x-p37385"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'15</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 159.05px;"><div class="$-x-p37386"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'16</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 190.95px;"><div class="$-x-p37387"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'17</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 222.85px;"><div class="$-x-p37388"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'18</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 254.75px;"><div class="$-x-p37389"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'19</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 286.65px;"><div class="$-x-p37411"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">2020</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 318.55px;"><div class="$-x-p37412"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'21</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf0" style="position: absolute; line-height: 100%; transform: translateX(-130px) translateY(-130px); top: 282.16px; left: 322.05px;"><div data-dx="-130" data-dy="-130" class="$-tf0-2016" data-callout="yes" data-datum="{&quot;forecasted_year&quot;:2016}" data-mark="line" data-viewname="bond-yields-mobile"><div style="width: 240px; color: red; font-size: 13px; font-weight: 700;">2016 forecast for world GDP growth</div><div style="width: 160px; font-size: 13px; font-weight: 100;">In April 2016 the IMF forecast the world’s GDP growth to be 3.9 this year and 3.2 in 2021</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 137.32px; left: 194.45px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2012" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2012</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 174.808px; left: 226.35px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2013" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2013</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 282.16px; left: 258.25px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2014" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2014</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 258.304px; left: 290.15px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2015" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2015</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 282.16px; left: 322.05px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2016" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: red;">2016</div></div></replacement></div></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-5 pt-3">
+          <h6>Rules: Remove the area mark and adjust the domin of the row element</h6>
+          <div class="card">
+            <div class="card-header">
+              <strong>Remove the area mark</strong>
+            </div>
+            <div class="card-body pb-0">
+              <pre class="code">
+<code>    {</code>
+<code>      "description": "Remove area mark",</code>
+<code>      "specifier": {</code>
+<code>        "role": "mark",</code>
+<code>        "mark": "area"</code>
+<code>      },</code>
+<code>      "action": "remove"</code>
+<code>    }</code>
+</pre>
+</div>
+</div>
+<div class="card mt-3">
+  <div class="card-header">
+    <strong>Remove the axis value of 5.5</strong>
+  </div>
+  <div class="card-body pb-0">
+    <pre class="code">
+<code>    {</code>
+<code>      "description": "Change the domain of row element",</code>
+<code>      "specifier": {</code>
+<code>        "role": "row",</code>
+<code>        "field": "growth"</code>
+<code>      },</code>
+<code>      "action": "modify",</code>
+<code>      "option": {</code>
+<code>        "scale": {</code>
+<code>          "domain": [</code>
+<code>            3.0,</code>
+<code>            5.0</code>
+<code>          ]</code>
+<code>        }</code>
+<code>      }</code>
+<code>    }</code>
+</pre>
+            </div>
+          </div>
+          <p class="mt-2">
+          </p>
+        </div>
+        <div class="col-12 col-md-7 pt-3">
+          <h6>View</h6>
+          <div id="fronto-view-transform-2" class="fronto-view-transform" style="position: relative; width: 500px; height: 600px;"><div id="title-bond-yields-mobile" data-role="fronto-title"><div style="position: relative; font-size: 14px;"><div data-role="title" style="width: 365px; margin-left: auto; margin-right: auto; margin-bottom: 15px; font-size: 16px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 700;">Forecasts for the world's gross domestic product, change from previous year</div><div data-role="title" style="width: 365px; margin-left: auto; margin-right: auto; margin-bottom: 15px; font-size: 13px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400;">Forecasts are shown for the forecasting year and the next five years. Forecasts are made in April of each year.</div></div></div><div id="view-bond-yields-mobile" data-role="fronto-view" class="vega-embed" style="left: 50%; transform: translate(-50%); position: absolute;"><div class="chart-wrapper fit-x fit-y" role="graphics-document" aria-roledescription="visualization" aria-label="Vega visualization" style="cursor: default;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="marks" width="375" height="460" viewBox="0 0 375 460" style="background-color: white;"><g fill="none" stroke-miterlimit="10" transform="translate(17,11)"><g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z" fill="transparent"></path><g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,426)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,320)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,213)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,107)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,0)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis for a discrete scale with 10 values: 2012, 2013, 2014, 2015, 2016, ending with 2021"><g transform="translate(0.5,426.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-tick" pointer-events="none"><line transform="translate(16,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(48,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(79,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(111,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(143,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(174,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(206,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(238,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(269,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(301,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line></g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="middle" transform="translate(15.849999999999994,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37382!</text><text text-anchor="middle" transform="translate(47.55,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37383!</text><text text-anchor="middle" transform="translate(79.25,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37384!</text><text text-anchor="middle" transform="translate(110.94999999999999,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37385!</text><text text-anchor="middle" transform="translate(142.64999999999998,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37386!</text><text text-anchor="middle" transform="translate(174.35,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37387!</text><text text-anchor="middle" transform="translate(206.04999999999998,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37388!</text><text text-anchor="middle" transform="translate(237.75,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37389!</text><text text-anchor="middle" transform="translate(269.45,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37411!</text><text text-anchor="middle" transform="translate(301.15,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37412!</text></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis for a linear scale with values from 3.0 to 5.0"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="start" transform="translate(-2,429)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p51!</text><text text-anchor="start" transform="translate(-2,322.5)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p50490!</text><text text-anchor="start" transform="translate(-2,216)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p52!</text><text text-anchor="start" transform="translate(-2,109.5)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p51451!</text><text text-anchor="start" transform="translate(-2,3)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p53!</text></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-scope mark_0_layer_0_pathgroup" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2012; growth: 3.55; forecasted_year: 2012" role="graphics-symbol" aria-roledescription="line mark" d="M15.849999999999994,308.85L47.55,191.70000000000007L79.25,127.79999999999993L110.94999999999999,85.20000000000007L142.64999999999998,74.54999999999993L174.35,63.89999999999996" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2013; growth: 3.3; forecasted_year: 2013" role="graphics-symbol" aria-roledescription="line mark" d="M47.55,362.1L79.25,202.35000000000005L110.94999999999999,127.79999999999993L142.64999999999998,117.14999999999996L174.35,106.5L206.04999999999998,110.7599999999999" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2014; growth: 3.6; forecasted_year: 2014" role="graphics-symbol" aria-roledescription="line mark" d="M79.25,298.2L110.94999999999999,255.60000000000005L142.64999999999998,223.64999999999995L174.35,227.90999999999997L206.04999999999998,234.3L237.75,244.95" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2015; growth: 3.45; forecasted_year: 2015" role="graphics-symbol" aria-roledescription="line mark" d="M110.94999999999999,330.15L142.64999999999998,255.60000000000005L174.35,244.95L206.04999999999998,234.3L237.75,223.64999999999995L269.45,215.12999999999997" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2016; growth: 3.2; forecasted_year: 2016" role="graphics-symbol" aria-roledescription="line mark" d="M142.64999999999998,383.4L174.35,308.85L206.04999999999998,287.55L237.75,266.25L269.45,259.86L301.15,244.95" stroke="red" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g><g class="mark-text role-mark mark_0_layer_1_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of year: 2021; growth for max year: 3.85; forecasted_year: 2016; forecasted_year_repl: $-tf0-2016" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(305.15,247.95)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf0-2016</text></g><g class="mark-text role-mark mark_0_layer_2_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of year: 2017; growth for max year: 4.7; forecasted_year: 2012; forecasted_year_repl: $-tf1-2012" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(178.35,66.89999999999996)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2012</text><text aria-label="Max of year: 2018; growth for max year: 4.48; forecasted_year: 2013; forecasted_year_repl: $-tf1-2013" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(210.04999999999998,113.7599999999999)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2013</text><text aria-label="Max of year: 2019; growth for max year: 3.85; forecasted_year: 2014; forecasted_year_repl: $-tf1-2014" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(241.75,247.95)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2014</text><text aria-label="Max of year: 2020; growth for max year: 3.99; forecasted_year: 2015; forecasted_year_repl: $-tf1-2015" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(273.45,218.12999999999997)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf1-2015</text><text aria-label="Max of year: 2021; growth for max year: 3.85; forecasted_year: 2016; forecasted_year_repl: $-tf1-2016" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(305.15,247.95)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf1-2016</text></g><g class="mark-line role-mark mark_1_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2012; growth: 3.49" role="graphics-symbol" aria-roledescription="line mark" d="M15.849999999999994,321.62999999999994L47.55,351.45L79.25,340.8L110.94999999999999,404.7" stroke="black" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g></g></svg><form class="vega-bindings"></form><svg data-role="replacement-callout" width="1" height="52.01249999999999" style="position: absolute; left: 312.141px; top: 201.938px;"><line x1="0" x2="0" y1="0" y2="52.01249999999999" stroke="black"></line></svg></div><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 435px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p51!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">3.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 328.5px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p50490!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">3.5</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 222px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p52!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">4.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 115.5px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p51451!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">4.5</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 9px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p53!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">5.0%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 33.35px;"><div class="$-x-p37382!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">2012</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 65.05px;"><div class="$-x-p37383!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'13</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 96.75px;"><div class="$-x-p37384!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'14</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 128.45px;"><div class="$-x-p37385!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'15</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 160.15px;"><div class="$-x-p37386!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'16</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 191.85px;"><div class="$-x-p37387!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'17</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 223.55px;"><div class="$-x-p37388!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'18</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 255.25px;"><div class="$-x-p37389!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'19</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 286.95px;"><div class="$-x-p37411!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">2020</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 318.65px;"><div class="$-x-p37412!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'21</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf0" style="position: absolute; line-height: 100%; transform: translateX(-130px) translateY(-130px); top: 245.95px; left: 322.15px;"><div data-dx="-130" data-dy="-130" class="$-tf0-2016" data-callout="yes" data-datum="{&quot;forecasted_year&quot;:2016}" data-mark="line" data-viewname="bond-yields-mobile"><div style="width: 240px; color: red; font-size: 13px; font-weight: 700;">2016 forecast for world GDP growth</div><div style="width: 160px; font-size: 13px; font-weight: 100;">In April 2016 the IMF forecast the world’s GDP growth to be 3.9 this year and 3.2 in 2021</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 64.9px; left: 195.35px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2012" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2012</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 111.76px; left: 227.05px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2013" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2013</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 245.95px; left: 258.75px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2014" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2014</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 216.13px; left: 290.45px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2015" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2015</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf1" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 245.95px; left: 322.15px;"><div data-dx="-50" data-dy="-10" class="$-tf1-2016" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: red;">2016</div></div></replacement></div></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-5 pt-3">
+          <h6>Rule: Reposition a mark label</h6>
+          <div class="card">
+            <div class="card-body pb-0">
+              <pre class="code">
+<code>    {</code>
+<code>      "description": "Reposition a mark label for 2016 (data annotation)",</code>
+<code>      "specifier": {</code>
+<code>        "role": "mark.label",</code>
+<code>        "mark": "line",</code>
+<code>        "text": {</code><annotate>// text query</annotate>
+<code>          "startsWith": "2016 forecast for"</code><annotate>// with 'startsWith' operator</annotate>
+<code>        }</code>
+<code>      },</code>
+<code>      "action": "reposition",</code>
+<code>      "option": {</code><annotate>// relative change using 'by' keyword</annotate>
+<code>        "dx": {"by": -10},</code>
+<code>        "dy": {"by": -40}</code>
+<code>      }</code>
+<code>    }</code>
+</pre>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-7 pt-3">
+          <h6>View</h6>
+          <div id="fronto-view-transform-3" class="fronto-view-transform" style="height: 600px; width: 500px; position: relative;"><div id="title-bond-yields-mobile" data-role="fronto-title"><div style="position: relative; font-size: 14px;"><div data-role="title" style="width: 365px; margin-left: auto; margin-right: auto; margin-bottom: 15px; font-size: 16px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 700;">Forecasts for the world's gross domestic product, change from previous year</div><div data-role="title" style="width: 365px; margin-left: auto; margin-right: auto; margin-bottom: 15px; font-size: 13px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400;">Forecasts are shown for the forecasting year and the next five years. Forecasts are made in April of each year.</div></div></div><div id="view-bond-yields-mobile" data-role="fronto-view" class="vega-embed" style="left: 50%; transform: translate(-50%);"><div class="chart-wrapper fit-x fit-y" role="graphics-document" aria-roledescription="visualization" aria-label="Vega visualization" style="cursor: default;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="marks" width="375" height="460" viewBox="0 0 375 460" style="background-color: white;"><g fill="none" stroke-miterlimit="10" transform="translate(17,11)"><g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z" fill="transparent"></path><g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,426)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,320)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,213)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,107)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line><line transform="translate(0,0)" x2="317" y2="0" stroke="#cccccc" stroke-width="1" opacity="1"></line></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis for a discrete scale with 10 values: 2012, 2013, 2014, 2015, 2016, ending with 2021"><g transform="translate(0.5,426.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-rule role-axis-tick" pointer-events="none"><line transform="translate(16,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(48,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(79,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(111,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(143,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(174,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(206,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(238,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(269,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line><line transform="translate(301,0)" x2="0" y2="5" stroke="#888" stroke-width="1" opacity="1"></line></g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="middle" transform="translate(15.849999999999994,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37382!</text><text text-anchor="middle" transform="translate(47.55,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37383!</text><text text-anchor="middle" transform="translate(79.25,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37384!</text><text text-anchor="middle" transform="translate(110.94999999999999,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37385!</text><text text-anchor="middle" transform="translate(142.64999999999998,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37386!</text><text text-anchor="middle" transform="translate(174.35,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37387!</text><text text-anchor="middle" transform="translate(206.04999999999998,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37388!</text><text text-anchor="middle" transform="translate(237.75,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37389!</text><text text-anchor="middle" transform="translate(269.45,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37411!</text><text text-anchor="middle" transform="translate(301.15,16)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p37412!</text></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis for a linear scale with values from 3.0 to 5.0"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path><g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="start" transform="translate(-2,429)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p51!</text><text text-anchor="start" transform="translate(-2,322.5)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p50490!</text><text text-anchor="start" transform="translate(-2,216)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p52!</text><text text-anchor="start" transform="translate(-2,109.5)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p51451!</text><text text-anchor="start" transform="translate(-2,3)" font-family="sans-serif" font-size="11px" fill="#000" fill-opacity="0.5" opacity="0">$-y-p53!</text></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"></path></g></g><g class="mark-group role-scope mark_0_layer_0_pathgroup" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2012; growth: 3.55; forecasted_year: 2012" role="graphics-symbol" aria-roledescription="line mark" d="M15.849999999999994,308.85L47.55,191.70000000000007L79.25,127.79999999999993L110.94999999999999,85.20000000000007L142.64999999999998,74.54999999999993L174.35,63.89999999999996" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2013; growth: 3.3; forecasted_year: 2013" role="graphics-symbol" aria-roledescription="line mark" d="M47.55,362.1L79.25,202.35000000000005L110.94999999999999,127.79999999999993L142.64999999999998,117.14999999999996L174.35,106.5L206.04999999999998,110.7599999999999" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2014; growth: 3.6; forecasted_year: 2014" role="graphics-symbol" aria-roledescription="line mark" d="M79.25,298.2L110.94999999999999,255.60000000000005L142.64999999999998,223.64999999999995L174.35,227.90999999999997L206.04999999999998,234.3L237.75,244.95" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2015; growth: 3.45; forecasted_year: 2015" role="graphics-symbol" aria-roledescription="line mark" d="M110.94999999999999,330.15L142.64999999999998,255.60000000000005L174.35,244.95L206.04999999999998,234.3L237.75,223.64999999999995L269.45,215.12999999999997" stroke="lightgray" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h317v426h-317Z"></path><g><g class="mark-line role-mark mark_0_layer_0_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2016; growth: 3.2; forecasted_year: 2016" role="graphics-symbol" aria-roledescription="line mark" d="M142.64999999999998,383.4L174.35,308.85L206.04999999999998,287.55L237.75,266.25L269.45,259.86L301.15,244.95" stroke="red" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g><g class="mark-text role-mark mark_0_layer_1_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of year: 2021; growth for max year: 3.85; forecasted_year: 2016; forecasted_year_repl: $-tf0-2016" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(305.15,247.95)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf0-2016</text></g><g class="mark-text role-mark mark_0_layer_2_marks" role="graphics-object" aria-roledescription="text mark container"></g><g class="mark-text role-mark mark_0_layer_3_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="Max of year: 2017; growth for max year: 4.7; forecasted_year: 2012; forecasted_year_repl: $-tf2-2012" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(178.35,66.89999999999996)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf2-2012</text><text aria-label="Max of year: 2018; growth for max year: 4.48; forecasted_year: 2013; forecasted_year_repl: $-tf2-2013" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(210.04999999999998,113.7599999999999)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf2-2013</text><text aria-label="Max of year: 2019; growth for max year: 3.85; forecasted_year: 2014; forecasted_year_repl: $-tf2-2014" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(241.75,247.95)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf2-2014</text><text aria-label="Max of year: 2020; growth for max year: 3.99; forecasted_year: 2015; forecasted_year_repl: $-tf2-2015" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(273.45,218.12999999999997)" font-family="sans-serif" font-size="11px" fill="lightgray" opacity="0">$-tf2-2015</text><text aria-label="Max of year: 2021; growth for max year: 3.85; forecasted_year: 2016; forecasted_year_repl: $-tf2-2016" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(305.15,247.95)" font-family="sans-serif" font-size="11px" fill="red" opacity="0">$-tf2-2016</text></g><g class="mark-line role-mark mark_1_marks" role="graphics-object" aria-roledescription="line mark container"><path aria-label="year: 2012; growth: 3.49" role="graphics-symbol" aria-roledescription="line mark" d="M15.849999999999994,321.62999999999994L47.55,351.45L79.25,340.8L110.94999999999999,404.7" stroke="black" stroke-width="2"></path></g></g><path class="foreground" aria-hidden="true" d="" display="none"></path></g></g></g></svg><form class="vega-bindings"></form><svg data-role="replacement-callout" width="1" height="172.0125" style="position: absolute; left: 282.141px; top: 81.9375px;"><line x1="0" x2="0" y1="0" y2="172.0125" stroke="black"></line></svg></div><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 435px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p51!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">3.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 328.5px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p50490!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">3.5</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 222px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p52!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">4.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 115.5px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p51451!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">4.5</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 9px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p53!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">5.0</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-y" style="position: absolute; line-height: 100%; top: 222px; transform: translateY(-50%); left: 15.5px;"><div class="$-y-p52412!" style="text-align: left; transform: translateY(-5px);"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">5.5%</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 33.35px;"><div class="$-x-p37382!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">2012</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 65.05px;"><div class="$-x-p37383!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'13</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 96.75px;"><div class="$-x-p37384!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'14</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 128.45px;"><div class="$-x-p37385!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'15</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 160.15px;"><div class="$-x-p37386!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'16</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 191.85px;"><div class="$-x-p37387!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'17</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 223.55px;"><div class="$-x-p37388!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'18</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 255.25px;"><div class="$-x-p37389!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'19</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 286.95px;"><div class="$-x-p37411!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">2020</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-axis-x" style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 442.5px; left: 318.65px;"><div class="$-x-p37412!"><div style="color: rgb(153, 153, 153); font-size: 11px; text-align: left;">'21</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf0" style="position: absolute; line-height: 100%; transform: translateX(-160px) translateY(-250px); top: 245.95px; left: 322.15px;"><div data-dx="-160" data-dy="-250" class="$-tf0-2016" data-callout="yes" data-datum="{&quot;forecasted_year&quot;:2016}" data-mark="line" data-viewname="bond-yields-mobile"><div style="width: 240px; color: red; font-size: 13px; font-weight: 700;">2016 forecast for world GDP growth</div><div style="width: 160px; font-size: 13px; font-weight: 100;">In April 2016 the IMF forecast the world’s GDP growth to be 3.9 this year and 3.2 in 2021</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf2" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 64.9px; left: 195.35px;"><div data-dx="-50" data-dy="-10" class="$-tf2-2012" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2012</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf2" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 111.76px; left: 227.05px;"><div data-dx="-50" data-dy="-10" class="$-tf2-2013" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2013</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf2" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 245.95px; left: 258.75px;"><div data-dx="-50" data-dy="-10" class="$-tf2-2014" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2014</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf2" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 216.13px; left: 290.45px;"><div data-dx="-50" data-dy="-10" class="$-tf2-2015" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: lightgray;">2015</div></div></replacement><replacement data-role="text-replacement" class="fronto-label-tf2" style="position: absolute; line-height: 100%; transform: translateX(-50px) translateY(-10px); top: 245.95px; left: 322.15px;"><div data-dx="-50" data-dy="-10" class="$-tf2-2016" data-callout="no"><div data-text-color="$mark" style="font-size: 13px; color: red;">2016</div></div></replacement></div></div>
+        </div>
+      </div>
+    </div>
+    <footer class="container my-5">
+      <div class="row">
+        <div class="col-12" style="color: #999999;">
+          &copy; 2021 Hyeok Kim
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
