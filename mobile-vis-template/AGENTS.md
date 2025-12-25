@@ -3,6 +3,9 @@
 ## Technical Requirements
 
 - ALWAYS use bun as the package manager for js. Never use npm or yarn.
+  - Run `bun add <package_name>` to install dependencies.
+  - Run `bun remove <package_name>` to remove dependencies.
+  - Run `bun run <script_name>` to run scripts.
 - For Python dependencies, ALWAYS use `uv`.
   - Run `uv add <package_name>` to install dependencies.
   - Run `uv remove <package_name>` to remove dependencies.

@@ -19,6 +19,7 @@ Carefully read the following files for instructions and more information:
 
 - You can write any Python/JS code to do data extraction from the original source code if you want. Store the extracted data in a JSON file.
 - Run `uv run screenshot.py` to take a screenshot of the mobile version that you implemented. The screenshot will be saved to `mobile-version.png`.
+- You can also use PlayWright MCP to check the rendered mobile version as well.
 
 ## HARD REQUIREMENT
 
