@@ -21,10 +21,12 @@ GEMINI_KEY=...
 First, prepare a frontend project for Gemini:
 
 ```shell
-# prepare Python environment
+# Prepare Python environment
 uv sync
-# As an example, we use html-examples/budgets-desktop-processed.html
-# add --use-flash if you only have a free-tier API key
+# As an example, we use html-examples/budgets-desktop-processed.html. 
+# You should use html-examples/*-processed.html as other examples to try out. 
+# Do NOT use non-processed html files as it will not work.
+# Add --use-flash if you only have a free-tier API key
 uv run prepare_project.py --original-visualization html-examples/budgets-desktop-processed.html --mobile-project-name test-mobile-budgets
 ```
 
@@ -32,11 +34,11 @@ Second, run
 
 ```shell
 cd test-mobile-budgets
-# prepare JavaScript environment
+# Prepare JavaScript environment
 bun install
 # --yolo gives gemini-cli all permissions to do its job
-# you can add --model gemini-3-pro-preview to use powerful Gemini 3 Pro
+# You can add --model gemini-3-pro-preview to use powerful Gemini 3 Pro
 gemini --yolo --prompt "read README.md and finish transforming desktop visualization to a mobile-friendly version"
 ```
 
-Wait for it for ~5 mins until it tells you that the job is done. Run `bun dev` to start the development server and see the result.
+Wait for it for ~3 mins until it tells you that the job is done. Run `bun dev` to start the development server and see the result.
