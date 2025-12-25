@@ -1,3 +1,4 @@
+// DO NOT MODIFY THIS FILE
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { Visualization } from "@/components/Visualization";
 

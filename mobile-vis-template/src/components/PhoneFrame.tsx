@@ -1,3 +1,4 @@
+// DO NOT MODIFY THIS FILE
 import { ReactNode } from "react";
 
 interface PhoneFrameProps {
@@ -12,7 +13,7 @@ export function PhoneFrame({
     height = 812
 }: PhoneFrameProps) {
     return (
-        <div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
+        <div id="phone-frame-container" className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
             <div
                 className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
                 style={{
