@@ -18,8 +18,12 @@ dev = [
     "jupyter>=1.1.1",
     "notebook>=7.5.1",
     "poethepoet>=0.38.0",
+    "python-dotenv>=1.2.1",
     "ruff>=0.14.10",
 ]
 
 [tool.ruff]
 extend-exclude = [".venv", ".vscode", ".next", "public", "node_modules"]
+
+[tool.uv.workspace]
+members = ["mobile-vis-template"]

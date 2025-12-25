@@ -28,11 +28,13 @@ You need to act as a planner to plan how to fulfill the following missions:
 
 ## Project Structure
 
-- `components/`: Contains the interactive chart components (e.g., `SalesChart.tsx`, `SalesLineChart.tsx`).
-- `app/preview/[type]/page.tsx`: Standalone mobile preview pages for each chart (iframe targets).
-- `app/page.tsx`: **Gallery Dashboard** (Desktop view) that showcases all mobile charts in various device frames.
-- `public/`: Stores the original reference SVGs.
+- `original_visualization`: 
+    - `desktop.{{html, svg}}`: the original source code of the visualization that is tailored for desktop.
+    - `desktop.png`: the rendered original visualization that is tailored for desktop.
+    - `desktop_on_mobile.png`: the original visualization that is directly rendered in mobile aspect ratio.
+- `src/components/Visualization.tsx`: The main component that renders the transformed mobile visualization.
 - `AGENTS.md`: Technical instructions for agents. Read this before implementing a new visualization.
+- `mobile-vis-design-action-space.md`: high-level description of the space for the actions that an agent can take to transform the visualization to a mobile version
 
 ## Related Information
 
@@ -44,12 +46,12 @@ Below is the source code of the original SVG or HTML file that you need to trans
 {source_code}
 ```
 
-Below, the first image is the rendered original visualization that is tailored for desktop. I also rendered it in mobile aspect ratio, check the second image.
+Below, the first image is the rendered original visualization that is tailored for desktop `desktop.png`. I also rendered it in mobile aspect ratio `desktop_on_mobile.png`, check the second image.
 """
 
 PROMPT_TEMPLATE_PART2 = """### Vis2Mobile Design Action Space
 
-Below is the document of Vis2Mobile Design Action Space, which details the design space of visualizations and action space of what actions you can take to convert the visualization into a mobile friendly one. 
+Below is the document of Vis2Mobile Design Action Space, `mobile-vis-design-action-space.md`, which details the design space of visualizations and action space of what actions you can take to convert the visualization into a mobile friendly one. 
 
 ```
 {vis2mobile_design_action_space}
@@ -63,6 +65,7 @@ Below is the document of Vis2Mobile Design Action Space, which details the desig
     - If there's an action that is not in the action space, tell the reason as well as the justification of why existing actions are not suitable.
     - You should analyse the desktop visualization, **think about the actions in the space and write the high-level plan first and then implmentational detailed steps in a seperate section.**
     - The mobile version should **preserve as much information and intention presented in the desktop version as possible.** If due to mobile constraints, some information must be omitted or presented in another view, you should mention it in the plan and write your justification.
+    - Write a seperate section about data extraction from the original SVG or HTML file.
 3. Write your plan in Markdown format. Respond with only the plan, no need to inlude irrelevant comments. 
 
 HARD REQUIREMENT: **Think about how to ensure readability on mobile screen. DO NOT just copy the layout of the desktop visualization. Failing to ensure readability will directly lead to task failure**.
