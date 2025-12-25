@@ -56,3 +56,7 @@ bun dev
 # Lint, Format, and Type Check
 bun run lint && bun run format && bun run check
 ```
+
+# Vis2Mobile Python Library
+
+The python library is managed by `uv`. Use `uv sync` to set up the Python environment.
