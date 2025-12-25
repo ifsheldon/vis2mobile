@@ -126,7 +126,10 @@ async def main(
     original_image_mobile = await html_to_image(original_visualization, "mobile")
     original_image_desktop.save(original_folder / "desktop.png")
     original_image_mobile.save(original_folder / "desktop_on_mobile.png")
-    shutil.copy2(original_visualization, original_folder)
+    shutil.copy2(
+        original_visualization,
+        original_folder / f"desktop{original_visualization.suffix}",
+    )
     print(
         f"Saved {original_visualization} and its rendered images to {original_folder}"
     )
