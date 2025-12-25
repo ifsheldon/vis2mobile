@@ -23,6 +23,9 @@ def main():
 
     # Get the directory of the script to run commands relative to it
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    output_path = os.path.join(script_dir, "mobile-version.png")
+    if os.path.exists(output_path):
+        os.remove(output_path)
 
     logging.info("Starting bun dev server...")
     # Start the server
@@ -77,11 +80,22 @@ def main():
             page.wait_for_load_state("networkidle")
 
             # Take screenshot
-            output_path = os.path.join(script_dir, "mobile-version.png")
-            page.locator("#phone-frame-container").screenshot(path=output_path)
+            try:
+                # Check for phone frame container with a short timeout
+                page.locator("#phone-frame-container").wait_for(
+                    state="visible", timeout=3000
+                )
+                page.locator("#phone-frame-container").screenshot(path=output_path)
+                logging.info(f"Screenshot saved to {output_path}")
+                print(f"Screenshot saved to {output_path}")
+            except Exception:
+                logging.warning(
+                    "Phone frame container not found. Taking full page screenshot."
+                )
+                page.screenshot(path=output_path, full_page=True)
+                logging.info(f"Screenshot saved to {output_path} (full page)")
+                print(f"Screenshot saved to {output_path} (full page)")
 
-            logging.info(f"Screenshot saved to {output_path}")
-            print(f"Screenshot saved to {output_path}")
             browser.close()
 
     except Exception as e:
