@@ -66,7 +66,9 @@ if os.getenv("GEMINI_KEY") is None:
     raise ValueError("GEMINI_KEY is not set")
 
 
-async def get_plan(original_visualization: Path, action_space_document: Path):
+async def get_plan(
+    original_visualization: Path, action_space_document: Path, use_flash: bool
+):
     prompt = await get_prompt(
         source_path=original_visualization,
         vis2mobile_design_action_space_path=action_space_document,
@@ -83,7 +85,7 @@ async def get_plan(original_visualization: Path, action_space_document: Path):
         media_resolution="MEDIA_RESOLUTION_HIGH",
     )
     response = await client.models.generate_content(
-        model="gemini-3-pro-preview",
+        model="gemini-3-flash-preview" if use_flash else "gemini-3-pro-preview",
         contents=prompt,
         config=generate_content_config,
     )
@@ -96,6 +98,7 @@ async def main(
     mobile_project_name: str,
     project_template: Path,
     action_space_document: Path,
+    use_flash: bool,
 ):
     assert original_visualization.exists(), (
         f"Original visualization {original_visualization} does not exist"
@@ -129,7 +132,7 @@ async def main(
     )
     shutil.copy2(action_space_document, project)
     print(f"Saved {action_space_document} to {project}")
-    plan = await get_plan(original_visualization, action_space_document)
+    plan = await get_plan(original_visualization, action_space_document, use_flash)
     with open(project / "transform-plan.md", "w") as f:
         f.write(plan)
     print(f"Saved transform plan to {project / 'transform-plan.md'}")
@@ -169,6 +172,11 @@ It will do the following:
         default=Path("./mobile-vis-design-action-space.md"),
         help="Path to the action space document",
     )
+    parser.add_argument(
+        "--use-flash",
+        action="store_true",
+        help="Use Gemini 3 Flash if you only have a free-tier API key",
+    )
     args = parser.parse_args()
 
     asyncio.run(
@@ -177,5 +185,6 @@ It will do the following:
             args.mobile_project_name,
             args.project_template,
             args.action_space_document,
+            args.use_flash,
         )
     )
