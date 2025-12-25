@@ -6,5 +6,10 @@
         "@playwright/mcp@latest"
       ]
     }
+  },
+  "tools": {
+    "exclude": [
+      "run_shell_command(npm)"
+    ]
   }
 }
