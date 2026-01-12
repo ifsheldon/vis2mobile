@@ -35,6 +35,8 @@ Then prepare a frontend project for Gemini:
 # Do NOT use non-processed html files as it will not work.
 # Add --use-flash if you only have a free-tier API key
 uv run prepare_project.py --original-visualization html-examples/budgets-desktop-processed.html --mobile-project-name test-mobile-budgets
+# for html examples in ./vega-examples
+uv run python prepare_project_vega.py --original-visualization vega-examples/vega_altair/01.html --vega-asset-path ./vega-examples/assets/ --mobile-project-name test-vega-altair-01
 ```
 
 Then run conversion:
