@@ -89,7 +89,7 @@ PROJECTS = [
 ]
 
 # Number of concurrent projects to run
-CONCURRENCY = 1
+CONCURRENCY = 2
 
 
 def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
@@ -137,11 +137,9 @@ def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
                     "codex",
                     "--model",
                     "gpt-5.2-codex",
-                    "--full-auto",
                     "--enable",
                     "web_search_request",
-                    "--sandbox",
-                    "workspace-write",
+                    "--dangerously-bypass-approvals-and-sandbox",
                     prompt,
                 ]
                 cli_name = "codex"
