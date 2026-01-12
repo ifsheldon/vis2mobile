@@ -5,6 +5,7 @@ This script does the following:
 3. Save the screenshot to `./mobile-version.png`
 4. Stop the server
 
+Run this script by `un run python screenshot.py`
 DO NOT MODIFY THIS SCRIPT
 """
 
