@@ -23,12 +23,12 @@ Carefully read the following files for instructions and more information:
 ## Technical Requirements
 
 - ALWAYS use bun as the package manager and script runner for js. Never use npm or yarn.
-  - Run `bun add <package_name>` to install dependencies.
+  - Run `bun add <package_name>` to install dependencies. You can add any js package that you want, no need to ask for permission.
   - Run `bun remove <package_name>` to remove dependencies.
   - Run `bun run <script_name>` to run scripts.
   - Run `bunx` instead of `npx`.
 - For Python dependencies, ALWAYS use `uv`.
-  - Run `uv add <package_name>` to install dependencies.
+  - Run `uv add <package_name>` to install dependencies. You can add any Python package that you want, no need to ask for permission.
   - Run `uv remove <package_name>` to remove dependencies.
   - Run `uv run python <script_name>` to run Python scripts.
 - Use typescript and tailwindcss.
