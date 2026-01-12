@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>13.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "description": "Source: https://altair-viz.github.io/gallery/us_population_pyramid_over_time.html", "concat": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "gender", "legend": null, "scale": {"domain": ["Male", "Female"], "range": ["#1f77b4", "#e377c2"]}, "type": "nominal"}, "x": {"aggregate": "sum", "field": "people", "sort": "descending", "title": "population", "type": "quantitative"}, "y": {"axis": null, "field": "age", "type": "ordinal"}}, "name": "view_be6cdf00ec9d2699_0", "title": "Female", "transform": [{"filter": {"param": "year"}}, {"calculate": "if((datum.sex === 1),'Male','Female')", "as": "gender"}, {"filter": "(datum.gender === 'Female')"}], "width": 250}, {"mark": {"type": "text"}, "encoding": {"text": {"field": "age", "type": "quantitative"}, "y": {"axis": null, "field": "age", "type": "ordinal"}}, "name": "view_94709b7a71ba606d_1", "transform": [{"filter": {"param": "year"}}, {"calculate": "if((datum.sex === 1),'Male','Female')", "as": "gender"}], "width": 20}, {"mark": {"type": "bar"}, "encoding": {"color": {"field": "gender", "legend": null, "scale": {"domain": ["Male", "Female"], "range": ["#1f77b4", "#e377c2"]}, "type": "nominal"}, "x": {"aggregate": "sum", "field": "people", "title": "population", "type": "quantitative"}, "y": {"axis": null, "field": "age", "type": "ordinal"}}, "name": "view_fb99d510c2a5986d_2", "title": "Male", "transform": [{"filter": {"param": "year"}}, {"calculate": "if((datum.sex === 1),'Male','Female')", "as": "gender"}, {"filter": "(datum.gender === 'Male')"}], "width": 250}], "data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/population.json"}, "params": [{"name": "year", "select": {"type": "point", "fields": ["year"]}, "bind": {"input": "range", "max": 2000, "min": 1850, "step": 10}, "value": 2000, "views": ["view_be6cdf00ec9d2699_0", "view_94709b7a71ba606d_1", "view_fb99d510c2a5986d_2"]}], "spacing": 5, "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json"};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>

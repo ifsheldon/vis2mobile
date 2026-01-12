@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>07.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"$schema": "https://vega.github.io/schema/vega-lite/v6.json", "description": "Source: https://vega.github.io/vega-lite/examples/layer_cumulative_histogram.html", "data": {"url": "https://vega.github.io/editor/data/movies.json"}, "transform": [{"bin": true, "field": "IMDB Rating", "as": "bin_IMDB_Rating"}, {"aggregate": [{"op": "count", "as": "count"}], "groupby": ["bin_IMDB_Rating", "bin_IMDB_Rating_end"]}, {"filter": "datum.bin_IMDB_Rating !== null"}, {"sort": [{"field": "bin_IMDB_Rating"}], "window": [{"op": "sum", "field": "count", "as": "Cumulative Count"}], "frame": [null, 0]}], "encoding": {"x": {"field": "bin_IMDB_Rating", "type": "quantitative", "scale": {"zero": false}, "title": "IMDB Rating", "bin": "binned"}, "x2": {"field": "bin_IMDB_Rating_end"}}, "layer": [{"mark": "bar", "encoding": {"y": {"field": "Cumulative Count", "type": "quantitative"}}}, {"mark": {"type": "bar", "color": "yellow", "opacity": 0.5}, "encoding": {"y": {"field": "count", "type": "quantitative"}}}]};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>
