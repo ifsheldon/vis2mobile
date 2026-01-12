@@ -12,9 +12,28 @@ import subprocess
 import time
 import os
 import signal
+import socket
+import random
 import urllib.request
 import logging
 from playwright.sync_api import sync_playwright
+
+
+def find_available_port(
+    min_port: int = 3000, max_port: int = 20000, max_attempts: int = 100
+) -> int:
+    """Find an available port by randomly selecting from the given range."""
+    for _ in range(max_attempts):
+        port = random.randint(min_port, max_port)
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(("localhost", port))
+                return port
+        except OSError:
+            continue
+    raise RuntimeError(
+        f"Could not find an available port in range {min_port}-{max_port} after {max_attempts} attempts"
+    )
 
 
 def main():
@@ -27,11 +46,15 @@ def main():
     if os.path.exists(output_path):
         os.remove(output_path)
 
-    logging.info("Starting bun dev server...")
+    # Find an available port
+    port = find_available_port()
+    server_url = f"http://localhost:{port}"
+
+    logging.info(f"Starting bun dev server on port {port}...")
     # Start the server
     # We use preexec_fn=os.setsid to be able to kill the whole process group later
     process = subprocess.Popen(
-        ["bun", "dev"],
+        ["bun", "dev", "--port", str(port)],
         cwd=script_dir,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -40,13 +63,13 @@ def main():
 
     try:
         # Wait for server to be ready
-        logging.info("Waiting for server to be ready at http://localhost:3000...")
+        logging.info(f"Waiting for server to be ready at {server_url}...")
         max_retries = 30
         server_ready = False
 
         for i in range(max_retries):
             try:
-                with urllib.request.urlopen("http://localhost:3000") as response:
+                with urllib.request.urlopen(server_url) as response:
                     if response.status == 200:
                         server_ready = True
                         break
@@ -74,7 +97,7 @@ def main():
             page = browser.new_page(viewport={"width": 1920, "height": 1200})
 
             # Navigate
-            page.goto("http://localhost:3000")
+            page.goto(server_url)
 
             # Wait for network idle to ensure everything loaded
             page.wait_for_load_state("networkidle")
