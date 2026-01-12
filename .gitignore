@@ -261,3 +261,4 @@ __marimo__/
 
 # Ignore test mobile directories
 test-mobile-*/
+test-vega-*/
