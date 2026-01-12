@@ -11,6 +11,7 @@ from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor
 import sys
 
+USE_CODEX = False
 
 # All projects to process
 PROJECTS = [
@@ -126,13 +127,32 @@ def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
                     f"bun install failed with code {result.returncode}",
                 )
 
-            log.write("\n--- Running: gemini ---\n")
-            log.flush()
+            # Run gemini or codex based on USE_CODEX flag
+            prompt = "read README.md and finish transforming desktop visualization into a mobile version"
 
-            # Run gemini with the prompt from README
-            gemini_prompt = "read README.md and finish transforming desktop visualization into a mobile version"
+            if USE_CODEX:
+                log.write("\n--- Running: codex ---\n")
+                log.flush()
+                cmd = [
+                    "codex",
+                    "--model",
+                    "gpt-5.2-codex",
+                    "--full-auto",
+                    "--enable",
+                    "web_search_request",
+                    "--sandbox",
+                    "workspace-write",
+                    prompt,
+                ]
+                cli_name = "codex"
+            else:
+                log.write("\n--- Running: gemini ---\n")
+                log.flush()
+                cmd = ["gemini", "--yolo", "--prompt", prompt]
+                cli_name = "gemini"
+
             result = subprocess.run(
-                ["gemini", "--yolo", "--prompt", gemini_prompt],
+                cmd,
                 cwd=project_dir,
                 stdout=log,
                 stderr=subprocess.STDOUT,
@@ -140,11 +160,11 @@ def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
             )
 
             if result.returncode != 0:
-                log.write(f"\ngemini failed with return code {result.returncode}\n")
+                log.write(f"\n{cli_name} failed with return code {result.returncode}\n")
                 return (
                     project_name,
                     False,
-                    f"gemini failed with code {result.returncode}",
+                    f"{cli_name} failed with code {result.returncode}",
                 )
 
             log.write(f"\n=== Completed {project_name} successfully ===\n")
