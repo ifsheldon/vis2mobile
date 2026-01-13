@@ -26,7 +26,7 @@
 - [x] vega-altair-02
 - [x] vega-altair-03
 - [x] vega-altair-04
-- [ ] vega-altair-05
+- [x] vega-altair-05
 - [ ] vega-altair-06
 - [ ] vega-altair-07
 - [ ] vega-altair-08
@@ -102,3 +102,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-03.
 - 2026-01-13: Migrated vega-altair-04 (Energy Source Share) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-04.
+- 2026-01-13: Migrated vega-altair-05 (Barley Yield Analysis) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-05.
