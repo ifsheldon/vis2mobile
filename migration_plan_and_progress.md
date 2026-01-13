@@ -23,7 +23,7 @@
 - [x] vega-04
 - [x] vega-05
 - [x] vega-altair-01
-- [ ] vega-altair-02
+- [x] vega-altair-02
 - [ ] vega-altair-03
 - [ ] vega-altair-04
 - [ ] vega-altair-05
@@ -96,3 +96,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-05.
 - 2026-01-13: Migrated vega-altair-01 (Market Trends) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-01.
+- 2026-01-13: Migrated vega-altair-02 (Data Density) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-02.
