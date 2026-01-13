@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -99,8 +99,7 @@ export function Visualization() {
 
   // 2. Process Data (Pivot)
   const { chartData, industries } = useMemo(() => {
-    if (!rawData.length)
-      return { chartData: [], industries: [] };
+    if (!rawData.length) return { chartData: [], industries: [] };
 
     const industriesSet = new Set<string>();
     const groupedByDate: Record<string, ChartDataPoint> = {};
@@ -230,7 +229,7 @@ export function Visualization() {
               dataKey="date"
               hide={true} // Hide X axis to save space, rely on tooltip
             />
-            <YAxis hide={true} domain={[0, 1]} />
+            <YAxis hide={true} domain={[0, 1]} ticks={[0, 0.5, 1]} />
             <Tooltip
               content={() => null}
               cursor={{ stroke: "#666", strokeWidth: 1 }}
@@ -245,11 +244,7 @@ export function Visualization() {
                 stroke="none"
                 fill={getIndustryColor(i)}
                 fillOpacity={
-                  focusedSeries
-                    ? focusedSeries === ind
-                      ? 1
-                      : 0.1
-                    : 0.85
+                  focusedSeries ? (focusedSeries === ind ? 1 : 0.1) : 0.85
                 }
                 animationDuration={300}
                 isAnimationActive={false} // Performance on mobile
@@ -310,14 +305,14 @@ export function Visualization() {
             <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">
               All Industries (Tap to Focus)
             </div>
-            <div className="flex flex-wrap gap-2 max-h-[200px] overflow-y-auto">
+            <div className="flex overflow-x-auto gap-2 pb-2 -mx-4 px-4 scrollbar-hide">
               {industries.map((ind, i) => (
                 <button
                   type="button"
                   key={ind}
                   onClick={() => handleLegendClick(ind)}
                   className={cn(
-                    "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs transition-all border",
+                    "flex-none flex items-center gap-1.5 px-3 py-2 rounded-full text-xs transition-all border whitespace-nowrap",
                     focusedSeries === ind
                       ? "bg-zinc-800 text-white border-zinc-800 shadow-md transform scale-105"
                       : "bg-white text-zinc-600 border-zinc-200 hover:border-zinc-300",
