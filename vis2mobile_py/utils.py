@@ -29,6 +29,16 @@ async def __get_image_bytes(
         file_url = Path(path).resolve().as_uri()
         await page.goto(file_url)
 
+        # Wait for Vega/Vega-Lite chart to render (they create canvas or svg elements)
+        # This handles dynamically rendered visualizations
+        try:
+            await page.wait_for_selector("canvas, svg", timeout=10000)
+            # Additional small delay to ensure rendering is complete
+            await page.wait_for_timeout(500)
+        except Exception:
+            # If no canvas/svg found, wait a bit anyway for any JS to execute
+            await page.wait_for_timeout(1000)
+
         # Take screenshot
         screenshot_bytes = await page.screenshot(type="png")
         await browser.close()
