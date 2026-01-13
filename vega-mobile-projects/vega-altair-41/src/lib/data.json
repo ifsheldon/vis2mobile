@@ -1,0 +1,80 @@
+[
+  {
+    "origin": "Europe",
+    "totalCount": 73,
+    "cyl3": 0,
+    "cyl4": 66,
+    "cyl5": 3,
+    "cyl6": 4,
+    "cyl8": 0,
+    "breakdown": [
+      {
+        "cylinder": 4,
+        "count": 66,
+        "percentage": 90.4
+      },
+      {
+        "cylinder": 5,
+        "count": 3,
+        "percentage": 4.1
+      },
+      {
+        "cylinder": 6,
+        "count": 4,
+        "percentage": 5.5
+      }
+    ]
+  },
+  {
+    "origin": "Japan",
+    "totalCount": 79,
+    "cyl3": 4,
+    "cyl4": 69,
+    "cyl5": 0,
+    "cyl6": 6,
+    "cyl8": 0,
+    "breakdown": [
+      {
+        "cylinder": 3,
+        "count": 4,
+        "percentage": 5.1
+      },
+      {
+        "cylinder": 4,
+        "count": 69,
+        "percentage": 87.3
+      },
+      {
+        "cylinder": 6,
+        "count": 6,
+        "percentage": 7.6
+      }
+    ]
+  },
+  {
+    "origin": "USA",
+    "totalCount": 254,
+    "cyl3": 0,
+    "cyl4": 72,
+    "cyl5": 0,
+    "cyl6": 74,
+    "cyl8": 108,
+    "breakdown": [
+      {
+        "cylinder": 4,
+        "count": 72,
+        "percentage": 28.3
+      },
+      {
+        "cylinder": 6,
+        "count": 74,
+        "percentage": 29.1
+      },
+      {
+        "cylinder": 8,
+        "count": 108,
+        "percentage": 42.5
+      }
+    ]
+  }
+]
