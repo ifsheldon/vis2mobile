@@ -1,101 +1,102 @@
 # Vis2Mobile Transformation Plan
 
 ## 1. Analysis of Original Visualization
-*   **Source**: A Vega-Lite chart showing a **Layered Cumulative Histogram**.
-*   **Data**: Movie dataset (IMDB Ratings).
-*   **Desktop View**:
-    *   **X-Axis**: IMDB Rating (Binned).
-    *   **Layer 1 (Background)**: Bar chart representing the **Cumulative Count** (total movies up to that rating).
-    *   **Layer 2 (Foreground)**: Yellow Bar chart representing the **Count** (frequency) of movies in that specific rating bin.
-*   **Mobile Issues (Desktop aspect ratio on mobile)**:
-    *   **Crowding**: X-axis labels (ratings) are small and hard to read.
-    *   **Visual Overlap**: The yellow transparency over the blue bars might become muddy on smaller, lower-contrast screens.
-    *   **Interaction**: Hover-based tooltips in Vega-Lite are unusable on touch devices (fat-finger problem).
-    *   **Height**: The default aspect ratio is too wide; mobile users prefer a squarer or taller aspect ratio to utilize vertical scroll.
 
-## 2. Vis2Mobile Design Action Space Plan
+### Source Characteristics
+- **Type:** Layered Histogram / Pareto-style Chart.
+- **Data Source:** `movies.json` (IMDB Ratings).
+- **Encoding:**
+    - **X-Axis:** Binned IMDB Rating (Quantitative).
+    - **Layer 1 (Blue):** Cumulative Count (sum of counts up to that bin).
+    - **Layer 2 (Yellow/Green):** Absolute Count (frequency in that bin).
+- **Visuals:** Two overlapping bar sets. The cumulative bars (blue) act as a background context for the frequency bars (yellow).
+- **Desktop UX:** Relies on mouse hover for details (implicit in Vega-lite). Axis labels are small.
 
-To transform this into a premium mobile component, I will apply the following actions from the design space:
+### Mobile Issues (Desktop on Mobile)
+- **Aspect Ratio:** The 1:1 or landscape ratio wastes vertical screen real estate on mobile.
+- **Touch Targets:** The bars, especially for lower ratings (2-4), are small and hard to tap precisely.
+- **Readability:** Overlapping bars (opacity) can be confusing on screens with lower contrast or high glare. The "Cumulative" vs "Count" distinction needs a legend or clear labeling which is currently missing/implicit.
+- **Axes:** The Y-axis takes up horizontal space.
 
-### **L0 Visualization Container**
-*   **Action: `Rescale`**: Set width to `100%` and allow height to be defined by a mobile-friendly aspect ratio (e.g., 1:1 or 4:5) rather than the wide desktop ratio.
-*   **Action: `Reposition`**: Adjust global padding to ensure the chart sits comfortably within a mobile card container ("Glassmorphic" card).
+## 2. Design Action Space & Transformation Strategy
 
-### **L1 Data Model**
-*   **Action: `Recompose (Aggregate)`**: The raw data (individual movies) needs to be processed on the client or server side to replicate the Vega `bin` -> `aggregate (count)` -> `window (cumulative sum)` transformation.
-    *   *Reason*: We cannot use the raw JSON directly in Recharts without preprocessing.
+### L0 Visualization Container
+- **Action:** `Rescale` (Fit to Width).
+    - **Reasoning:** Mobile screens have limited width. The chart must assume 100% of the container width. The height should be fixed (e.g., 350px) to ensure bars are tall enough to interact with.
+- **Action:** `Reposition` (Padding).
+    - **Reasoning:** Remove default Vega margins. Use Tailwind's padding to ensure the chart doesn't touch the screen edges.
 
-### **L2 Coordinate System**
-*   **Action: `Transpose` (Rejected)**: While transposing to horizontal bars is often good for mobile, histograms representing a distribution (Rating 0-10) are conventionally read left-to-right. We will keep the **Vertical Layout** but optimize the axes.
+### L1 Data Model
+- **Action:** `Recompose (Aggregate)` (Simulate Vega Transform).
+    - **Reasoning:** The HTML source contains specific logic (`bin`, `aggregate count`, `window cumulative sum`). To strictly follow "Real Data," we must implement this processing pipeline in the React component (or a utility function) using the raw `movies.json` data.
 
-### **L3 Axes & Ticks**
-*   **Action: `Decimate Ticks` (L5)**: On the X-Axis (IMDB Rating), we will not show every single bin label. We will reduce ticks to integers (e.g., 2, 4, 6, 8, 10) to prevent `Cluttered text`.
-*   **Action: `Recompose (Remove)` (L4)**: Remove the Y-axis line and ticks entirely.
-    *   *Reason*: Exact values on the Y-axis are hard to read on mobile. We will rely on **Gridlines** (subtle) and **Interactive Feedback** (Tooltip/Card) to show values.
+### L1 Chart Components
+- **Action:** `Serialize layout`.
+    - **Reasoning:** While we keep the "Layered" concept (Cumulative behind Count), we need to ensure the visual hierarchy is obvious.
 
-### **L2 Data Marks (The Layered Bars)**
-*   **Action: `Rescale` (L4)**: The desktop view has thin bars. On mobile, we will make bars wider to utilize available width.
-*   **Action: `Recompose (Change Encoding)` (L2)**:
-    *   Instead of two overlapping bars which can be visually heavy, I will use a **Composed Chart**:
-        1.  **Cumulative Count**: Rendered as a **Stepped Area** or a Faint/Glassy Bar in the background. This implies "Total volume".
-        2.  **Frequency Count**: Rendered as a solid, vibrant Bar in the foreground.
-    *   *Justification*: This creates a clearer visual hierarchy. The "Count" is the immediate data, "Cumulative" is the context.
+### L2 Title Block
+- **Action:** `Reposition` (Externalize).
+    - **Reasoning:** Move the title "IMDB Rating Distribution" out of the chart canvas into a semantic HTML header (`<h3>`) above the chart for better accessibility and styling control.
+- **Action:** `Recompose (Replace)` (Subtitle).
+    - **Reasoning:** Add a subtitle explaining the two layers: "Cumulative (Blue) vs. Frequency (Yellow)" to act as a natural legend.
 
-### **L3 Legend**
-*   **Action: `Reposition`**: Move legend items to the top of the card (Header) or integrate them into the interaction state.
-*   **Action: `Compensate (Toggle)`**: Provide a segmented control (toggle) to switch the view between "Combined", "Just Count", or "Just Cumulative" if the screen is too small, though I plan to make the "Combined" view work via smart opacity handling.
+### L2 Coordinate System (Axes)
+- **Action:** `Recompose (Remove)` (Y-Axis Line).
+    - **Reasoning:** To save horizontal space (L4 Axis Line). We will keep horizontal gridlines for reference but remove the vertical axis line.
+- **Action:** `Simplify labels` (X-Axis).
+    - **Reasoning:** The bins (2, 4, 6, 8, 10) are readable. We will ensure they don't overlap.
 
-### **L5 Interaction & Feedback**
-*   **Action: `Reposition (Fix)`**: Instead of a floating tooltip that follows the finger (which obscures data), I will use a **Fixed Legend/Tooltip Header**. When a user touches the chart, the values for that specific bin will display prominently at the top of the component.
-*   **Action: `Recompose (Replace)`**: Replace `Hover` triggers with `Touch/Click` active states. Use a `Cursor` (vertical line) to indicate the active bin.
+### L2 Data Marks
+- **Action:** `Rescale` (Bar Width).
+    - **Reasoning:** Increase the visual weight of the bars.
+- **Action:** `Recompose (Change Encoding)` (Color/Opacity).
+    - **Reasoning:** The original Yellow on Blue creates a "Green" intersection. On mobile, we might use a more modern palette (e.g., a faint primary color for cumulative, and a solid, vibrant primary color for count) or keep the contrast high but visually pleasing (Glassmorphism).
 
-## 3. Data Extraction & Processing Strategy
+### L2 Interaction
+- **Action:** `Triggers` (Touch/Click).
+    - **Reasoning:** Replace hover. Tapping anywhere on the chart vertical slice (Cursor) should trigger the tooltip.
+- **Action:** `Feedback` (Fix Tooltip Position).
+    - **Reasoning:** Use a customized tooltip that renders clearly above the data point or at the top of the chart to avoid finger occlusion.
 
-Since we need **Real Data**, I will perform the following steps in the implementation:
+## 3. Data Extraction & Processing Plan
 
-1.  **Fetch**: Retrieve `https://vega.github.io/editor/data/movies.json` (as referenced in the spec).
-2.  **Process (Transform)**:
-    *   Filter out `null` IMDB Ratings.
-    *   **Binning**: Round ratings to the nearest `0.5` or `1.0`. (Looking at the source image, the bins seem to be around 0.5-1.0 width. I will use 0.5 for granularity).
-    *   **Aggregation**: Count occurrences per bin.
-    *   **Cumulative**: Sort bins ascending, then iterate to calculate `cumulative_count` (running total).
-3.  **Resulting Structure**:
-    ```typescript
-    interface ChartData {
-      bin: number;       // e.g., 6.5
-      binDisplay: string; // e.g., "6.5-7.0"
-      count: number;     // e.g., 150
-      cumulative: number;// e.g., 1200
-    }
-    ```
+Since the source is a Vega-Lite spec pointing to a URL, we will codify the data by implementing the transformation logic described in the spec.
+
+**Source Data:** `https://vega.github.io/editor/data/movies.json`
+
+**Processing Logic to Implement (in `src/components/Visualization.tsx`):**
+1.  **Fetch:** Load the JSON data.
+2.  **Filter:** Remove entries where `IMDB_Rating` is null.
+3.  **Bin:** Create bins (e.g., floor the rating: `Math.floor(rating)`).
+4.  **Group:** Count movies per bin.
+5.  **Window:** Sort bins ascending and calculate `Cumulative Count` (running total).
+6.  **Format:** Output array: `[{ bin: 2, count: 5, cumulative: 5 }, { bin: 3, count: 20, cumulative: 25 }, ...]`
+
+*Note: If fetching external data is blocked by the environment, we will use a hardcoded dataset that matches the visual output of the `desktop.png` exactly (approximated from the graph).*
 
 ## 4. Implementation Steps
 
-### Step 1: Data Utility (`utils/processData.ts`)
-*   Create a function to fetch the movies JSON.
-*   Implement the binning and cumulative logic using standard array methods (`reduce`, `sort`, `map`).
-*   Return clean data ready for Recharts.
-
-### Step 2: Component Structure (`src/components/Visualization.tsx`)
-*   **Container**: A `div` with `w-full`, rounded corners, `backdrop-blur` (glassmorphism), and a dark gradient background.
-*   **Header**: Title ("IMDB Rating Distribution") and a dynamic area that shows the "Total Movies" or the specific values when a bar is touched.
-*   **Chart Area**:
-    *   `ResponsiveContainer` from Recharts.
-    *   `ComposedChart` with `XAxis` (Ratings) and hidden `YAxis`.
-    *   `Tooltip` (Custom, `cursor={{fill: 'transparent'}}`, using `active` state to update the Header instead of rendering a popup).
-    *   `Bar` for "Count" (Vibrant Color, e.g., Neon Amber).
-    *   `Area` or `Bar` for "Cumulative" (Subtle Color, e.g., White/Blue with low opacity).
-
-### Step 3: Styling (Tailwind)
-*   Use a "Dark Mode" aesthetic for premium feel.
-*   Colors:
-    *   Background: Deep Slate/Black gradient.
-    *   Count Bar: `amber-400` or `yellow-400` (referencing original yellow).
-    *   Cumulative: `blue-500/20` (glassy blue).
-*   Typography: Sans-serif, legible sizes (minimum 12px for axes).
-
-### Step 4: Refinement
-*   Ensure the `XAxis` ticks are decimated (show only integers) to avoid overlap.
-*   Add a "Reset" interaction (clicking outside clears the selection).
-
-This plan ensures all information from the desktop version (Distribution + Cumulative trend) is preserved but reformatted for the constraints and ergonomic needs of a mobile device.
+1.  **Project Setup**: Initialize the component structure with `Recharts`, `Lucide`, and `Tailwind`.
+2.  **Data Processing**:
+    - Create a `processData` function.
+    - Implement the binning and cumulative sum logic.
+    - *Fallback*: If raw data access is complex, hardcode the derived dataset representing the movie ratings curve shown in the image (approximately: bins 2-9).
+3.  **Layout Construction**:
+    - Create a Card container with `bg-white/glass`.
+    - Add Header: Title (Distribution of IMDB Ratings) + Legend (Visual indicators for "Total so far" vs "Count").
+4.  **Chart Implementation**:
+    - Use `<ComposedChart>`.
+    - **X-Axis**: `<XAxis>` dataKey="bin" tickLine={false} axisLine={false}.
+    - **Y-Axis**: `<YAxis>` hide line, keep modest tick count.
+    - **Grid**: `<CartesianGrid>` vertical={false} opacity={0.1}.
+    - **Layer 1 (Cumulative)**: `<Bar>` dataKey="cumulative" fill="#3b82f6" opacity={0.3} radius={[4, 4, 0, 0]} barSize={32} (max).
+    - **Layer 2 (Count)**: `<Bar>` dataKey="count" fill="#eab308" radius={[4, 4, 0, 0]} barSize={32} (max). Note: In Recharts, to overlay bars, we might need to make them separate axes or use a specific `barGap` / `barCategoryGap` setting, or simply render them in specific order (Background first). *Correction:* To strictly overlay bars in Recharts, simply rendering two `<Bar>` components with the same `xAxisId` usually stacks them side-by-side unless `stackId` is used. To get the "Layered" (one in front of other) effect without stacking, we can use a custom shape or ensure the X-axis aligns them. Actually, Recharts places bars side-by-side by default.
+    - **Alternative for Layering**: Use `barGap={-100%}` (hacky) or better, simply make the "Cumulative" a `<Area>` or a wider `<Bar>` and the "Count" a narrower `<Bar>`.
+    - **Decision**: Make "Cumulative" a filled `<Area>` (stepped) or a wider, lighter `<Bar>`. Make "Count" a narrower, vibrant `<Bar>` inside it. This improves the mobile aesthetic and clarity.
+5.  **Interaction Design**:
+    - Add `<Tooltip>` with `cursor={{ fill: 'transparent' }}`.
+    - Custom Tooltip Content: Display "Rating: [Bin]", "Count: [Val]", "Cumulative: [Val]".
+6.  **Refinement**:
+    - Add responsive container `<ResponsiveContainer>`.
+    - Ensure typography is readable (text-slate-500).
+    - Add a "summary" metric in the header (e.g., Total Movies).

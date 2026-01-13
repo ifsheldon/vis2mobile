@@ -2,106 +2,120 @@
 
 ## 1. Analysis of Original Visualization
 
-### Desktop Version Analysis
-- **Content**: The visualization explores a movies dataset (`movies.json`).
-- **Structure**: It consists of two vertically concatenated views (`vconcat`).
-  1.  **Top View (Heatmap + Scatter)**:
-      -   **X-Axis**: IMDB Rating (Quantitative, Binned).
-      -   **Y-Axis**: Rotten Tomatoes Rating (Quantitative, Binned).
-      -   **Layer 1 (Background)**: A Rectangular Heatmap showing the density (count) of *all* records. Color scheme: Green-Blue.
-      -   **Layer 2 (Foreground)**: A Scatter plot showing specific records based on the selection from the bottom chart.
-  2.  **Bottom View (Bar Chart)**:
-      -   **X-Axis**: Major Genre (Nominal).
-      -   **Y-Axis**: Count (Quantitative).
-      -   **Interaction**: Selecting a bar filters the top view.
-- **Interaction Model**: Cross-filtering. Clicking a genre in the bar chart highlights movies of that genre in the top ratings chart.
+### Original Desktop Version
+- **Structure**: Vertical arrangement of two charts.
+    - **Top (Heatmap/Scatter Hybrid)**: A 2D binned plot comparing "IMDB Rating" vs. "Rotten Tomatoes Rating".
+        - Background: Rectangles colored by total record count (GreenBlue scheme).
+        - Foreground: Circles sized by "Records in Selection" (grey).
+        - Interaction: Brushing/Selecting a range on the X-axis filters the bottom chart.
+        - Legend: Placed on the right side.
+    - **Bottom (Bar Chart)**: Distribution of "Major Genre".
+        - X-Axis: Genre (Categorical).
+        - Y-Axis: Count of Records.
+        - Labels: Vertical text for genres (hard to read).
+        - Color: Grey base, Steelblue for selected data.
 
-### Mobile Constraints & Issues
-- **Bar Chart Layout**: The desktop bar chart puts "Major Genre" on the X-axis. There are many genres. On a narrow mobile screen, these labels will severely overlap or become unreadable (Requires **Transpose**).
-- **Heatmap Detail**: The heatmap relies on recognizing density patterns. On mobile, the `viewBox` shrinking might make bins too small to see. The legend for the heatmap is likely to squeeze the chart content horizontally if kept on the right (Requires **Reposition**).
-- **Touch Targets**: Bars on a compressed X-axis would be too thin for reliable touch interaction (Fat-finger problem).
-- **Vertical Space**: Stacking two charts vertically is good for mobile scrolling, but the headers and axes need to be compact.
+### Mobile Constraints & Issues (Desktop on Mobile)
+- **Aspect Ratio**: The 2D heatmap becomes too small to distinguish individual bins or tap them accurately.
+- **Readability**:
+    - The vertical X-axis labels on the Bar Chart ("Black Comedy", "Concert/Performance") will be unreadable or overlap significantly on a narrow screen.
+    - The Legend on the right squeezes the main chart area, making the data ink ratio poor for mobile.
+- **Interaction**:
+    - The "Brush" interaction (dragging a box to select a range) is notoriously difficult on mobile touchscreens ("Fat-finger problem").
 
-## 2. Design Action Space Planning
+## 2. Design Action Space & Reasoning
 
-Based on the `mobile-vis-design-action-space.md`, here is the plan to transform the visualization.
+### L0: Visualization Container
+*   **Action: `Rescale` (Fit width)**
+    *   **Reasoning**: Mobile screens are narrow. The container must occupy 100% of the width with appropriate padding.
+*   **Action: `Reposition` (Vertical Stack)**
+    *   **Reasoning**: Keep the vertical stacking of the two charts but increase vertical spacing to ensure distinct touch areas.
 
-### High-Level Actions
+### Chart 1: Rating Correlation (Heatmap/Scatter)
+*   **L3 Legend: `Reposition` (Move to Bottom/Top)**
+    *   **Reasoning**: The side legend consumes ~20% of horizontal space. Moving it to the top (as a summary header) or bottom allows the heatmap to expand to full width.
+*   **L5 Tooltip: `Reposition (Fix)`**
+    *   **Reasoning**: Hover is not available. Tooltips should appear in a fixed location (e.g., top of the card) or a modal upon clicking a cell.
+*   **L2 Interaction: `Recompose (Replace)` (Drag -> Tap)**
+    *   **Reasoning**: Replace the complex "Brush" (drag selection) with a simpler "Tap to Filter" or simply remove the cross-filtering if it degrades UX too much. *Plan: Allow tapping a specific bin to see details, rather than dragging a range.*
 
-1.  **L0 Visualization Container: Rescale & Reposition**
-    -   **Action**: Use a fluid layout (`width: 100%`) with a scrollable container.
-    -   **Reasoning**: Mobile screens vary in height. We will treat the page as a dashboard where the user scrolls between the specific metrics.
+### Chart 2: Genre Distribution (Bar Chart)
+*   **L2 Coordinate System: `Transpose` (Vertical -> Horizontal)**
+    *   **Reasoning (CRITICAL)**: Vertical bar charts with long categorical labels (Genres) are terrible on mobile. By transposing to a **Horizontal Bar Chart**, we give the text ample horizontal space to be read naturally from left to right.
+*   **L4 Axis: `Recompose (Remove)` (X-Axis)**
+    *   **Reasoning**: In a horizontal bar chart, the numeric axis (now bottom) takes up space. We can remove the axis line/ticks and place the **Data Label (Value)** directly inside or at the end of the bar.
+*   **L4 Axis Title: `Recompose (Remove)`**
+    *   **Reasoning**: "Count of Records" is implied by the title or context. Removing it saves vertical space.
 
-2.  **L2 Coordinate System (Bottom Chart): Transpose (Axis-Transpose)**
-    -   **Action**: Convert the **Vertical Bar Chart** (Genre on X) to a **Horizontal Bar Chart** (Genre on Y).
-    -   **Reasoning**: This is the most critical action. "Major Genre" labels are text-heavy. Horizontal bars allow labels to be read naturally (left-to-right) and provide a large, full-width touch target for filtering. This solves the "Distorted layout" and "Cluttered text" issues found in the `desktop_on_mobile.png`.
+### General UI/UX
+*   **L1 Data Model: `Codify Data`**
+    *   **Reasoning**: Extract the raw JSON (`movies.json`). Do not use the pre-calculated view. We need to calculate bins and counts dynamically to support responsive resizing or custom binning if necessary.
 
-3.  **L2 Data Marks (Top Chart): Rescale & Recompose**
-    -   **Action (Heatmap)**: Instead of Vega's automatic binning, we will pre-calculate bins in the React component to ensure they map to a responsive grid. We will use a `ScatterChart` with custom square shapes to emulate the heatmap, ensuring the size of squares scales with the screen width.
-    -   **Action (Overlay Points)**: The "selected" movies will be rendered as distinct dots over the heatmap squares.
+## 3. Detailed Implementation Steps
 
-4.  **L3 Legend Block: Reposition & Simplify**
-    -   **Action**: Move the "Total Records" color legend from the right side (desktop) to the **top** of the heatmap (mobile), formatted as a gradient bar or a simplified "Low -> High" indicator.
-    -   **Reasoning**: Horizontal space is premium on mobile. Side legends compress the chart data area.
+### Step 1: Data Extraction & Processing
+1.  **Fetch Data**: Retrieve `movies.json` from the provided Vega dataset URL.
+2.  **Process Data (Transformation)**:
+    *   **Binning**: Create a utility function to bin "IMDB Rating" and "Rotten Tomatoes Rating".
+    *   **Aggregation (Heatmap)**: Group data by these bins to calculate `count` (for rect color) and `selection_count` (for circle size).
+    *   **Aggregation (Bar Chart)**: Group data by "Major Genre" to calculate total counts.
+    *   **Sorting**: Sort genres by count descending to make the horizontal bar chart easier to read.
 
-5.  **L4 Axis: Simplify & Remove**
-    -   **Action (Bar Chart)**: Remove the X-axis (Count) lines and gridlines. Place the numerical count value *inside* or *at the end* of the bar.
-    -   **Reasoning**: Cleanliness. The exact count axis takes up vertical space. Direct labeling is more readable on mobile.
-    -   **Action (Heatmap)**: Reduce tick count on IMDB (0-10) and Rotten Tomatoes (0-100) axes to prevent label overlap.
+### Step 2: Component Architecture (Next.js)
+1.  **Container**: Create a `Visualization` component with a responsive grid/flex layout.
+2.  **State Management**:
+    *   Use React `useState` to hold the "Selection" state (if preserving interactivity).
+    *   *Simplification*: Instead of a drag-brush, we might simply show the global distribution to ensure a high-quality static view first. If interaction is added, it will be tapping a Genre to highlight that genre's position in the Heatmap (Reverse interaction is easier on mobile).
 
-6.  **L1 Interaction: Feedback**
-    -   **Action**: Implement "Active State" styling. When a Genre bar is tapped, it should glow or change color significantly to indicate it is the active filter.
-    -   **Action**: Add a "Reset" button (Floating or fixed) to clear the filter, as clicking "empty space" is harder on mobile.
+### Step 3: Top Chart - Heatmap (Recharts `ScatterChart` customized)
+1.  **Composition**:
+    *   Use `ScatterChart` or a custom SVG Grid. Given Recharts limitations with heatmaps, a customized **Grid Layout** using Tailwind Grid or SVG might be cleaner than forcing Recharts.
+    *   *Decision*: Use **Recharts `ScatterChart`** with `Customized` shapes.
+        *   Layer 1: Rectangles (The Heatmap background).
+        *   Layer 2: Circles (The Scatter overlay).
+2.  **Styling**:
+    *   X-Axis: IMDB Rating.
+    *   Y-Axis: Rotten Tomatoes.
+    *   Map color intensity to the `count`.
 
-## 3. Data Extraction Strategy
+### Step 4: Bottom Chart - Horizontal Bar Chart (Recharts `BarChart`)
+1.  **Composition**:
+    *   `layout="vertical"` in Recharts.
+    *   `XAxis type="number" hide`.
+    *   `YAxis type="category" dataKey="genre" width={100}` (Adjust width for readability).
+2.  **Styling**:
+    *   Bars: Rounded corners, gradient fill (Premium Aesthetic).
+    *   Labels: Render value labels to the right of the bars.
 
-The source data is a JSON file. I cannot rely on Vega-Lite's internal processing; I must process the raw data in JavaScript/TypeScript.
+## 4. Data Extraction Plan
 
-1.  **Fetch Data**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/movies.json`
-2.  **Processing for Bar Chart (Aggregation)**:
-    -   Iterate through the array.
-    -   Group by `Major Genre`.
-    -   Count records.
-    -   Sort by Count (Descending) for better readability in list format.
-    -   *Handle Nulls*: Filter out or label 'Unknown' genres.
-3.  **Processing for Heatmap (Binning)**:
-    -   Define Bin dimensions: IMDB (0-10, step 0.5), Rotten Tomatoes (0-100, step 10).
-    -   Create a grid matrix.
-    -   Iterate all movies, calculate which bin they fall into, and increment count.
-    -   Map count to a color scale (Green-Blue).
-4.  **Processing for Interaction (Filtering)**:
-    -   Keep the raw array in state.
-    -   When a genre is selected, filter the raw array to get the subset of movies.
-    -   Pass this subset to the Heatmap's second layer (Scatter).
+**Source**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/movies.json`
 
-## 4. Implementation Detailed Steps
+**Processing Logic**:
+1.  **Clean Data**: Filter out records where `IMDB Rating`, `Rotten Tomatoes Rating`, or `Major Genre` is null.
+2.  **Heatmap Data Structure**:
+    ```typescript
+    interface HeatmapCell {
+      xBin: number; // IMDB Rating rounded down
+      yBin: number; // Rotten Tomatoes rounded down
+      count: number;
+      movies: Movie[]; // Keep reference for tooltip
+    }
+    ```
+3.  **Bar Chart Data Structure**:
+    ```typescript
+    interface GenreStat {
+      genre: string;
+      count: number;
+    }
+    ```
+4.  **Binning Logic**:
+    *   IMDB: Bin size 1.0 (0-10).
+    *   Rotten Tomatoes: Bin size 10 (0-100).
 
-### Step 1: Component Structure
--   **Header**: Title "Movie Ratings Analysis" with a glassmorphism effect.
--   **Section 1: Rating Distribution (Heatmap)**
-    -   Container with fixed aspect ratio (Square-ish).
-    -   Recharts `ComposedChart`.
-    -   **Series A (Background)**: `Scatter` with custom shape (Rectangle). Data = All Binned Data. Color = Scale based on density.
-    -   **Series B (Foreground)**: `Scatter` with circle shape. Data = Filtered Movies (Raw Coordinates). Color = Accent color (e.g., Orange/Pink) to contrast with Green-Blue background.
--   **Section 2: Genre Filter (Horizontal Bar Chart)**
-    -   Scrollable vertical list.
-    -   Recharts `BarChart` (layout="vertical").
-    -   **YAxis**: Type="category", dataKey="genre", width={100} (allow space for text).
-    -   **Bar**: Custom active state styling.
+## 5. Mobile Readability Assurance (Hard Requirement Check)
 
-### Step 2: Styling (Tailwind)
--   **Palette**: Dark mode or deep blue/slate background (`bg-slate-900`) to make the colors pop.
--   **Heatmap Colors**: `scaleSequential` (d3-scale) using `interpolateGnBu` or a custom Tailwind gradient map (Teal to Blue).
--   **Selection Highlight**: Amber or Rose color for selected points to ensure visibility against the Green-Blue map.
--   **Typography**: Inter or system sans-serif. Large, legible headings.
-
-### Step 3: Interaction Logic
--   State: `selectedGenre` (string | null).
--   State: `chartData` (Processed JSON).
--   Event: `onClick` on Bar Chart updates `selectedGenre`.
--   Effect: Updating `selectedGenre` triggers a re-calculation of the "Series B" data for the Heatmap.
-
-### Step 4: Refinement
--   **Tooltip**: Custom mobile-friendly tooltip. Instead of hovering, tapping a point in the heatmap could show movie details (Title, Rating) in a fixed bottom drawer (Action: **Reposition (Fix)**) or a transient toast, but given the density, just showing the overall distribution is the primary goal. We will stick to standard Recharts tooltip for the bars, but perhaps disable specific movie tooltips on the heatmap if it's too crowded, or show a summary.
-
-This plan ensures the visualization is not just a shrunk desktop chart, but a functional mobile application component.
+*   **Font Size**: All text (Axis labels, Tooltips) will be at least `12px` (Tailwind `text-xs` or `text-sm`).
+*   **Contrast**: Use adequate contrast for text against the glassmorphism background.
+*   **Touch Targets**: The "Transpose" action on the bar chart ensures genre names are readable without rotation.
+*   **Spacing**: Add gap between the two charts so the user knows they are distinct but related.

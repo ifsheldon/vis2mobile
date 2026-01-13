@@ -1,109 +1,110 @@
-# Vis2Mobile Transformation Plan
+# Mobile Visualization Plan
 
 ## 1. Analysis of Original Visualization
 
-### Source Description
-The original visualization is a **Time-Series Area Chart** defined in Vega-Lite.
-- **Data**: Unemployment statistics across industries (sourced from `vega-datasets`).
-- **Visual Encoding**:
-    - **X-Axis**: Date (Year-Month).
-    - **Y-Axis**: Aggregate Sum of Unemployment Count.
-    - **Mark**: Area (`goldenrod` color).
-    - **Layers**: Two layers are defined. One with 0.3 opacity (background) and one fully opaque (foreground).
-- **Interaction**: A "Brush" interval selection (`select: interval`). When the user drags across the chart, the selected area remains opaque, while the unselected area fades, effectively highlighting a specific time range.
+### Desktop Version Characteristics
+*   **Visual Type**: Time-series Area Chart.
+*   **Data Source**: Unemployment count over time (monthly), aggregated (summed) across all industries.
+*   **X-Axis**: Temporal (Year-Month), ranging from approx. Jan 2000 to Jan 2010.
+*   **Y-Axis**: Quantitative (Sum of count), range 0 to ~16,000.
+*   **Visual Encodings**:
+    *   **Mark**: Area.
+    *   **Color**: "Goldenrod" (Yellow-Orange).
+    *   **Opacity**: Layered opacity (likely for highlighting/brushing interaction in the original Vega spec).
+*   **Interaction**: The original spec includes a `param` for interval selection (brushing) to filter/highlight time ranges.
+*   **Gridlines**: Full grid (vertical and horizontal).
+*   **Labels**: Standard axis titles ("date (year-month)", "Sum of count") and tick labels.
 
-### Mobile Challenges (Desktop vs. Mobile)
-- **Aspect Ratio**: The desktop version is wide, allowing the long time series (spanning ~10 years) to breathe. On mobile (portrait), this will be severely compressed.
-- **Interaction**: The "Brush/Interval Select" interaction (click and drag a box) is poor on mobile devices due to conflict with vertical scrolling and "fat finger" issues.
-- **Readability**: 
-    - X-axis labels (Dates) will overlap if not decimated/rotated.
-    - Y-axis labels take up valuable horizontal screen real estate.
-    - Tooltips that follow the cursor will be obstructed by the user's finger.
+### Issues on Mobile (Desktop_on_Mobile)
+*   **Aspect Ratio**: The vertical orientation compresses the X-axis time series, making trends steeper and harder to read.
+*   **Touch Targets**: The "Brushing/Interval Selection" feature from the desktop spec is extremely difficult to use on a small touch screen (Fat-finger problem).
+*   **Label Readability**: Axis titles ("date (year-month)") are redundant and occupy valuable vertical space. Tick labels might overlap if not decimated.
+*   **Data Density**: 10 years of monthly data compressed into a mobile width can result in "Overplotting" or jagged lines that obscure the trend.
+*   **Tooltip**: Standard hovering tooltips block the finger and the data being viewed.
 
-## 2. Design Action Plan
+## 2. Vis2Mobile Design Plan
 
-Based on the **Vis2Mobile Design Action Space**, I plan to take the following actions to transform this into a premium mobile component.
+I propose transforming this into a **"Finance-Style" Interactive Area Chart**. This style is common in mobile banking/stock apps (e.g., Robinhood) because it handles time-series data elegantly on narrow screens.
 
-### **L0: Visualization Container**
-*   **Action: `Rescale` (Viewport)**
-    *   **Reasoning**: The fixed width of the desktop site (800px) must be converted to `width: 100%` with a fixed height (e.g., 300px-400px) to fit mobile screens.
-*   **Action: `Reposition` (Margins)**
-    *   **Reasoning**: Remove default body padding and maximize chart width. We will push labels inside or minimize margins to prevent "wasted whitespace".
+### Design Actions & Reasoning
 
-### **L1: Data Model**
-*   **Action: `Recompose (Aggregate)`**
-    *   **Reasoning**: The raw data contains unemployment by industry. The Vega spec performs a `sum` aggregation on the fly. We must perform this aggregation in JavaScript *before* passing data to Recharts to ensure performance and correct rendering.
+#### L0: Visualization Container
+*   **Action**: `Rescale` (Fit to Width)
+    *   **Reasoning**: Use `width: 100%` and a fixed height (e.g., `h-64` or `h-80`) to maximize the usage of the narrow mobile screen width.
+*   **Action**: `Reposition` (Margins)
+    *   **Reasoning**: Remove default Recharts margins/padding to allow the area chart to "bleed" to the edges or fill the container smoothly, maximizing data-ink ratio.
 
-### **L1: Interaction Layer**
-*   **Action: `Recompose (Replace)` (Trigger)**
-    *   **Reasoning**: The "Brush interval" interaction is not native to mobile usage flows for simple trend viewing. I will replace the **Brush** interaction with a **Touch/Scrub** interaction. Users can drag their finger across the chart to read specific values.
-*   **Action: `Disable Hover`**
-    *   **Reasoning**: Hover states don't exist on touch screens. Active states will be triggered by touch.
+#### L1: Interaction Layer & L2: Features
+*   **Action**: `Recompose (Replace)` (Trigger: Hover → Touch/Drag)
+    *   **Reasoning**: Replace the desktop "Interval Selection" (Brushing) with a **"Touch Scrubbing"** interaction. Users drag their finger across the chart area to activate a specific time point.
+*   **Action**: `Recompose (Replace)` (Filter Mechanism)
+    *   **Reasoning**: Since precise brushing is hard, I will add **Time Range Tabs** (e.g., "All", "5Y", "1Y") above the chart. This filters the `DataModel` to zoom in on specific periods, solving the data density issue.
 
-### **L2: Features / Feedback**
-*   **Action: `Reposition (Fix)` (Tooltip)**
-    *   **Reasoning**: Instead of a floating tooltip next to the cursor (which gets blocked by the finger), I will use a **Fixed Legend/Info Block** at the top of the card that dynamically updates as the user scrubs the chart. This ensures the data is always readable.
+#### L2: Feedback (Tooltips)
+*   **Action**: `Reposition (Fix)` (Tooltip Position)
+    *   **Reasoning**: Instead of a floating tooltip near the finger, I will implement a **Header Summary Card**. When the user touches/scrubs the chart, the Title (Total Count) and Date in the header update dynamically. This avoids occlusion.
 
-### **L3: Coordinate System (Axes)**
-*   **Action: `Recompose (Remove)` (Gridlines)**
-    *   **Reasoning**: To create a "Premium" and clean aesthetic, I will remove standard gridlines and axis lines (`Axis Line`), relying on the area shape and a minimal number of ticks for context.
-*   **Action: `Decimate Ticks` (X-Axis)**
-    *   **Reasoning**: The dataset spans many years. I will reduce the tick count (e.g., show only every 2 years or 5 ticks max) to prevent overlapping text.
-*   **Action: `Format Tick Label`**
-    *   **Reasoning**: 
-        - X-Axis: "2005", "2010" (Short format).
-        - Y-Axis: Convert raw numbers (e.g., 5,000,000) to readable notation (e.g., "5M") to save horizontal space.
+#### L3: Axes & Gridlines
+*   **Action**: `Recompose (Remove)` (Axis Titles)
+    *   **Reasoning**: "date (year-month)" and "Sum of count" are obvious from context and the header. Removing them saves L0 vertical space.
+*   **Action**: `Recompose (Remove)` (Vertical Gridlines)
+    *   **Reasoning**: Vertical lines add noise on a narrow screen. I will keep minimal Horizontal Gridlines for value estimation.
+*   **Action**: `Recompose (Remove)` (Axis Lines)
+    *   **Reasoning**: Remove the hard axis lines (`stroke: none`) for a cleaner, modern look.
 
-### **L2: Data Marks (Area)**
-*   **Action: `Rescale` / Aesthetic Upgrade**
-    *   **Reasoning**: The original uses a flat `goldenrod` color. For the "Premium" look, I will use a `<defs>` linear gradient in SVG. The top of the area will be the solid `goldenrod` color, fading to transparent at the bottom. This adds depth and modernity (Glassmorphism style).
+#### L4 & L5: Ticks & Labels
+*   **Action**: `Decimate Ticks` (X-Axis)
+    *   **Reasoning**: Limit `tickCount` to 3 or 4.
+*   **Action**: `Simplify Label` (Formatting)
+    *   **Reasoning**:
+        *   **X-Axis**: Convert "January 2000" → "2000" or "'00".
+        *   **Y-Axis**: Convert "16,000" → "16k" (`abbreviateText`).
 
-## 3. Data Extraction Plan
+#### L2: Data Marks (Aesthetics)
+*   **Action**: `Rescale` (Encoding)
+    *   **Reasoning**: Use a **Gradient Fill** (Goldenrod to transparent) instead of a flat color. This adds depth and looks "Premium" (Glassmorphism style).
+*   **Action**: `Recompose (Change Encoding)` (Focus)
+    *   **Reasoning**: When "Scrubbing", display a vertical cursor line (Action: `Focus Mode`) and a dot on the active data point to guide the eye.
 
-Since I cannot run the Vega-Lite runtime environment, I must emulate the data processing described in the spec.
+## 3. Data Extraction Strategy
 
-1.  **Source URL**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/unemployment-across-industries.json`
-2.  **Schema Analysis**:
-    The JSON structure is likely an array of objects:
-    ```json
-    [
-      {"series": "Agriculture", "year": 2000, "month": 1, "count": 100, ...},
-      ...
-    ]
-    ```
-    *Note: The Vega spec uses a `date` field. The raw JSON might separate year/month or have a date string. I need to inspect and parse it.*
-3.  **Processing Logic (Codification)**:
-    - **Fetch** the JSON.
-    - **Group By** Date (Year-Month).
-    - **Aggregate**: Sum the `count` field for all entries sharing the same Year-Month.
-    - **Sort**: Ensure the array is sorted chronologically.
-    - **Output**: An array compatible with Recharts:
-      ```typescript
-      type ChartData = {
-          date: string; // ISO or timestamp
-          displayDate: string; // "Jan 2000"
-          count: number; // Total unemployment
-      }[];
-      ```
+The original HTML sources data from a URL. I will fetch and process this real data.
 
-## 4. Implementation Steps
+1.  **Source**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/unemployment-across-industries.json`
+2.  **Schema Analysis**: The raw data contains fields: `series` (industry), `year`, `month`, `count`, `date`.
+3.  **Aggregation Logic**:
+    *   The raw data is granular (per industry).
+    *   The Desktop Spec uses `aggregate: "sum", field: "count"`.
+    *   **Extraction Step**: I must group the raw data by `date` and sum the `count` values to create a single array of objects: `{ date: string, count: number }`.
+4.  **Formatting**: Convert `date` strings into JS Date objects or timestamps for Recharts to handle time-scales correctly.
 
-1.  **Setup Component Structure**: Create `UnemploymentAreaChart.tsx` with a responsive wrapper.
-2.  **Data Fetching Hook**: Implement a `useEffect` to fetch the data from the CDN, aggregate it by date, and store it in state.
-3.  **Layout**:
-    - Create a Card container with a slight glassmorphism effect (backdrop-blur, semi-transparent background).
-    - Add a Header section for the Title ("Unemployment Trends") and the Dynamic Data Display (the "Fixed Tooltip").
-4.  **Chart Configuration (Recharts)**:
-    - Use `<AreaChart>` and `<Area>`.
-    - Define `<linearGradient>` in `<defs>` for the Goldenrod fade effect.
-    - Configure `<XAxis>` with `tickFormatter` (years only) and `minTickGap`.
-    - Configure `<YAxis>` with `tickFormatter` (millions shorthand) and `width={40}`.
-    - Use `<Tooltip>` with a custom `content` render function that triggers the Dynamic Data Display update, but returns `null` to render nothing near the cursor (or render a simple vertical cursor line).
-5.  **Refinement**:
-    - Add loading skeletons.
-    - Ensure typography uses Tailwind's readable defaults (e.g., `text-sm`, `text-muted-foreground`).
-    - Verify touch responsiveness (remove default browser touch actions on the chart area if necessary).
+## 4. Implementation Plan
 
-## 5. Justification for Deviation (if any)
-*   **Interaction**: I am deviating from the "Brush" interaction (highlight range) to a "Scrub" interaction (view specific point).
-    *   *Justification*: The "Brush" is a desktop-centric pattern used for filtering cross-views or zooming. On a standalone mobile chart, "Scrubbing" provides better immediate information retrieval without the complex gesture overhead of defining a start and end point with a finger. The "Premium" mobile experience prioritizes fluidity over complex tool manipulation.
+### Step 1: Data Utility
+*   Create a function to fetch the JSON.
+*   Implement `processData`: Group by Year-Month, Sum Counts.
+*   Sort by date ascending.
+
+### Step 2: Component Structure
+*   **Header**:
+    *   **Main Display**: Large text showing the "Current Value" (defaults to latest, updates on scrub).
+    *   **Sub-text**: "Current Date" (defaults to range end, updates on scrub).
+*   **Controls**: Segmented Control (Tabs) for Time Range (All, 5Y, 1Y).
+*   **Chart Container**:
+    *   Recharts `ResponsiveContainer`.
+    *   `AreaChart` with gradient definition.
+    *   `XAxis` (Time scale).
+    *   `YAxis` (Numeric, Right-aligned or hidden if header is sufficient, but I will keep right-aligned small ticks).
+    *   `Tooltip` (custom, invisible trigger for state updates).
+
+### Step 3: Styling (Tailwind)
+*   Use a `amber-500` (closest to Goldenrod) color palette.
+*   Background: Mild gradient or solid dark/light mode compatible card with shadow (`glassmorphism`).
+*   Typography: Sans-serif, variable weights (Bold for numbers, light for labels).
+
+### Step 4: Interactivity
+*   Use React `useState` to track `activeDataPoint`.
+*   Pass `onMouseMove` / `onTouchMove` events from Recharts to update the Header state.
+*   Use `activeDot` to highlight the specific month being viewed.
+
+This plan ensures high readability on mobile by moving detailed information (tooltips/axis titles) out of the chart area into a dedicated header, while maintaining the fidelity of the original data trends.

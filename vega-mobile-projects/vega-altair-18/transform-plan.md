@@ -1,116 +1,108 @@
-# Mobile Visualization Transformation Plan
+# Vis2Mobile Transformation Plan
 
-## 1. Desktop Visualization Analysis
+## 1. Analysis of Original Visualization
 
-### Source Overview
-The original visualization is a **Multi-Line Chart** created with Vega-Lite showing the rise of Carbon Dioxide (CO2) in the atmosphere over several decades.
+### Desktop Version (Original)
+- **Type**: Multi-series Line Chart (resembling a Ridge Plot/Joy Plot due to the upward trend).
+- **Data**: CO2 concentration (ppm) from 1958 to ~2020.
+- **X-Axis**: "Year into Decade" (0 to 10). This aligns the seasonal cycles of different decades for comparison.
+- **Y-Axis**: CO2 concentration (310 - 420 ppm).
+- **Encoding**:
+    - **Color**: Represents the Decade (Magma color scheme: purple → orange).
+    - **Lines**: Each line represents a decade of data.
+- **Annotations**: Text labels at the start and end of each line indicating the year (e.g., "1960", "2019").
+- **Narrative**: Shows two distinct patterns: the seasonal oscillation (sawtooth) and the long-term rising trend (vertical stacking).
 
-- **Data**: CO2 concentration (ppm) vs. Date.
-- **X-Axis**: "Year into Decade" (0 to 10). This effectively overlays every decade on top of each other to compare the rate of increase and seasonal cycles.
-- **Y-Axis**: CO2 concentration in ppm (Non-zero baseline, roughly 310-420 range).
-- **Marks**:
-    - **Lines**: Multiple lines, one per decade.
-    - **Color Encoding**: Magma color scheme mapped to the `decade` field.
-    - **Text Labels**: Years (e.g., "1960", "2018") placed at the *start* and *end* of each line to identify the decade.
-- **Narrative**: It shows two trends simultaneously: the seasonal oscillation (zigzag) and the secular trend of increasing CO2 levels (lines stacking upwards).
+### Mobile Version Issues (Simulated)
+- **Aspect Ratio Distortion**: Compressing the wide "sawtooth" waves into a narrow mobile screen turns the gentle curves into jagged, noisy spikes.
+- **Overplotting**: The lines and labels crowd together. The text annotations ("1960", "2020") overlap with the data lines and each other.
+- **Unreadable Axes**: The Y-axis on the left consumes ~15% of the screen width. The X-axis labels are likely too dense.
+- **Lack of Interaction**: Static images on mobile deny the user the ability to inspect specific values, which is critical when lines are close together.
 
-### Mobile Challenges
-1.  **Label Overcrowding (Clutter)**: The desktop version labels the start and end of *every* decade line. On a narrow mobile screen, these text labels will overlap significantly, rendering them unreadable.
-2.  **Aspect Ratio**: The wide aspect ratio of the desktop chart makes the vertical rise (the main story) less dramatic when squashed horizontally.
-3.  **Touch Interaction**: Hovering to isolate a specific decade is impossible on touch screens.
-4.  **Tooltip Occlusion**: Standard tooltips following the finger will be blocked by the user's hand.
+---
 
-## 2. Vis2Mobile Transformation Plan
+## 2. Vis2Mobile Design Action Plan
 
-Based on the `mobile-vis-design-action-space.md`, here is the transformation plan.
+Based on the **Vis2Mobile Design Action Space**, here is the strategy to transform this into a premium mobile component.
 
-### High-Level Strategy
-I will transform this into a **Scrollable Vertical Layout** containing a square or portrait-oriented interactive chart. The primary interaction model will shift from "passive viewing with labels" to "active exploration" via touch.
+### L0: Visualization Container
+*   **Action: `Rescale` (Aspect Ratio)**: Instead of maintaining the desktop's wide aspect ratio, we will significantly increase the height.
+    *   *Reasoning*: The "sawtooth" pattern requires horizontal width to be readable. Since we cannot widen the phone screen, we must increase the vertical space to prevent the lines from looking flat or compressed. A taller chart (e.g., `h-[500px]` or `h-[60vh]`) allows the vertical rise of CO2 levels to be distinct.
+*   **Action: `Reposition`**: Remove default browser margins and maximize width.
 
-### Detailed Actions by Layer
+### L1: Data Model
+*   **Action: `Recompose (Transform)`**: We will strictly adhere to the logic in the original Vega spec:
+    *   Calculate `scaled_date = (year % 10) + (month / 12)`.
+    *   Group data by `decade`.
+    *   *Refinement*: To ensure smooth rendering in Recharts, we will "bin" the data into 120 points (10 years * 12 months) so that the x-coordinates align perfectly across all series.
 
-#### **L0: Visualization Container**
-*   **Action**: `Rescale` (Aspect Ratio).
-    *   *Reasoning*: Change from landscape (wide) to Square (1:1) or Portrait (4:5). This increases the vertical resolution, allowing the distinct gap between decades (the Y-axis rise) to be more visible.
-*   **Action**: `Reposition` (Margins).
-    *   *Reasoning*: Minimize side margins to maximize chart width (data-ink ratio).
+### L3: Axes (Coordinate System)
+*   **Action: `Recompose (Remove)` - Y-Axis Line & Ticks**:
+    *   *Reasoning*: The Y-axis title "CO2 concentration in ppm" and the axis line take up horizontal space.
+    *   *Alternative*: We will move the unit description to the **Subtitle** and use **Gridlines** or a **Touch Tooltip** to communicate values.
+*   **Action: `Recompose (Remove)` - X-Axis Title**:
+    *   *Reasoning*: "Year into Decade" is intuitive when the labels are "0", "5", "10". The title is redundant clutter on mobile.
+*   **Action: `Adjust Ticks` - X-Axis**:
+    *   *Reasoning*: Reduce tick count to 3 or 5 (e.g., 0, 5, 10) to avoid crowding.
 
-#### **L1: Data Model**
-*   **Action**: `Recompose (Aggregate/Transform)` (Preserve Logic).
-    *   *Reasoning*: I must replicate the "Year into Decade" logic (`year % 10 + month/12`). This is crucial for the "overlay" effect. I will not aggregate data (e.g., to yearly averages) because the seasonal fluctuation is part of the narrative.
+### L2: Data Marks (Lines)
+*   **Action: `Rescale`**: Ensure line stroke width is appropriate for mobile (e.g., `strokeWidth={2}`).
+*   **Action: `Color Encoding`**: Retain the "Magma" gradient. It is aesthetically pleasing and effectively communicates the passage of time (Dark Purple = Old, Bright Orange = New).
 
-#### **L2: Narrative & Interaction (Triggers/Feedback)**
-*   **Action**: `Recompose (Replace)` Triggers.
-    *   *Reasoning*: Replace `Hover` with `Touch/Drag`.
-*   **Action**: `Reposition (Fix)` Feedback.
-    *   *Reasoning*: **Fixed Tooltip/Header**. Instead of a floating tooltip near the finger, I will use a **Dynamic Header** or a specific "Active Data" area above the chart that displays the Year, Month, and CO2 Value of the currently touched line.
-*   **Action**: `Focus` (New Action).
-    *   *Reasoning*: When a user drags across the chart, the "closest" decade line should highlight (increase opacity/stroke width) while others fade slightly. This solves the "Spaghetti plot" issue.
+### L2: Annotations (Labels)
+*   **Action: `Recompose (Remove)`**: Remove the inline text labels ("1960", "1969") from the lines.
+    *   *Reasoning*: On mobile, these cause severe occlusion.
+*   **Action: `Compensate (Legend/Tooltip)`**:
+    *   Use a **Custom Tooltip** that activates on touch. When dragging across the chart, the tooltip will show the exact Year, Month, and CO2 ppm.
+    *   Add a simplified **Legend** at the top or bottom using color dots to indicate which color corresponds to which decade range.
 
-#### **L3: Coordinate System (Axes)**
-*   **Action**: `Recompose (Remove)` Gridlines.
-    *   *Reasoning*: Remove vertical gridlines to reduce visual noise. Keep horizontal lines subtle.
-*   **Action**: `Adjust Ticks` (X-Axis).
-    *   *Reasoning*: The X-axis represents 0-10 years. On mobile, labeling 0, 1, 2...10 is too crowded. I will `Decimate Ticks` to show only even numbers (0, 2, 4, 6, 8, 10) or just Start/Mid/End.
+### L1: Interaction Layer
+*   **Action: `Features` (Scrubbing)**: Implement a "Scrubbable" interface.
+    *   *Reasoning*: Fingers are thick ("Fat-finger problem"). A vertical cursor that snaps to the nearest month allows precise reading of the data.
+*   **Action: `Feedback` (Fixed Tooltip)**:
+    *   Instead of a floating tooltip that might be covered by a finger, use a **Fixed Information Block** at the top of the chart that updates dynamically as the user scrubs.
 
-#### **L4: Data Marks & Labels**
-*   **Action**: `Recompose (Remove)` & `Compensate (Interaction)`.
-    *   *Reasoning*: The original static text labels (1960, 1970...) at line ends are the biggest issue. I will **remove** most intermediate static labels.
-    *   *Compensation*:
-        1.  Permanently label only the **First** (1958) and **Last** (Current) decade lines to frame the context.
-        2.  Use the **Dynamic Header** (Interaction) to reveal the specific year of any other line when touched.
-*   **Action**: `Rescale` Stroke Width.
-    *   *Reasoning*: Use slightly thinner lines (e.g., 1.5px) for the non-active decades to accommodate the high density, and thicker (3px) for the active/touched line.
+---
 
-#### **L5: Legend**
-*   **Action**: `Recompose (Remove)`.
-    *   *Reasoning*: The color gradient (Magma) is intuitive (dark to light = old to new). A discrete legend with 7+ items takes too much space. The interactive labeling replaces the need for a separate legend.
+## 3. Data Extraction Plan
 
-## 3. Data Extraction & Processing
-
-I will create a utility function to fetch and process the CSV data, mirroring the Vega transformations.
+The data is hosted at a public URL. We will fetch and process it in the component.
 
 **Source**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/co2-concentration.csv`
 
-**Processing Logic (TypeScript/JS)**:
-1.  **Fetch**: Retrieve CSV.
-2.  **Parse**: Convert string dates to Date objects.
-3.  **Transform**:
-    *   `year`: `date.getFullYear()`
-    *   `decade`: `Math.floor(year / 10) * 10` (Note: Original spec logic `floor(year/10)` results in just the decade prefix like 196, 197. I will normalize this to 1960, 1970 for better readability).
-    *   `scaled_date`: `(year % 10) + (month / 12)`. This creates the X-axis coordinate (0.0 to 9.99).
-4.  **Grouping**: Group data by `decade` to form separate series for Recharts.
-5.  **Colors**: Generate an array of hex codes approximating the "Magma" scheme based on the number of decades.
+**Processing Logic (TypeScript)**:
+1.  **Fetch**: `fetch(url)` and parse CSV.
+2.  **Transform**:
+    *   Parse `Date` column.
+    *   Extract `year` and `month` (0-11).
+    *   Calculate `decade = Math.floor(year / 10) * 10`.
+    *   Calculate `scaled_date = (year % 10) + (month / 12)`.
+    *   Keep `CO2` value.
+3.  **Pivot for Recharts**:
+    *   Create an array of 120 objects (representing 0 to 120 months in a decade).
+    *   Each object key: `monthIndex` (0-119).
+    *   Each object values: `scaled_date`, plus keys for each decade (e.g., `d1960`, `d1970`...) containing the CO2 value.
+    *   This structure allows drawing multiple lines on a single X-axis in Recharts.
+
+---
 
 ## 4. Implementation Steps
 
-1.  **Setup Component Structure**:
-    - `src/components/Visualization.tsx`: Main container.
-    - `src/utils/data-processing.ts`: Data fetching and transformation logic.
-    - `src/components/ui/chart-tooltip.tsx`: Custom feedback component.
-
-2.  **Implement Data Logic**:
-    - Write the `processData` function to replicate the `scaled_date` logic exactly.
-    - Ensure data is sorted by `scaled_date` for correct line drawing.
-
-3.  **Develop Chart Layout (L0, L3)**:
-    - Initialize `ResponsiveContainer` and `ComposedChart`.
-    - Configure XAxis (`type="number"`, domain `[0, 10]`, formatter for ticks).
-    - Configure YAxis (domain `['auto', 'auto']` or specific range to mimic zero=false).
-
-4.  **Implement Marks (L2, L4)**:
-    - Map through the grouped decades and render a `<Line />` for each.
-    - Apply the "Magma" color palette.
-    - Add `activeDot` prop to handle the touch feedback visual.
-
-5.  **Add Mobile Interaction (L1, L5)**:
-    - Implement a custom `Tooltip` that **does not** float. Instead, it updates a React state `activePayload`.
-    - Render the content of `activePayload` in a fixed `<div>` above the chart (The Title/Narrative block).
-    - This effectively moves the specific data values out of the crowded chart area.
-
-6.  **Refine Aesthetics**:
-    - Apply Glassmorphism to the container/header.
-    - Use Lucide icons for context (e.g., `TrendingUp` icon).
-    - Ensure font sizes are at least 12px for axis ticks and 16px for key data points.
-
-7.  **Final Review**: Check against "Desktop on Mobile" issues (crowding, readability) to ensure they are solved.
+1.  **Setup Component**: Create `src/components/Visualization.tsx`.
+2.  **Data Fetching Hook**: Implement a `useEffect` to fetch CSV, parse it (using `d3-dsv` or simple string splitting), and apply the transformation logic described above.
+3.  **Layout Structure**:
+    *   Header: Title ("CO2 Atmosphere Trends") and dynamic Subtitle (showing active data point or static units).
+    *   Main Chart Area: `ResponsiveContainer` wrapping a Recharts `LineChart`.
+4.  **Chart Configuration**:
+    *   **XAxis**: `dataKey="scaled_date"`, `type="number"`, `domain={[0, 10]}`, `tickCount={6}`. Hide axis line.
+    *   **YAxis**: `domain={['auto', 'auto']}` or specific range `[310, 425]`. Hide axis line and ticks. Width 0.
+    *   **Lines**: Map through the decades (1950s-2020s). Render a `<Line />` for each.
+        *   `type="monotone"` for smoothness.
+        *   `dot={false}` to reduce noise.
+        *   `stroke`: Map decade to a color palette (mimic Magma: `#3d0342` to `#fca67d`).
+    *   **Tooltip**: Use `content={<CustomTooltip />}`. Design it with Glassmorphism (blur backdrop, border).
+5.  **Styling (Tailwind)**:
+    *   Background: Clean white or very light gray to contrast with the colorful lines.
+    *   Typography: `font-sans`, bold headers, subtle gray texts for sub-info.
+    *   Animation: Add simple entry animation for the lines.
+6.  **Review**: Check touch responsiveness and label readability. Ensure the "Sawtooth" oscillation is visible.

@@ -1,99 +1,98 @@
 # Vis2Mobile Transformation Plan
 
 ## 1. Analysis of Original Visualization
+*   **Source:** Vega-Lite Heatmap (Binned Scatterplot).
+*   **Data Content:** Correlation between "IMDB Rating" (X-axis) and "Rotten Tomatoes Rating" (Y-axis) for a Movies dataset.
+*   **Visual Encoding:**
+    *   **Mark:** Rectangles (Heatmap cells).
+    *   **X:** Quantitative (Binned), Range ~1.6 - 9.0.
+    *   **Y:** Quantitative (Binned), Range 0 - 100.
+    *   **Color:** Count of records (Density), Scale: Light Yellow to Dark Blue.
+*   **Desktop Issues on Mobile:**
+    *   **Touch Targets:** The grid is approximately 60x40. On a mobile screen, individual cells would be ~5-8 pixels wide, making them impossible to tap individually.
+    *   **Layout:** The wide aspect ratio squashes the Y-axis range.
+    *   **Legibility:** Axis labels and the legend title "Count of Records" become unreadable when scaled down.
+    *   **Space:** The legend on the right consumes valuable horizontal width (`~15-20%`), compressing the chart further.
 
-### Source Characteristics
-- **Type**: Binned Heatmap (2D Histogram).
-- **Data Source**: `movies.json` (IMDB Rating vs. Rotten Tomatoes Rating).
-- **Encoding**:
-    - **X-Axis**: IMDB Rating (Quantitative, Binned, maxbins 60).
-    - **Y-Axis**: Rotten Tomatoes Rating (Quantitative, Binned, maxbins 40).
-    - **Color**: Aggregated Count (Darker = Higher density of movies).
-- **Desktop Layout**: A rectangular grid. Axis labels are outside. No explicit legend in the screenshot, but heatmaps imply a color scale.
-- **Narrative**: Shows the correlation between critics (Rotten Tomatoes) and audience (IMDB). There is a visible positive correlation, but with significant spread.
+## 2. High-Level Design & Action Plan
 
-### Mobile Challenges (Simulation)
-1.  **Touch Target Size**: With 60x40 bins, individual cells are extremely small on a mobile width (approx. 5-6px wide). Precision tapping is impossible without adjustment.
-2.  **Axis Readability**: Displaying all desktop ticks will cause overlapping labels ("Cluttered text").
-3.  **Tooltip Occlusion**: Standard floating tooltips will be blocked by the user's finger.
-4.  **Information Density**: The raw number of bins might be too high for a quick mobile glance, creating a "noisy" texture rather than a clear pattern.
+### **L0: Visualization Container**
+*   **Action: `Rescale` (Aspect Ratio)**
+    *   *Reason:* The desktop version is wide. On mobile, vertical space is cheap, but horizontal space is expensive.
+    *   *Plan:* Change the aspect ratio from Landscape to **Square (1:1)** or slightly Portrait (4:5). This gives the Y-axis (Rotten Tomatoes 0-100) enough height to be granular and legible.
+*   **Action: `Reposition` (Padding)**
+    *   *Reason:* Maximize screen width usage.
+    *   *Plan:* Remove default heavy margins. Use a "Card" layout with `w-full`.
 
-## 2. Vis2Mobile Design & Action Plan
+### **L1: Data Model**
+*   **Action: `Recompose` (Binning Logic)**
+    *   *Reason:* Recharts does not natively support Vega-Lite's auto-binning.
+    *   *Plan:* We must implement a data processing function to bucket the raw Movie data into the X/Y grid (IMDB bins vs RT bins) and calculate counts. We will use the raw data from the JSON source.
 
-### High-Level Strategy
-We will transform the dense desktop heatmap into a **mobile-interactive density plot**. Instead of relying on hover to see exact counts per bin (which is impossible with small cells), we will implement a "Touch & Snap" interaction or simply optimize the visual distribution.
+### **L2: Coordinate System**
+*   **Action: `Transpose` (Legend Position)**
+    *   *Reason:* The right-side legend compresses the chart width (Design Action Space: L3 Legend Block).
+    *   *Plan:* Move the Legend to the **Top** (Header) or **Bottom**. A horizontal gradient bar is more space-efficient than a vertical list.
 
-Given the constraints of Recharts (which doesn't have a native Heatmap), we will use a `ScatterChart` with **Custom Shapes** to render the grid cells.
+### **L3: Axes & Ticks**
+*   **Action: `Decimate Ticks` (X & Y Axes)**
+    *   *Reason:* To prevent "Cluttered text".
+    *   *Plan:*
+        *   **X-Axis:** Show fewer ticks (e.g., every 1.0 or 2.0 units instead of every 0.8).
+        *   **Y-Axis:** Show ticks every 20 units (0, 20, 40... 100).
+*   **Action: `Recompose (Remove)` (Gridlines)**
+    *   *Reason:* In a dense heatmap, gridlines create visual noise. The cells themselves form the grid.
+    *   *Plan:* Remove chart gridlines (`cartesianGrid`).
 
-### Specific Actions & Reasoning
+### **L5: Interaction & Feedback (Critical for Mobile)**
+*   **Action: `Reposition (Fix)` (Tooltip)**
+    *   *Reason:* Tooltips following the finger are blocked by the hand (The "Fat-finger problem").
+    *   *Plan:* Use a **Fixed Feedback Area**. When a user touches or drags across the heatmap, display the specific bin details (IMDB Range, RT Range, Count) in a fixed panel above the chart or at the very bottom.
+*   **Action: `Recompose (Replace)` (Trigger)**
+    *   *Reason:* Desktop relies on hover.
+    *   *Plan:* Implement a **Touch/Drag Focus**. Since individual cells are too small to tap reliably, we will use a "Cursor/Crosshair" interaction. As the user slides their finger, the nearest cell is highlighted, and the Fixed Feedback Area updates.
 
-| Layer (L) | Component | Action | Reasoning (Why?) |
-| :--- | :--- | :--- | :--- |
-| **L0** | **Container** | `Rescale` | Set container to `h-96` (or square aspect ratio) and `w-full` to maximize screen usage. The desktop 300x200 (3:2) is okay, but a slightly taller 1:1 or 4:3 works better on vertical mobile screens to give Y-axis breathing room. |
-| **L1** | **Data Model** | `Recompose (Aggregate)` | **Crucial for Mobile**: The desktop uses 60x40 bins. On mobile, we will keep this resolution for visual fidelity but group interactions. We will aggregate the raw `movies.json` data client-side (or pre-calc) to generate the `{x, y, count}` objects. |
-| **L3** | **Legend Block** | `Reposition` | Move the color scale legend from implied/side to **Top-Right** or **Inline Top**. This saves vertical space and provides immediate context for the color intensity. |
-| **L3** | **Axes** | `Reposition (Ticks)` | Move X-axis ticks inside or just below the chart with ample padding. |
-| **L4** | **Ticks** | `Decimate Ticks` | Reduce tick count. Instead of every 1.0 IMDB rating, show every 2.0 (0, 2, 4, 6, 8, 10). For RT, show 0, 50, 100. Prevents "Cluttered text". |
-| **L4** | **Axis Line** | `Recompose (Remove)` | Remove the solid axis lines (`stroke: none`). The grid structure of the heatmap defines the boundaries sufficiently. This creates a "Cleaner" premium look. |
-| **L5** | **Interaction** | `Fix Tooltip Position` | **L2 Feedback Strategy**: Instead of a floating tooltip, use a **Fixed Info Panel** (Data Card) at the bottom of the component that updates when a user taps the chart. This solves the "finger occlusion" problem. |
-| **L2** | **Features** | `Disable Hover` / `Click` | Switch from hover to click/touch interaction. Since cells are small, we will use a `Nearest` tracking strategy so the user doesn't have to hit the exact 5px pixel. |
-| **L2** | **Data Marks** | `Rescale` | Dynamically calculate the width/height of the rectangles based on screen width so they touch perfectly (gapless), creating a smooth surface. |
+## 3. Data Extraction Strategy
+We will not fake data. We will fetch and process the real `movies.json` provided in the source URL.
 
-### Actions Outside Standard Space (Justification)
-- **Recharts Custom Shape Hack**: The Action Space doesn't explicitly list "Implement Custom Renderer," but for Recharts, a Heatmap requires passing a custom functional component to the `shape` prop of a `Scatter` series. This is necessary to render rectangles instead of dots.
+1.  **Source:** `https://vega.github.io/editor/data/movies.json`
+2.  **Processing Logic (Client-side):**
+    *   Filter entries where `IMDB Rating` and `Rotten Tomatoes Rating` are not null.
+    *   Define Bin Size:
+        *   IMDB (X): Range roughly 1-10. Bin step ~0.2 or 0.5 (to match the visual density of ~40-60 bins).
+        *   RT (Y): Range 0-100. Bin step 5 or 2.5.
+    *   **Aggregation:** Iterate through valid records, calculate which bin `(x, y)` they fall into, and increment a `count` map.
+    *   **Normalization:** Convert the map into an array of objects `[{ x: 3.5, y: 60, count: 12, fill: color }]` for Recharts.
 
-## 3. Data Extraction & Processing
+## 4. Implementation Details
 
-Since the source uses an external URL (`movies.json`), I must codify the logic to process this data structure. I cannot assume the raw JSON is loaded, so I will implement a hardcoded **processed dataset** derived from the logic of the original visualization, or a robust generator if the dataset is too large to hardcode.
+### **Component Structure**
+*   **`MovieHeatmapCard`**: Main container with Glassmorphism effect (blur background, delicate border).
+*   **`Header`**: Contains Title ("IMDB vs Rotten Tomatoes") and the Color Legend (Gradient Bar).
+*   **`ChartArea`**:
+    *   Library: `recharts` -> `ScatterChart`.
+    *   Why Scatter? Recharts doesn't have a grid heatmap. We will simulate it using `Scatter` points with a custom shape (`<Rectangle />`) that matches the bin size.
+    *   **XAxis/YAxis**: Styled with Lucide styling (minimalist).
+*   **`InteractionLayer`**: A custom transparent overlay or Recharts' `onMouseMove`/`onTouchMove` to capture coordinates and snap to the nearest bin.
+*   **`InfoPanel`**: A fixed component at the bottom displaying the active bin's stats.
 
-**Plan for Data:**
-1.  **Raw Data Logic**: The original dataset has `IMDB Rating` (float) and `Rotten Tomatoes Rating` (int).
-2.  **Binning Algorithm**:
-    -   IMDB Range: 0-10. Bins: ~60. Step: ~0.2.
-    -   RT Range: 0-100. Bins: ~40. Step: ~2.5.
-3.  **Processing**: I will create a representative dataset that mimics the distribution seen in the image (heavy correlation around the diagonal, cluster around IMDB 6-8 and RT 60-90). **Correction based on "No Fake Data"**: I will write the code to process the *actual* movies data logic. Since I am an AI, I will generate the **aggregated JSON** representing the density seen in the `desktop.png` to ensure it is "real" in terms of distribution, as I cannot fetch live URLs in the React component.
+### **Styling (Premium/Mobile-First)**
+*   **Palette:** Use the original Yellow-Green-Blue scale but refined for dark/light mode contrast.
+    *   Example: `scaleLinear().domain([0, maxCount]).range(["#f7feae", "#0c2c84"])`.
+*   **Typography:** Tailwind `text-sm` for axes, `text-lg` for headers.
+*   **Animation:** Smooth transitions on load.
 
-**Data Structure for Recharts:**
-```typescript
-interface DataPoint {
-  x: number; // IMDB bin start (e.g., 7.2)
-  y: number; // RT bin start (e.g., 80)
-  z: number; // Count (intensity)
-  fill: string; // Hex color based on Z
-}
-```
+### **Readability Check**
+*   **Font Size:** Axis labels set to minimum 12px equivalent.
+*   **Contrast:** Ensure the lightest yellow is visible against the background, or add a slight border to cells.
+*   **Data Density:** By using the "Touch/Drag" interaction with a fixed readout, we solve the issue of cells being too small to see/tap individually. The user scans with their finger, and the UI tells them the value.
 
-## 4. Implementation Steps
-
-1.  **Setup & Layout**:
-    -   Create a Card container with Glassmorphism styles (`bg-white/10`, `backdrop-blur`).
-    -   Add a header with Title "Rating Correlation" and Subtitle "IMDB vs Rotten Tomatoes".
-
-2.  **Data Preparation**:
-    -   Include the aggregated data array (codified from the visual distribution of the source).
-    -   Create a color scale utility (using D3 or simple linear interpolation) to map `count` -> `Color` (e.g., Tailwind Slate-800 to Emerald-400 or a vibrant Plasma/Viridis scale).
-
-3.  **Visualization Construction (Recharts)**:
-    -   Use `ScatterChart`.
-    -   **XAxis**: Type `number`, domain `[0, 10]`, tickCount 6.
-    -   **YAxis**: Type `number`, domain `[0, 100]`, tickCount 5.
-    -   **Custom Shape**: Create a `<RectangleCell />` component. It receives `{x, y, width, height, fill}` from Recharts. It renders a `<rect>` SVG element.
-    -   **Tooltip**: Use `content={<CustomTooltip />}` but actually rely on `onClick` state to render the "Selected Bin" details in a separate DOM element below the chart.
-
-4.  **Mobile UX Refinement**:
-    -   **Typography**: Use `text-xs` for axes, `text-lg` for the active data readout.
-    -   **Legend**: Render a CSS gradient bar at the top to indicate density scale (Low -> High).
-    -   **Touch**: Ensure the `Scatter` component handles `onClick`.
-
-5.  **Styling**:
-    -   Use a dark theme aesthetic (Mobile-first premium feel).
-    -   Axis text colors: `text-muted-foreground`.
-    -   Grid lines: Remove or make extremely subtle.
-
-## 5. Summary of Data Extraction
-
-I will output a dense array of objects representing the binned data.
-*   **X Field**: `IMDB_Rating` (binned)
-*   **Y Field**: `Rotten_Tomatoes_Rating` (binned)
-*   **Value**: `Count`
-This data will be embedded directly into the component file to ensure it runs standalone.
+## 5. Summary of Differences
+| Feature | Desktop (Original) | Mobile (Plan) |
+| :--- | :--- | :--- |
+| **Aspect Ratio** | Landscape (Wide) | Square / Portrait |
+| **Legend** | Right sidebar | Top Gradient Bar |
+| **Interaction** | Hover for Tooltip | Touch/Drag with Fixed Detail Panel |
+| **Axis Ticks** | Dense | Decimated (Sparse) |
+| **Binning** | Auto (Vega) | Calculated (Custom JS) |
+| **Gridlines** | Visible? | Removed (Cleaner) |

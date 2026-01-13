@@ -1,117 +1,94 @@
-# Vis2Mobile Planning: Penguin Body Mass Box Plot
+# Vis2Mobile Transformation Plan
 
 ## 1. Analysis of Original Visualization
 
-- **Source**: HTML/Vega-Lite.
-- **Content**: A vertical box plot displaying the distribution of body mass (g) across three penguin species (Adelie, Chinstrap, Gentoo).
-- **Data Attributes**:
-    - **X-axis (Categorical)**: Species.
-    - **Y-axis (Quantitative)**: Body Mass (g).
-    - **Encoding**: Box plots showing Min, Max, Median, and Quartiles. Color is redundantly encoded by Species.
-- **Desktop vs. Mobile Assessment**:
-    - **Desktop**: The vertical orientation works well on wide screens where horizontal space is abundant.
-    - **Mobile Issues**:
-        - **Aspect Ratio Mismatch**: Vertical box plots on a narrow mobile screen compress the X-axis. While 3 categories might fit, the bars become very narrow, or the text labels might wrap/shrink.
-        - **Interaction**: The original likely relies on hover for exact values, which doesn't exist on mobile.
-        - **Visual Density**: Standard box plots can look "clinical" or "academic." The goal is a "Premium Aesthetics" look.
+### Source Analysis
+- **Type**: Vertical Box Plot (Box-and-Whisker).
+- **Data**: Penguin body mass (g) distributed by Species (Adelie, Chinstrap, Gentoo).
+- **Visual Encoding**:
+  - **X-axis**: Species (Nominal). Labels are rotated 90° vertical.
+  - **Y-axis**: Body Mass (Quantitative). Range ~2500g to 6500g.
+  - **Color**: Encodes Species (Red, Blue, Orange).
+  - **Marks**: Box (IQR), Line inside (Median), Whiskers (Min/Max).
 
-## 2. Vis2Mobile Design & Action Plan
+### Mobile Issues (Desktop Render on Mobile)
+1.  **Unreadable Typography**: The X-axis labels (Species names) are rotated 90 degrees. On a mobile screen, this requires the user to tilt their head or phone. It also consumes significant vertical space.
+2.  **Inefficient Layout**: Vertical bars in a portrait mobile aspect ratio become very narrow. The chart looks squished horizontally, making it hard to distinguish the spread of data.
+3.  **Touch Target Issues**: The "whiskers" and specific box boundaries are too thin to interact with precisely using a finger.
+4.  **Redundant Axis Title**: The Y-axis title "Body Mass (g)" takes up valuable horizontal screen width on the left side.
 
-Based on the `mobile-vis-design-action-space.md`, the following actions will be taken to transform the visualization.
+## 2. Design Action Space Planning
 
-### High-Level Strategy
-**Transpose and Modernize.** We will convert the vertical box plot into a **Horizontal Box Plot**. This aligns the categorical axis (Species) with the vertical scroll of the mobile device, ensuring labels are horizontal and readable. We will style it using a "Glassmorphism" card aesthetic.
+Based on the **Vis2Mobile Design Action Space**, here is the transformation plan:
 
-### Specific Actions
+### L2 Coordinate System: Transpose (Axis-Transpose)
+- **Action**: Change the chart from **Vertical Box Plot** to **Horizontal Box Plot**.
+- **Reason**: This is the most critical action for mobile readability.
+    - **Solves "Distorted Layout"**: Mobile screens are narrow but tall. Horizontal bars utilize the width more effectively.
+    - **Solves "Text Readability"**: It allows Species labels (Adelie, Gentoo, etc.) to be written horizontally on the Y-axis (or above the bars), eliminating the need for 90° rotation.
 
-#### **L2 Coordinate System (CoordinateSystem)**
-*   **Action**: `Transpose (Axis-Transpose)`
-    *   **Operation**: `transposeAxes()`
-    *   **Reason**: Vertical columns on narrow screens squeeze categorical labels. Transposing to a horizontal layout allows the Species labels ("Adelie", "Chinstrap", "Gentoo") to be listed vertically on the left (Y-axis), providing ample horizontal space for the box plot length (Body Mass) on the X-axis. This prevents "Distorted layout" and "Cluttered text".
+### L4 Axis Title: Recompose (Remove/Replace)
+- **Action**: Remove the "Body Mass (g)" axis title from the left side of the chart.
+- **Reason**: It consumes horizontal pixels.
+- **Compensation**: Move the unit "(g)" to the X-axis tick labels (e.g., "3k g") or include it prominently in the main Subtitle (e.g., "Body mass distribution in grams").
 
-#### **L1 Data Model (DataModel)**
-*   **Action**: `Recompose (Aggregate)`
-    *   **Operation**: Calculate quartiles (Min, Q1, Median, Q3, Max) from the raw data.
-    *   **Reason**: Unlike Vega-Lite, Recharts (the target library) does not automatically compute box plot statistics from raw rows. To render the box plot, we must transform the raw penguin data into a summarized format containing the statistical metrics for each species.
+### L3 Axes & Gridlines: Recompose (Simplify)
+- **Action**:
+    - **Y-axis (Categories)**: Hide the axis line. Align labels to the left or put them above the bar track.
+    - **X-axis (Values)**: Keep tick labels but reduce density.
+    - **Gridlines**: Keep vertical gridlines (since bars are horizontal) to aid in reading values across the chart, but style them as dashed/subtle.
+- **Reason**: Reduces visual clutter ("High graphical density").
 
-#### **L3 Axes (Axes)**
-*   **Action**: `Recompose (Remove)` (for Axis Lines)
-    *   **Operation**: Remove the axis lines (`axisLine={false}`), keep tick labels.
-    *   **Reason**: To achieve a "Premium Aesthetic," we reduce chart junk. The gridlines and alignment are sufficient without heavy axis borders.
-*   **Action**: `Rescale` / `Simplify` (for Ticks)
-    *   **Operation**: `formatTickLabel()`
-    *   **Reason**: Simplify body mass ticks (e.g., "3000" -> "3k" or keep as is if space permits) to ensure they don't crowd the horizontal axis.
+### L1 Interaction: Features (Touch-First)
+- **Action**:
+    - **Disable Hover**: Remove reliance on hover for detailed stats (Min, Max, Median).
+    - **Card/Area Tap**: Make the entire horizontal track for a species tappable.
+    - **Reposition (Fix) Feedback**: When tapped, show a **Sticky Summary Card** at the bottom or top containing the precise 5-number summary (Min, Q1, Median, Q3, Max) instead of a floating tooltip that might be blocked by a finger.
 
-#### **L2 Data Marks (DataMarks)**
-*   **Action**: `Recompose (Change Encoding)` (Styling)
-    *   **Operation**: Custom Shape.
-    *   **Reason**: Recharts does not have a native `<BoxPlot>` component. We will use a `<ComposedChart>` with a `<Bar>` component that uses a **Custom Shape**. This shape will draw the "Box" (Q1 to Q3), the "Median" line, and the "Whiskers" (Min/Max).
-*   **Action**: `Rescale` (Visual Weight)
-    *   **Reason**: Make the boxes thicker and use vibrant gradients or glassmorphic fills to stand out against a dark background.
+### L2 Data Marks: Rescale & Custom Shape
+- **Action**: Increase the thickness (height) of the boxes. Use a custom SVG shape within Recharts to render the Box-and-Whisker cleanly.
+- **Reason**: Improves visibility and makes the "Median" line easier to see without zooming.
 
-#### **L2 Feedback (Feedback)**
-*   **Action**: `Reposition (Fix)` & `Recompose (Replace)`
-    *   **Operation**: `Fix tooltip position` or Custom Legend/Info.
-    *   **Reason**: Replace hover tooltips with a custom `Cursor` or a `Click` trigger that updates a fixed information block (e.g., a "Summary Card" at the bottom or top of the chart) showing the specific stats (Min, Median, Max) for the selected species.
+### L1 Narrative: Emphases (Insight)
+- **Action**: Add a "Key Insight" summary at the top (e.g., "Gentoo penguins are significantly heavier").
+- **Reason**: Mobile users prefer immediate answers over exploring complex statistical distributions.
 
-#### **L3 Title Block (TitleBlock)**
-*   **Action**: `Rescale` / `Reposition`
-    *   **Reason**: Move the title "Body Mass by Species" to a clean header component outside the SVG chart area.
+## 3. Data Extraction & Codification Plan
 
-## 3. Data Extraction Plan
+The original HTML sources data from `https://vega.github.io/editor/data/penguins.json`. I cannot use the raw JSON URL directly in a static component without fetching, so I will **hardcode the aggregated statistics** derived from that dataset to ensure the component is self-contained and performant.
 
-Since I cannot fetch the external URL (`https://vega.github.io/editor/data/penguins.json`) during the build time of the component without a backend, I will use **real statistical data** derived from the Palmer Penguins dataset.
+**Processing Logic (Mental Sandbox):**
+I will filter the standard `penguins` dataset by Species and calculate the 5-number summary for `Body Mass (g)`.
 
-**Target Data Structure for Component:**
-
-I will aggregate the known dataset values into this structure for the React component:
-
-```typescript
-// Box Plot Statistics (in grams)
-const data = [
-  {
-    species: "Adelie",
-    min: 2850,
-    q1: 3350,
-    median: 3700,
-    q3: 4000,
-    max: 4775,
-    color: "#06b6d4", // Cyan
-  },
-  {
-    species: "Chinstrap",
-    min: 2700,
-    q1: 3487,
-    median: 3700,
-    q3: 3950,
-    max: 4800,
-    color: "#8b5cf6", // Violet
-  },
-  {
-    species: "Gentoo",
-    min: 3950,
-    q1: 4700,
-    median: 5000,
-    q3: 5500,
-    max: 6300,
-    color: "#f43f5e", // Rose
-  }
-];
-```
+**Extracted Real Data (Approximation based on standard dataset stats):**
+*   **Adelie**: Min: 2850, Q1: 3350, Median: 3700, Q3: 4000, Max: 4775
+*   **Chinstrap**: Min: 2700, Q1: 3550, Median: 3700, Q3: 3950, Max: 4800
+*   **Gentoo**: Min: 3950, Q1: 4700, Median: 5000, Q3: 5500, Max: 6300
 
 ## 4. Implementation Steps
 
-1.  **Setup Component Shell**: Create `src/components/Visualization.tsx` with a responsive container using Tailwind (glassmorphism background).
-2.  **Implement Custom Box Shape**: Create a Recharts custom shape function that takes `x`, `y`, `width`, `height` (from the Bar component) and the payload (stats) to draw:
-    -   A horizontal line for the range (Min to Max).
-    -   Vertical "whisker" caps at Min and Max.
-    -   A rectangle for the IQR (Q1 to Q3).
-    -   A strong vertical line for the Median.
-3.  **Construct Chart**:
-    -   Use `ComposedChart` with `layout="vertical"`.
-    -   **X-Axis**: Type="number", domain specific (e.g., `[2500, 6500]`) to focus the view.
-    -   **Y-Axis**: Type="category", dataKey="species".
-    -   **Bar**: Connect the custom shape to the data.
-4.  **Add Interactivity**:
-    -   Implement a custom Tooltip that renders a nice card showing the exact statistics when a bar is tapped.
-5.  **Styling**: Apply Lucide icons for context, use Tailwind for typography and layout. Ensure high contrast text.
+### Step 1: Project Setup & Components
+- Initialize `src/components/Visualization.tsx`.
+- Import `ComposedChart`, `XAxis`, `YAxis`, `CartesianGrid`, `ResponsiveContainer`, and `Bar` (customized) from `recharts`.
+- Import `Info`, `Scale` icons from `lucide-react`.
+
+### Step 2: Data Structure
+- Define a constant `PENGUIN_STATS` array containing the calculated min, q1, median, q3, max for each species, plus their associated colors (Adelie: Blue, Chinstrap: Orange, Gentoo: Red).
+
+### Step 3: Layout & Container (L0)
+- Create a mobile-first container with `w-full`, `max-w-md`, and glassmorphism styling (`bg-white/10`, `backdrop-blur`).
+- Use a Flex column layout: Title/Insight Header -> Chart Area -> Interactive Details Footer.
+
+### Step 4: The Chart (L2 - Transposed)
+- **Component**: `ComposedChart` with `layout="vertical"`.
+- **XAxis**: Type="number", domain `['dataMin - 200', 'dataMax + 200']`, hide axis line.
+- **YAxis**: Type="category", dataKey="species", width={80} (sufficient for horizontal text), tick={{ fontSize: 12, fill: '#666' }}.
+- **Custom Mark**: Create a custom React component to render the Box Plot shape (horizontal line for range, rectangle for IQR, line for median) using SVG elements (`<line>`, `<rect>`). Pass this into Recharts.
+
+### Step 5: Interaction & Polish
+- Add a `selectedSpecies` state.
+- `onClick` on the chart updates the state.
+- Render a "Details Panel" below the chart that displays the exact numbers for the selected species (or the first one by default).
+- Use Tailwind for premium typography (Inter font, subtle text colors).
+
+This plan ensures the visualization is readable (horizontal labels), touch-friendly (larger tap areas), and aesthetically premium (glassmorphism/clean UI).

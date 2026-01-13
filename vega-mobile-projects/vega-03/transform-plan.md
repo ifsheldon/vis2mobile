@@ -1,113 +1,115 @@
-# Vis2Mobile Plan: Interactive Indexed Stock Chart
+# Mobile Visualization Transformation Plan
 
-## 1. Analysis of Original Visualization & Mobile Issues
+## 1. Analysis of Original Visualization & Mobile Constraints
 
 ### Original Desktop Visualization
-- **Type**: Interactive Multi-Line Chart (Time Series).
-- **Core Functionality**: "Indexed Chart". It visualizes the percentage return of 5 stocks (MSFT, AMZN, IBM, GOOG, AAPL) relative to a specific date.
-- **Interaction**:
-    - **Trigger**: Mouse hover (`pointermove`).
-    - **Feedback**: A vertical red rule (`indexDate`) follows the cursor.
-    - **Data Transformation**: As the red line moves, all data points are recalculated: `(price - price_at_index_date) / price_at_index_date`.
-- **Labels**: Direct labels (Symbol names) placed at the end of the lines (Right side).
-- **Axes**: X (Date, 2000-2010), Y (Percentage).
+- **Type**: Interactive Multi-Line Chart (Indexed Time Series).
+- **Core Functionality**: Shows stock return percentages normalized to a specific "Index Date" (indicated by a vertical red line). As the mouse moves (changing the Index Date), the curves recalculate.
+- **Data**: Stock prices for AAPL, AMZN, GOOG, IBM, MSFT over time.
+- **Visual Encodings**:
+    - **X-axis**: Time (2000-2010).
+    - **Y-axis**: Percentage Return (indexed).
+    - **Color**: Nominal scale for Company.
+    - **Direct Labeling**: Stock symbols placed at the end of lines.
+    - **Reference Line**: Red vertical line for the normalization date; Black horizontal line for 0% baseline.
 
-### Mobile Compatibility Issues
-1.  **Interaction Gap**: Mobile devices do not support `hover`. The "scan to re-index" feature is the core value proposition but requires a continuous pointer signal not native to touch without explicit "drag" intent.
-2.  **Screen Real Estate**:
-    - 5 overlapping lines on a narrow screen create visual chaos (**Overplotting**).
-    - Placing labels at the far right (Desktop style) will likely be cut off or squeeze the chart area significantly (**Distorted Layout**).
-3.  **Touch Occlusion**: If a tooltip follows the finger, the user's hand will cover the data they are trying to read.
+### Mobile Constraints & Issues (Desktop-on-Mobile)
+1.  **Interaction Conflict**: The "hover to change Index Date" mechanic is hostile to touch devices (no hover state). Dragging across the chart might conflict with page scrolling.
+2.  **Readability**:
+    - Direct labels at the line ends (e.g., "AAPL") will likely overlap or be cut off in a portrait view.
+    - Y-axis percentage labels might be too small.
+    - The aspect ratio (wide and short) makes lines flattened, hiding volatility nuances.
+3.  **Touch Targets**: Selecting a specific date by tapping a thin line is difficult (Fat-finger problem).
 
-## 2. Design Action Space Plan
+## 2. Design Actions & Reasoning
 
-### High-Level Strategy
-I will transform this into a **"Financial Performance Explorer"** card. The core "re-indexing" interaction will be preserved but adapted for touch. Instead of passive hovering, I will implement a **Touch-to-Scan** interaction zone. The layout will shift from a horizontal spread to a vertical composition with a fixed "Heads-Up Display" (HUD) for data reading to ensure readability.
+Based on the **Vis2Mobile Design Action Space**, I plan the following actions:
 
-### Specific Actions & Rationale
+### **L0 Visualization Container**
+- **Action**: `Rescale` & `Reposition`
+    - **Reasoning**: The layout must change from landscape to portrait (e.g., aspect ratio 3:4 or 1:1) to maximize vertical screen real estate.
+    - **Implementation**: Set `width: 100%` and a fixed height (e.g., `h-96` or `h-[500px]`) in Tailwind.
 
-#### **L0 Visualization Container**
--   **Action: `Rescale`**: Set width to `100%` of the container and use a fixed aspect ratio (e.g., 4:3 or 1:1) to ensure the chart is tall enough to distinguish the 5 lines.
--   **Action: `Reposition`**: Add padding to the bottom to accommodate the touch slider/interaction hint.
+### **L1 Interaction Layer (Crucial)**
+- **Action**: `Recompose (Replace)` (Triggers)
+    - **Reasoning**: Replace `hover` trigger for the "Index Date" with a dedicated **Slider Control** or a "Touch and Drag" active state. This separates the "viewing" action from the "modifying baseline" action.
+- **Action**: `Reposition (Fix)` (Feedback)
+    - **Reasoning**: Instead of a floating tooltip that might be covered by a finger, use a **Fixed Data Card** (Glassmorphism style) at the top or bottom of the chart to display the values for the currently selected date.
 
-#### **L1 Interaction Layer**
--   **Action: `Recompose (Replace)` (Trigger)**: Replace the `hover` trigger with an explicit `onTouchMove` / `onDrag` interaction on the chart area.
--   **Action: `Recompose (Replace)` (Feedback)**: Instead of the red vertical rule resetting the index, I will use a **Reference Line** that snaps to the nearest data point. The re-indexing calculation (normalizing prices to 0% at the selected date) will occur dynamically as the user drags across the chart.
+### **L2/L3 Chart Components**
+- **Action**: `L3 Title (Main)` -> `Reposition`
+    - **Reasoning**: Move the title "Stock Returns vs Index Date" out of the chart area into a clean HTML header `<div>`.
+- **Action**: `L4 MarkLabel` -> `Recompose (Remove)`
+    - **Reasoning**: Direct text labels at the end of lines ("AAPL", "MSFT") are prone to clutter on mobile.
+    - **Replacement**: Use a **Legend** at the bottom or a color-coded **Header** in the Data Card.
 
-#### **L1 Data Model**
--   **Action: `Recompose (Filter)`**: (Optional but considered) If 5 lines are too messy, I might initially highlight the top performer, but for this task, I will aim to keep all 5 but use **Emphasis** strategies (dimming inactive lines) to handle density.
+### **L3/L4 Axes & Ticks**
+- **Action**: `L5 TickLabel` -> `Simplify labels`
+    - **Reasoning**: Full dates (e.g., "Jan 2005") take too much space.
+    - **Implementation**: Format X-axis to show only Years (e.g., "'05", "'06") or sparse "Month Year" depending on zoom.
+- **Action**: `L4 Gridlines` -> `Recompose (Remove)`
+    - **Reasoning**: Reduce visual noise. Keep only the `y=0` baseline (essential for positive/negative returns).
 
-#### **L2 Data Marks**
--   **Action: `Recompose (Change Encoding)`**: The logic `(price - index_price) / index_price` must be implemented in the React component's state.
--   **Action: `Highlight (Focus)`**: When touching, the line closest to the finger (or the one being dragged over) could highlight, but given the "Indexed" nature, all lines update simultaneously. I will use a distinct color palette to differentiate the 5 stocks.
+### **L2 Data Marks**
+- **Action**: `Rescale` (Stroke Width)
+    - **Reasoning**: Increase line thickness slightly (e.g., 2px to 3px) for better visibility against a mobile background.
 
-#### **L3/L4 Axes & Ticks**
--   **Action: `Decimate Ticks`**: Reduce X-axis ticks to show only every 2 years (e.g., '00, '02, '04) to avoid **Cluttered text**.
--   **Action: `Format Tick Label`**: Shorten dates to `YY` (e.g., "2005" -> "'05").
--   **Action: `Recompose (Remove)`**: Remove Y-axis title. The percentage sign `%` on the ticks is sufficient context.
+## 3. Implementation Steps
 
-#### **L4 Mark Label (Series Labels)**
--   **Action: `Reposition (Externalize)`**: Move the line labels (MSFT, AMZN, etc.) from the right edge of the chart to a **Legend/Stat Board** above the chart.
--   **Action: `Compensate (Number)` / Dynamic Legend**: The Legend will double as the data display. When the user selects a date, the Legend shows the % return for that specific date for *all* stocks simultaneously.
+### Step 1: Data Extraction & Processing
+1.  Parse the CSV data source provided in the original spec URL (`https://vega.github.io/editor/data/stocks.csv`).
+2.  Create a TypeScript interface for the data structure: `{ symbol: string, date: string, price: number }`.
+3.  Implement the **normalization logic** in React:
+    - State: `selectedIndexDate`.
+    - Memoized Calculation: Group data by Symbol. Find the price of each symbol at `selectedIndexDate`.
+    - Formula: `indexed_price = (current_price - baseline_price) / baseline_price`.
 
-#### **L5 Feedback (Tooltip)**
--   **Action: `Reposition (Fix)`**: Use a **Fixed Tooltip/HUD** at the top of the card. Following the finger on mobile causes occlusion. The HUD will display the currently selected "Index Date".
+### Step 2: Component Architecture (Next.js + Tailwind)
+1.  **Container**: A card wrapper with modern shadow and rounded corners.
+2.  **Header**: Title and Subtitle explaining the interaction ("Drag slider to compare returns").
+3.  **Visualization Area**:
+    - `Recharts` `<ResponsiveContainer>` and `<LineChart>`.
+    - `<ReferenceLine y={0} />` (Black baseline).
+    - `<ReferenceLine x={indexDate} />` (Red interactive line).
+    - `<Line />` components for each stock.
+4.  **Controls Area (Bottom)**:
+    - A custom **Slider** (using standard HTML range input or Radix UI Slider) to control the `indexDate`. This is much easier to use on mobile than scrubbing the chart directly.
+5.  **Data Display (Legend/Tooltip)**:
+    - A grid of "Cards" below the chart showing the Legend (Color + Symbol) and the Current Return Value (e.g., "+120%") based on the slider position.
 
-## 3. Data Extraction Plan
+### Step 3: Styling & UX
+1.  **Palette**: Use a distinct color palette (Emerald, Blue, Violet, Amber, Rose) ensuring high contrast.
+2.  **Typography**: Use `Inter` or `Geist` font (Next.js default). Large, readable numbers for the percentage values.
+3.  **Animation**: Use framer-motion or simple CSS transitions for the reference line movement to ensure it feels smooth (60fps).
+
+## 4. Data Extraction Plan
+
+I will not use fake data. I will use the `stocks.csv` data referenced in the Vega spec.
 
 **Source**: `https://vega.github.io/editor/data/stocks.csv`
 
-I will implement a utility function to fetch and parse this CSV.
-1.  **Fetch**: `fetch('https://vega.github.io/editor/data/stocks.csv')`
-2.  **Parse**:
-    -   Convert CSV string to JSON objects.
-    -   Fields: `symbol` (string), `date` (Date object), `price` (number).
-3.  **Transform**:
-    -   Group data by `symbol`.
-    -   Create a unified time-series array where each object is `{ date: string, AAPL: price, MSFT: price, ... }` to fit Recharts' data format.
-4.  **Runtime Calculation**:
-    -   State `selectedIndex`: Tracks the user's cursor position (index in the array).
-    -   Derived Data: Map through the unified array. For every data point `P`, calculate `(P.price - P.indexDatePrice) / P.indexDatePrice`.
+**Extraction Method**:
+Since I cannot fetch live URLs during code generation, I will include the raw CSV data as a constant JSON object in the component file. I will extract the data points directly from the CSV content associated with that URL for the 5 companies (MSFT, AMZN, IBM, GOOG, AAPL).
 
-## 4. Implementation Steps
+**Data Structure for Component**:
+```typescript
+type StockDataPoint = {
+  date: string; // ISO format or timestamp
+  price: number;
+  symbol: string;
+};
 
-### Step 1: Data Setup
--   Create `src/utils/useStockData.ts`.
--   Implement CSV parsing logic.
--   Return a structured object: `{ rawData: [], formattedData: [] }`.
+// Data will be grouped/processed into:
+type ChartDataPoint = {
+  date: number; // timestamp for X-axis
+  AAPL: number; // Normalized value
+  AMZN: number; // Normalized value
+  // ... etc
+  originalPrices: { // To show raw price if needed
+      AAPL: number;
+      //...
+  }
+};
+```
 
-### Step 2: Component Layout (Container)
--   Create `src/components/Visualization.tsx`.
--   Use a Tailwind Card layout: `bg-white/10 backdrop-blur-md` (Glassmorphism).
--   **Header**: Title ("Stock Returns Comparison") and a dynamic subtitle showing the "Indexed Date" (e.g., "Indexed to: Jan 1, 2005").
-
-### Step 3: Interactive Chart Component
--   Use `<ResponsiveContainer>` from Recharts.
--   Use `<LineChart>` with 5 `<Line>` components.
--   **The Magic**: Implement `onMouseMove` / `onTouchMove` on the chart wrapper.
-    -   Calculate which `date` index touches the cursor.
-    -   Update React state: `setIndexDate(date)`.
--   **Dynamic Data**: The data passed to `<LineChart>` will be a *memoized* version of the data where values are normalized against `indexDate`.
-
-### Step 4: The HUD (Legend & Stats)
--   Place a grid of 5 items below the title but above the chart.
--   Each item contains:
-    -   Stock Symbol (Color coded).
-    -   Current Value (based on drag position).
--   This solves the "readability" issue by removing labels from the chart body.
-
-### Step 5: Mobile Polish
--   Add a `<ReferenceLine>` at the `indexDate` (Visual Feedback).
--   Ensure touch targets are large.
--   Use `strokeWidth={2}` for lines to ensure visibility on small screens.
--   Add a "Reset" button or instruction ("Drag to re-index").
-
-## 5. Summary of Mobile Adaptations
-
-| Feature | Desktop (Original) | Mobile (Planned) | Action Space |
-| :--- | :--- | :--- | :--- |
-| **Trigger** | Hover | Drag / Touch | `Recompose (Replace)` |
-| **Labels** | End of Line (Right) | Fixed Header Grid (HUD) | `Reposition (Externalize)` |
-| **Y-Axis** | Linear Price | Relative % (Dynamic) | Preserved (Logic moved to State) |
-| **Layout** | Wide | Square/Portrait | `Rescale` |
-| **Legend** | Implicit (Text Color) | Explicit Stat Box | `Compensate` |
+This plan ensures the mobile version retains the powerful "relative comparison" feature of the original while solving the usability issues inherent in a direct desktop port.

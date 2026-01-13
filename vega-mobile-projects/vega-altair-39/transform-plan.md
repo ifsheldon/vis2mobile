@@ -1,110 +1,126 @@
-# Plan: Mobile Transformation for "Strip Plot Jitter"
+# Vis2Mobile Transformation Plan
 
-## 1. Visualization Analysis & Design Strategy
+## 1. Analysis of Original Visualization
 
-### Desktop Analysis
-The original visualization displays two side-by-side "strip plots" (1D scatter plots).
-- **Data**: Movies dataset (IMDB Rating vs. Major Genre).
-- **Encoding**:
-    - X-axis: Quantitative (IMDB Rating).
-    - Y-axis: Nominal (Major Genre).
-    - Color: Nominal (Major Genre).
-    - Y-Offset (Jitter): Used to separate overlapping points. Left chart uses Normal distribution; Right chart uses Uniform distribution.
-- **Issues on Mobile**:
-    - **Horizontal Compression**: Displaying two charts side-by-side on a portrait screen squishes the X-axis, making patterns indistinguishable.
-    - **Tiny Targets**: High density of points makes individual interaction impossible.
-    - **Redundant Legends/Labels**: The genre text takes up valuable horizontal space.
+### Source Analysis
+- **Type**: Jittered Strip Plot (1D Scatter Plot organized by category).
+- **Data Source**: Vega Datasets (`movies.json`).
+- **Dimensions**:
+    - **Y-Axis**: `Major Genre` (Nominal/Categorical).
+    - **X-Axis**: `IMDB Rating` (Quantitative, scale 0-10).
+    - **Color**: `Major Genre` (Redundant encoding with Y-axis, creates visual separation).
+    - **Jitter**: Two calculation methods used for vertical spread within the category band:
+        1.  **Normal Distribution**: `sqrt(-2*log(random()))*cos(2*PI*random())` (Box-Muller transform).
+        2.  **Uniform Distribution**: `random()`.
+- **Layout**: Two horizontal charts (`hconcat`) side-by-side.
 
-### Mobile Design Strategy
-To ensure readability and a premium experience, we cannot simply shrink the desktop layout. We must decouple the two visualization modes and optimize the layout for vertical scrolling.
+### Desktop vs. Mobile Issues
+- **Aspect Ratio**: The desktop version places two charts side-by-side. On mobile, this compresses the width significantly, causing the X-axis (Rating 0-10) to be too short. Points will overlap excessively, making the distribution pattern unreadable.
+- **Text Readability**: The Y-axis labels ("Romantic Comedy", "Thriller/Suspense") are long. In the "Desktop on Mobile" view, these would either wrap awkwardly or consume 50% of the screen width, leaving no room for the data.
+- **Interaction**: The dots (size 8px) are too small for touch interaction. Hover effects in the original Vega-Lite spec won't work on touch devices.
+- **Context**: The user likely wants to see the distribution of ratings. The comparison between "Normal" and "Uniform" jitter is a secondary technical exploration. Showing both simultaneously taxes the cognitive load on a small screen.
 
-#### 1. Layout Serialization (L1 Chart Components)
-Instead of `hconcat` (side-by-side), we will use a **Split State** approach.
-- **Action**: **Compensate (Toggle)**.
-- **Reasoning**: The two charts show the *same* data with different jitter algorithms. Showing both simultaneously on mobile provides little value and destroys readability. We will implement a segmented control (switch) to toggle between "Normal Jitter" and "Uniform Jitter".
+## 2. High-Level Strategy
 
-#### 2. Coordinate System Adaptation (L2 Coordinate System)
-- **Action**: **Rescale (Vertical Expansion)**.
-- **Reasoning**: There are many genres. To avoid overplotting even with jitter, the chart height must be dynamic based on the number of genres. We will allow the user to scroll vertically through the genres while the X-axis (Rating) remains fixed or sticky.
-- **Action**: **Reposition (Axis Labels)**.
-- **Reasoning**: Y-axis labels (Genres) usually sit to the left. On mobile, this eats horizontal space for the actual data. We will move the Genre label to be a **Section Header** above each strip, or overlay it neatly, giving the full width to the data points.
+To create a premium mobile-first experience, I will transform the **Side-by-Side** layout into a **Tabbed** interface. This allows each visualization to utilize the full width of the mobile screen.
 
-#### 3. Interaction Refinement (L1 Interaction)
-- **Action**: **Recompose (Replace Trigger)**.
-- **Reasoning**: Desktop relies on visual density. Mobile requires specific data access. We will replace `hover` with `click/tap`. Tapping a point will trigger a **L2 Feedback (Fix Tooltip Position)**—specifically a bottom drawer or a fixed overlay showing movie details, as fingers obscure standard tooltips.
+The layout will be a **Vertical Scrollable Strip Plot**.
+- **Y-Axis Handling**: Instead of squeezing text on the left, I will use a clean list layout where the Genre Title acts as a section header or a clearly defined row label with adequate vertical padding.
+- **Interactive Switch**: A "Segmented Control" (Tab) at the top will allow the user to toggle between "Normal Jitter" and "Uniform Jitter". This adds interactivity and solves the space issue.
+- **Animation**: When switching tabs, the dots will animate to their new positions (from Normal distribution to Uniform distribution), providing the "Wow" factor and helping the user understand the mathematical difference visually.
+- **Data Density**: To ensure readability, I will increase the vertical height assigned to each Genre, making the chart scrollable.
 
-## 2. Vis2Mobile Design Action Space Plan
+## 3. Design Action Space Plan
 
-| Level | Component | Action | Description & Reasoning |
-| :--- | :--- | :--- | :--- |
-| **L1** | **Chart Components** | `Serialize layout` | **Critical Step**. Convert the side-by-side layout into a single view with a toggle switch. This solves the "Distorted layout" issue on narrow screens. |
-| **L2** | **Data Marks** | `Rescale` (Mark Size) | Maintain a touch-friendly size for dots (approx 6-8px) but ensure the container has enough height so they don't overlap excessively. |
-| **L2** | **Coord. System** | `Rescale` (Height) | Calculate container height dynamically: `height = num_genres * row_height`. This prevents the "High graphical density" issue. |
-| **L4** | **Axis Label** | `Reposition` | Move Y-axis labels (Genres) from the left side to above the data rows or integrated as row headers. This maximizes the X-axis width for the `IMDB Rating`. |
-| **L5** | **Feedback** | `Reposition (Fix)` | Use a "Selected Item" card fixed at the bottom of the screen instead of a floating tooltip. This addresses the "Fat-finger problem". |
-| **L3** | **Gridlines** | `Recompose (Remove)` | Remove vertical gridlines to reduce visual noise. Keep faint horizontal guides to separate genres. |
+### L0: Visualization Container
+- **Action: `Rescale`**
+    - **Details**: Set container width to 100% and allow height to grow based on the number of genres.
+    - **Reasoning**: Mobile screens are vertically infinite (scrollable) but horizontally constrained. We trade vertical space for clarity.
+- **Action: `Reposition`**
+    - **Details**: Add padding to the container to ensure the visualization "breathes" and isn't flush against the screen edges.
 
-## 3. Data Extraction & Codification Plan
+### L1: Chart Components
+- **Action: `Transpose` (Serialize Layout)**
+    - **Details**: Instead of `hconcat` (side-by-side), I will serialize the views using a Tab state. The user sees one mode at a time.
+    - **Reasoning**: Resolves the "Distorted layout" issue where side-by-side charts are too narrow on mobile.
+- **Action: `Recompose (Interactive Toggle)`**
+    - **Details**: Implement a top-level control to switch the `jitter` calculation method.
 
-The source data is external (`movies.json`). We cannot rely on Vega's internal transform on the client side without importing Vega (which is heavy). We will implement the data processing in TypeScript.
+### L3: Axes (X-Axis - IMDB Rating)
+- **Action: `Set Tick Count`**
+    - **Details**: Reduce tick count to ~5 (e.g., 0, 2.5, 5, 7.5, 10) or just integers (0, 2, 4, 6, 8, 10).
+    - **Reasoning**: Prevents label overlapping on narrow screens.
+- **Action: `Reposition`**
+    - **Details**: Place the X-axis at the bottom (sticky) or repeat it at the top if the list is very long. For this plan, a standard bottom axis is sufficient if the component height is managed well.
 
-### Data Source
-- **URL**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/movies.json`
+### L3: Axes (Y-Axis - Genres)
+- **Action: `Recompose (Replace)`**
+    - **Details**: Instead of a traditional axis line on the left, I will render the Genre Name as a **Row Header** above the data strip or integrated into the background of the strip.
+    - **Reasoning**: Long labels like "Thriller/Suspense" destroy horizontal space for the data. Moving labels *above* the data strip (or effectively increasing row height) allows the scatter plot to use 100% of the width.
 
-### Processing Logic (TypeScript)
-1.  **Fetch**: Retrieve the JSON data.
-2.  **Filter**: Remove entries where `IMDB Rating` or `Major Genre` is null.
-3.  **Group**: Extract unique `Major Genre` list to create the Y-axis scale.
-4.  **Jitter Calculation**: Replicate the Vega formulas in JS to generate static coordinates for the points.
-    *   **Normal Jitter**: Box-Muller transform.
-        ```javascript
-        // Formula from spec: sqrt(-2*log(random()))*cos(2*PI*random())
-        const jitterNormal = Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
-        ```
-    *   **Uniform Jitter**:
-        ```javascript
-        // Formula from spec: random()
-        const jitterUniform = Math.random();
-        ```
-5.  **Coordinate Mapping**:
-    *   Map `Major Genre` to a base Y-index (e.g., Action = 0, Comedy = 100).
-    *   Final `y` = `base_y + (jitter * scale_factor)`.
+### L2: Data Marks (The Dots)
+- **Action: `Recompose (Change Encoding)`**
+    - **Details**:
+        1.  **Calculate Jitter in JS**: Since Recharts doesn't natively support Vega's transform syntax, I will pre-calculate the `yOffset` for both Normal and Uniform distributions in the data processing step.
+        2.  **Mapping**: The Y-value in Recharts will be `GenreIndex + JitterOffset`.
+    - **Reasoning**: Ensures precise control over the visual output.
+- **Action: `Rescale`**
+    - **Details**: slightly adjust dot radius based on screen density, but keeping them relatively small (e.g., 3px-4px) with `opacity` is crucial to visualize density.
+- **Action: `Recompose (Color)`**
+    - **Details**: Use a distinct color palette for genres to keep the visual appeal, matching the original's intent.
 
-## 4. Implementation Steps
+### L5: Interaction & Feedback
+- **Action: `Fix Tooltip Position`**
+    - **Details**: Use a fixed-position tooltip (glassmorphism style) at the bottom or top of the viewport when a dot is tapped.
+    - **Reasoning**: Fingers block tooltips that appear directly under the touch point.
+- **Action: `Disable Hover` / `Enable Click`**
+    - **Details**: Mobile interaction will rely on tapping. However, given the density, tapping a specific dot is hard. I will implement a "Voronoi" or large-radius active area, or simply allow tapping a *Genre Row* to see aggregate stats (Median, Count) if individual movie selection is too difficult. *Correction*: I will aim for individual selection but with a larger hit radius.
 
-### Step 1: Data Hook (`useMoviesData.ts`)
-- Create a React hook to fetch the JSON.
-- Process the data to add `jitterNormal` and `jitterUniform` properties to every movie object.
-- Group data by Genre to help with layout calculations.
+## 4. Data Extraction & Processing
 
-### Step 2: Component Structure (`Visualization.tsx`)
-- **Container**: Full-width, mobile-optimized container with `min-h-screen`.
-- **Header**:
-    - Title: "IMDB Ratings by Genre".
-    - Control: A segmented toggle (Tab) for [Normal | Uniform].
-- **Chart Area (Recharts)**:
-    - Use `<ScatterChart>` with `layout="vertical"`?
-    - *Correction*: Recharts Scatter is Cartesian. We will use a custom `<ComposedChart>` or `<ScatterChart>`.
-    - **X-Axis**: `IMDB Rating` (0 to 10).
-    - **Y-Axis**: We will simulate the categorical Y-axis using numbers. Each Genre gets a "slot" (e.g., Action is at Y=10, Adventure at Y=20).
-    - **Scatter Data**: `x: Rating`, `y: GenreIndex + (Jitter * Width)`.
-    - **Custom Tooltip**: Disabled default tooltip.
+I will create a helper function to fetch and process the data.
 
-### Step 3: Interaction & Feedback
-- **State**: `selectedMovie` (Movie object | null).
-- **Event**: `onClick` on `<Scatter>` point sets `selectedMovie`.
-- **UI**: A fixed `AnimatePresence` (framer-motion) bottom sheet that appears when `selectedMovie` is active, showing the movie title, specific rating, and genre.
+1.  **Fetch**: Retrieve JSON from `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/movies.json`.
+2.  **Filter**: Remove entries where `Major Genre` or `IMDB Rating` is null.
+3.  **Group & Index**: 
+    - Identify unique `Major Genre` list.
+    - Assign an index `i` to each genre (0 to N).
+4.  **Math Transformation (The Jitter)**:
+    - Iterate through the data.
+    - For each movie, calculate two coordinates:
+        - **Normal Y**: `GenreIndex + (Clamp(BoxMullerRandom(), -0.4, 0.4))`
+        - **Uniform Y**: `GenreIndex + (Random() - 0.5) * 0.8`
+    - Store these as properties: `yNormal`, `yUniform`.
+5.  **Data Structure for Recharts**:
+    ```typescript
+    interface ProcessedMovie {
+        title: string;
+        genre: string;
+        rating: number; // X-axis
+        genreIndex: number;
+        jitterNormal: number; 
+        jitterUniform: number;
+        // Calculated final Y positions for the chart
+        yPosNormal: number; // genreIndex + jitterNormal
+        yPosUniform: number; // genreIndex + jitterUniform
+    }
+    ```
 
-### Step 4: Premium Styling
-- **Glassmorphism**: Use `backdrop-blur` for the control panel and bottom sheet.
-- **Color Palette**: Use a vibrant color scale for genres (referencing the original encoded colors) but ensuring contrast against a dark or light mode background (prefer Dark Mode for premium feel).
-- **Typography**: Clean sans-serif fonts, large numbers for ratings in the details view.
+## 5. Implementation Steps
 
-### Step 5: Axis Handling
-- Since we are stacking genres vertically, we might have 15+ genres. The chart height needs to be `number_of_genres * 80px`.
-- We will render the Genre Title as a Text label inside the chart area (using Recharts `<ReferenceLine>` or `<Label>`) or simply map the Y-Axis ticks to the Genre names, ensuring text wrapping or truncation handled via CSS `text-overflow`. *Decision*: Standard Y-Axis ticks with a reasonable width, but formatted to be readable.
+1.  **Setup Components**: Create `MovieJitterPlot.tsx` and a sub-component `JitterControls.tsx`.
+2.  **Data Loading**: Implement the `useEffect` to fetch and process the data using the Box-Muller transform for the normal distribution.
+3.  **Layout Skeleton**: 
+    - Create a wrapper with a fixed height (e.g., `h-[600px]`) or allow body scroll. 
+    - Add the Segmented Control (Normal | Uniform) at the top.
+4.  **Recharts Implementation**:
+    - Use `<ResponsiveContainer>` and `<ScatterChart>`.
+    - X-Axis: `dataKey="rating"` type="number" domain={[0, 10]}.
+    - Y-Axis: `dataKey={viewMode === 'normal' ? 'yPosNormal' : 'yPosUniform'}` type="number" range specific to the number of genres (height).
+    - **Custom Axis Tick**: Custom component for Y-Axis to render Genre names clearly.
+5.  **Styling**:
+    - Apply Tailwind classes for a modern dark/light mode compatible look.
+    - Use `framer-motion` (if available via standard CSS transitions or Recharts animation) to smooth the transition between Y-positions when toggling the view.
+6.  **Tooltip**: Implement a custom `<Tooltip />` that shows Movie Title, Genre, and Rating with a glassmorphism backdrop.
 
-## 5. Mobile Readability Checks
-- **Font Size**: Axis labels min 12px.
-- **Touch Targets**: Scatter points will have a visual radius of 4-5px but a transparent hit area (cursor/stroke width) that is larger if possible, or we rely on the sparsity of the strip plot.
-- **Contrast**: Ensure colored dots stand out against the background.
+This plan ensures the original analytical intent (comparing distributions) is preserved while adapting the form factor for mobile usability and aesthetics.

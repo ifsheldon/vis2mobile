@@ -1,106 +1,95 @@
-# Mobile Visualization Transformation Plan
+# Vis2Mobile Transformation Plan
 
 ## 1. Analysis of Original Visualization
 
-### Source Analysis
-*   **Type**: Focus + Context Area Chart (Time Series).
-*   **Data**: S&P 500 stock prices (Date vs. Price).
-*   **Structure**:
-    *   **Top View (Focus)**: Detailed area chart showing a specific time range.
-    *   **Bottom View (Context)**: Smaller area chart showing the entire dataset history.
-    *   **Interaction**: A "Brush" / Interval selection on the bottom chart controls the X-axis domain of the top chart.
-*   **Aesthetics**: Basic Vega-Lite default styles (standard blue, simple axes).
+### Desktop Version
+- **Type**: Composite View (Focus + Context).
+- **Structure**:
+  - **Top Chart (Focus)**: An Area Chart showing S&P 500 prices over a specific time range.
+  - **Bottom Chart (Context)**: A smaller Area Chart showing the full history (2000-2010) with a "Brush" interaction (a gray sliding window) to control the top chart's X-axis domain.
+- **Data**: Time-series data (Date vs. Price).
+- **Visual Encodings**:
+  - X-axis: Temporal (Date).
+  - Y-axis: Quantitative (Price).
+  - Mark: Area (filled blue).
+- **Interaction**: Brushing and linking. Moving the selection on the bottom chart updates the top chart.
 
-### Mobile Challenges (Desktop on Mobile)
-*   **Fixed Dimensions**: The desktop spec uses `width: 600`, which causes horizontal scrolling or severe scaling issues on mobile.
-*   **Touch Targets**: The "brush" handles on the context chart are likely too small for fingers (Fat-finger problem).
-*   **Label Density**: X-axis dates on both charts will overlap or become unreadably small if simply shrunk.
-*   **Vertical Space**: Stacking two charts with default padding wastes valuable mobile vertical screen real estate.
-*   **Interaction**: Hover tooltips (default in desktop) do not work on touch devices.
+### Mobile Layout Issues
+- **Aspect Ratio**: The 16:9 layout of the two stacked charts becomes illegible when squeezed into a mobile portrait width (`desktop_on_mobile.png`).
+- **Interaction**: The "Brush" selector on the bottom chart becomes tiny on mobile. Dragging a small handle on a touch screen ("Fat-finger problem") is frustrating and inaccurate.
+- **Readability**: Axis labels (dates and prices) become too small. The Y-axis title takes up valuable horizontal space.
+- **Vertical Space**: Stacking two charts consumes significant vertical screen real estate, leaving little room for headers or data readouts.
 
-## 2. Design Action Plan
+## 2. Mobile Design Philosophy & Strategy
 
-Based on the `mobile-vis-design-action-space.md`, here is the transformation strategy:
+**"Finance App Aesthetic"**: The transformation will mimic premium stock trading apps (like Robinhood or Apple Stocks).
+
+1.  **Simplify Interaction**: Replace the difficult-to-use "Brush" chart with **Time Range Buttons** (e.g., 1Y, 5Y, Max). This preserves the *intention* (filtering time ranges) while solving the mobile usability issue.
+2.  **Focus on Data**: Maximize the main chart area. Use a "Crosshair" interaction on touch (long press or drag) to show specific price data in a fixed header, rather than floating tooltips which get blocked by fingers.
+3.  **Premium UI**: Use a gradient fill for the area chart, glassmorphism for the container, and Lucide icons for metadata.
+
+## 3. Design Action Space Mapping
 
 ### L0: Visualization Container
-*   **Action: `Rescale` (Resize)**
-    *   **Reasoning**: Change fixed pixel width to `width: 100%` and `height: 100%` (or a fixed aspect ratio like 3:4) to utilize the full mobile screen width.
-*   **Action: `Reposition` (Padding)**
-    *   **Reasoning**: Remove outer HTML body margins. Use a card-based layout with internal padding to frame the chart comfortably within a mobile view.
+- **Action: `Rescale`**: Set container width to 100% and use a responsive height (e.g., `h-64` or `aspect-[4/3]`) rather than fixed pixels.
+- **Action: `Reposition`**: Add global padding (`p-4`) to ensure the chart doesn't touch screen edges.
 
-### L1: Chart Components & Layout
-*   **Action: `Serialize Layout` (Vertical Stacking)**
-    *   **Reasoning**: Maintain the "Focus (Top) + Context (Bottom)" layout but adjust the proportions. Give the main chart 75% of the height and the context brush 15%.
-*   **Action: `Recompose` (Aggregated Data - Optional)**
-    *   **Reasoning**: S&P 500 data is granular. If performance lags, we might sample data, but Recharts handles moderate datasets well. We will stick to the full dataset for precision but optimize rendering.
+### L1: Interaction Layer
+- **Action: `Recompose (Replace)` (Triggers)**: Replace the bottom "Context" chart (Vega-Lite Brush) with **Time Range Selector Buttons** (1M, 6M, 1Y, All).
+    - *Reasoning*: The "Brush" interaction is poor on mobile. Buttons provide distinct, easy-to-tap targets to change the `domain` of the X-axis.
+- **Action: `Recompose (Replace)` (Triggers)**: Change `Hover` triggers to `Touch/Drag` triggers for the main chart tooltip.
 
-### L3: Axes (Coordinate System)
-*   **Action: `Decimate Ticks` (X-Axis)**
-    *   **Reasoning**: On the main chart, show fewer date labels (e.g., only 3-4 ticks).
-*   **Action: `Simplify Label` (Formatting)**
-    *   **Reasoning**: Convert "January 2008" to "Jan '08" or just the year to save horizontal space.
-*   **Action: `Recompose (Remove)` (Y-Axis Lines)**
-    *   **Reasoning**: Remove the vertical axis line on the Y-axis (`axisLine={false}`) and tick lines, keeping only the text for a cleaner, modern look.
-*   **Action: `Recompose (Remove)` (Context Chart Axes)**
-    *   **Reasoning**: The bottom context chart is for navigation, not reading values. Remove its Y-axis entirely. Keep minimal X-axis hints.
+### L1: Chart Components & L2 Title Block
+- **Action: `Reposition`**: Move the dynamic price display (the value currently being hovered) out of the tooltip and into a **Fixed Info Header** (Big Number) at the top of the card.
+- **Action: `Recompose (Replace)`**: Use a simplified Main Title ("S&P 500") and a dynamic Subtitle showing the current price/date.
 
-### L2: Interaction & Feedback
-*   **Action: `Recompose (Replace)` (Triggers)**
-    *   **Reasoning**: Replace `hover` triggers with a continuous `touch` / `drag` interaction.
-*   **Action: `Fix Tooltip Position`**
-    *   **Reasoning**: Instead of a floating tooltip that gets blocked by the finger, display the "Active Date" and "Active Price" in a fixed **Header Block** (L2 Title Block) above the chart. This is a standard mobile finance pattern (e.g., Robinhood, Apple Stocks).
-*   **Action: `Rescale` (Brush Handle)**
-    *   **Reasoning**: Increase the height/hit-area of the Brush selection handles to ensure they are touch-friendly (min 44px equivalent target).
+### L2: Coordinate System (Axes)
+- **Action: `Recompose (Remove)`**: Remove the Y-axis Title ("price") and X-axis Title ("date"). The context makes these obvious.
+- **Action: `Recompose (Remove)`**: Remove Y-axis lines (keeping only faint gridlines) to reduce ink ratio.
+- **Action: `Decimate Ticks`**: Reduce X-axis tick count (e.g., only show 3-4 dates) to prevent overlap.
+- **Action: `Format Tick Label`**: Shorten dates (e.g., "Jan '08" instead of "January 2008").
 
-### L2: Data Marks
-*   **Action: `Rescale` (Stroke Width)**
-    *   **Reasoning**: Use a slightly thicker stroke for the main line to improve visibility on high-DPI mobile screens.
-*   **Action: `Emphases` (Gradients)**
-    *   **Reasoning**: Use a vertical linear gradient fill (opacity fade) for the area chart to give it a "Premium" glassmorphic feel, rather than a solid flat color.
+### L5: Feedback (Tooltips)
+- **Action: `Reposition (Fix)`**: Instead of a floating tooltip, update the **Big Number** header when the user drags their finger across the chart. This solves the finger occlusion problem.
 
-## 3. Data Extraction Strategy
+## 4. Data Extraction Plan
 
-The original HTML sources data from a URL: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/sp500.csv`.
+The original HTML points to an external CSV: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/sp500.csv`.
 
-1.  **Fetch**: The component will need a utility function to fetch and parse this CSV.
-2.  **Parsing**: Since we are using standard JS/TS, we will need a simple CSV parser (or a lightweight split/map function if avoiding heavy libraries) to convert the CSV text into an array of objects: `{ date: string, price: number }`.
-3.  **Validation**: Ensure the date strings are converted to JS `Date` objects or Unix timestamps for Recharts to handle the time scale correctly.
+1.  **Fetch**: I will download the CSV data from the provided URL.
+2.  **Parse**: Convert the CSV format (Date string, Price number) into a JSON array compatible with Recharts.
+3.  **Process**:
+    - Ensure Date is formatted strictly as `YYYY-MM-DD` or a JS Date object for Recharts processing.
+    - No fake data. The full dataset (approx 2000-2010) will be embedded or fetched.
 
-## 4. Implementation Steps
+**Expected Data Format for Component**:
+```typescript
+interface DataPoint {
+  date: string; // "2000-01-01"
+  price: number; // 1450.23
+}
+```
 
-### Step 1: Setup & Data Fetching
-*   Create `src/components/Visualization.tsx`.
-*   Implement a `useEffect` hook to fetch the S&P 500 CSV data on mount.
-*   Parse the CSV into a state variable `data`.
-*   Implement a Loading state (skeleton or spinner) while data fetches.
+## 5. Implementation Steps
 
-### Step 2: Container & Layout Structure
-*   Use a Flexbox column layout (`h-[500px]` or similar suitable mobile height).
-*   **Header Section**: Create a distinct area for the Title ("S&P 500") and a dynamic "Price Display" that updates when the user interacts with the chart.
-    *   *Default*: Show the latest price.
-    *   *Interaction*: Show the price at the cursor position.
+1.  **Data Preparation**: Write a script to fetch the CSV and convert it to a static JSON constant within the component file (or a separate data file if large) to ensure the component is self-contained.
+2.  **Component Skeleton**: Create the `Visualization` component with a container using `bg-white/10` (glassmorphism) and rounded corners.
+3.  **State Management**:
+    - `activeData`: The data currently visible based on time range.
+    - `hoverData`: The data point currently selected by the user's touch.
+    - `timeRange`: State for the active button (1M, 1Y, All).
+4.  **Header Section**: Implement the "Big Number" display.
+    - Default: Shows the latest price in the dataset.
+    - On Hover/Touch: Updates to show the price at the cursor position.
+5.  **Main Chart (Recharts)**:
+    - `<ResponsiveContainer>` for fluid width.
+    - `<AreaChart>` with a `<defs>` gradient for the fill color (e.g., fading blue).
+    - `<XAxis>` with `tickFormatter` to abbreviate dates.
+    - `<Tooltip>` with `content={<CustomTooltip />}` (or logically hidden to drive the Header display).
+    - Remove `<Brush />` component (replacing with buttons).
+6.  **Time Range Controls**: Render a flex row of buttons below the chart. Clicking a button filters the `activeData` passed to the chart.
+7.  **Styling**: Apply Tailwind classes for typography (Inter font), spacing, and colors (slate-900 text, indigo-500 chart).
 
-### Step 3: Main Area Chart (Focus View)
-*   Use `<ResponsiveContainer>` with `<AreaChart>`.
-*   Apply `<defs>` for a LinearGradient (color teal or blue, fading to transparent).
-*   Configure XAxis with `tickFormatter` (short dates) and `minTickGap` to prevent overlap.
-*   Configure YAxis to be on the right side (often easier for thumb reach on mobile) or mirror standard finance apps (left, simplified). Let's go **Right** side for Y-axis to avoid obscuring the most recent data (usually on the right).
-*   Add `<Tooltip>` with `cursor={{ stroke: '...', strokeWidth: 1 }}` but set `content={<></>}` (empty) and use the `onMouseMove` callback to update the Header Section (Externalized Tooltip).
+## 6. Justification for Deviations
 
-### Step 4: Brush/Context Chart
-*   Below the main chart, add a second `<ResponsiveContainer>` (height ~60-80px).
-*   Render a simplified `<AreaChart>` (same data) to serve as the context.
-*   Add the Recharts `<Brush>` component.
-    *   Style the Brush: Remove default grey background, use a border color that matches the theme.
-    *   **Crucial**: Sync the Brush `startIndex` / `endIndex` or range with the Main Chart's domain. *Note: Recharts `<Brush>` automatically controls the parent chart if placed inside it. However, for a separate look, we might put the Brush in the main chart but position it at the bottom, or use a synchronized chart approach.*
-    *   *Refined Approach*: Place the `<Brush>` inside the Main Chart component to ensure native linking, but style it to look like a separate mini-map at the bottom. This is the most robust way in Recharts.
-
-### Step 5: Premium Styling
-*   **Typography**: Use `tabular-nums` for prices to prevent jitter during interaction.
-*   **Colors**: Use a vibrant primary color (e.g., `emerald-500` or `blue-500`) against a clean white or slight off-white background.
-*   **Animation**: Enable `isAnimationActive` for initial load "wow" factor.
-
-### Step 6: Review against Mobile Constraints
-*   Check if text overlaps.
-*   Check if touch area for the brush is sufficient.
-*   Ensure no horizontal scrollbar on the page body.
+- **Removing the Bottom Brush Chart**: The prompt asks to preserve intention. The intention of the bottom chart is *navigation* through time. On mobile, a dedicated navigation chart is visually cramped and functionally difficult. Replacing it with Time Range pills preserves the *function* (navigation) while improving the *form* (usability and aesthetics). This aligns with `L1 Interaction > Features > Recompose`.

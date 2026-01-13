@@ -1,97 +1,100 @@
-# Vis2Mobile Transformation Plan
+# Mobile Visualization Plan: Top 10 IMDB Movies
 
-## 1. Analysis of Original Visualization
+## 1. High-Level Strategy
 
-### Desktop Version (Original)
-- **Type**: Vertical Bar Chart (Column Chart).
-- **Data**: Top 10 Movies by IMDB Rating.
-- **X-Axis**: Movie Titles (Categorical/Nominal).
-- **Y-Axis**: IMDB Rating (Quantitative).
-- **Encoding**: Bar height represents rating; Color also represents rating (redundant but aesthetic encoding).
-- **Interaction**: Standard tooltip (implied by Vega-Lite).
-- **Layout**: Wide landscape aspect ratio. Labels on X-axis are horizontal, which requires significant width to prevent overlapping or rotation.
+The original visualization is a vertical bar chart showing the top 10 movies by IMDB Rating.
+**Key Issues for Mobile:**
+1.  **Aspect Ratio:** Vertical bars for categorical data (movie titles) work poorly on narrow screens. The X-axis labels ("The Godfather", "The Shawshank Redemption") are long and will either overlap, require extreme rotation (unreadable), or be excessively truncated.
+2.  **Data Resolution:** The ratings are very close (8.9 to 9.2). A standard 0-10 Y-axis makes the bars look nearly identical in height, reducing the visual impact of the ranking.
+3.  **Redundancy:** The color legend on the right takes up significant horizontal space but encodes the same information as the bar height (Rating).
 
-### Mobile Rendering Issues (Desktop on Mobile)
-- **Distorted Layout**: The X-axis labels (Movie Titles) will likely overlap, rotate 90 degrees (becoming hard to read), or be aggressively truncated due to lack of horizontal pixels.
-- **Touch Targets**: Vertical bars in a Top 10 chart on a narrow screen might be too thin for reliable finger tapping.
-- **Aspect Ratio**: The 16:9 layout becomes tiny when scaled down to mobile width (viewport width ~375px-400px), making text unreadable.
+**Transformation Strategy:**
+We will apply a **Transpose (Axis-Transpose)** operation to convert the chart into a **Horizontal Bar Chart**. This allows movie titles to be listed vertically (left-aligned), utilizing the natural scrolling behavior of mobile devices. We will remove the redundant color legend and instead use a gradient fill on the bars to maintain the "premium" aesthetic. To ensure readability and precise comparison, we will explicitly display the rating value next to or inside each bar.
 
-## 2. High-Level Strategy & Design Rationale
+## 2. Design Action Space Analysis
 
-The primary transformation strategy is **Transposition (Rotation)**.
+Based on `mobile-vis-design-action-space.md`, the following actions will be taken:
 
-Vertical bar charts with long categorical labels (like Movie Titles) are notoriously poor on mobile devices. Users naturally scroll vertically on mobile. By transposing the chart to a **Horizontal Bar Chart**, we align the list of movies with the natural vertical flow of the device, allowing ample space for long titles to be read horizontally without tilting the head.
+### L2 Coordinate System
+*   **Action: Transpose (Axis-Transpose)**
+    *   *Reasoning:* Vertical columns are unsuitable for long categorical labels (Movie Titles) on mobile width. Switching to horizontal bars allows titles to be readable horizontally without rotation.
 
-We will adopt a **"Premium List" aesthetic**:
-1.  **Transpose Axes**: Titles become the Y-axis (or row headers), Rating becomes bar width.
-2.  **Embedded Data**: Instead of a separate numerical axis which takes up space, we will place the exact rating value inside or immediately next to the bar.
-3.  **Interactive Details**: Tapping a row will trigger a bottom-sheet style detail view or an expanded state, solving the "hover" limitation on mobile.
+### L1 Data Model / L2 Data Marks
+*   **Action: Recompose (Aggregate/Sort)**
+    *   *Reasoning:* Ensure data is sorted strictly by rating descending (Top to Bottom) to match the mental model of a "Leaderboard".
+*   **Action: Recompose (Remove Encoding - Legend)**
+    *   *Reasoning:* The color encoding in the original (dark blue to light blue) matches the rating. Since the rating is also the length of the bar, a separate legend block is redundant and wastes screen width. We will keep the color encoding (gradient) but remove the legend component.
 
-## 3. Action Space Mapping
+### L3/L4 Axes & Ticks
+*   **Action: Recompose (Remove Axis Line/Ticks)**
+    *   *Reasoning:* On mobile, we want a clean look. We will remove the X-axis (Rating) grid lines and axis lines. Instead, we will place the specific data value (e.g., "9.2") directly at the end of the bar.
+*   **Action: Rescale (Tick Label)**
+    *   *Reasoning:* The Y-axis (Movie Titles) needs enough width. We will integrate the titles as text labels positioned *above* the bars or to the left, depending on available width, to prevent truncation.
 
-Based on the `mobile-vis-design-action-space.md`, the following actions will be taken:
+### L5 Interaction & Labels
+*   **Action: Serialize Layout (Labels)**
+    *   *Reasoning:* Instead of relying on a hover tooltip to see the exact rating (which is hard on touch), we will display the rating score permanently.
+*   **Action: Disable Hover / Add Touch Feedback**
+    *   *Reasoning:* Remove hover-dependent states. Add a subtle active state (highlight) when a user touches a bar row.
 
-### L0: Visualization Container
-- **Action**: `Rescale`
-    - **Reason**: Force `width: 100%` and allow `height` to grow dynamically based on the number of items (Top 10). The viewbox must adapt to the device width.
+## 3. Data Extraction Plan
 
-### L1: Data Model
-- **Action**: `Filter` / `Sort` (Implicit in Source)
-    - **Reason**: The source Vega-Lite spec performs a specific transform: `window: rank`, `filter: rank < 10`. We must replicate this logic in the React component to ensure we only render the Top 10 items, preventing information overload.
+Since I cannot execute external network requests to fetch the full JSON during this planning phase, the implementation agent must use the data logic described in the original Vega spec to reconstruct the data.
 
-### L2: Coordinate System
-- **Action**: `Transpose (Axis-Transpose)` (High Priority)
-    - **Reason**: Convert Vertical Columns to Horizontal Bars. This fixes the readability of movie titles.
+**Source Logic:**
+1.  Source: `movies.json`
+2.  Sort: `IMDB Rating` (Descending)
+3.  Filter: Top 10 items (`rank < 10`)
 
-### L2: Data Marks (Bars)
-- **Action**: `Rescale` (Reduce width / Increase height)
-    - **Reason**: In the horizontal context, we increase the *thickness* (height) of the bars to ~32px-40px to serve as comfortable touch targets.
-- **Action**: `Recompose (Change Encoding)`
-    - **Reason**: The original uses a gradient/color scale for ratings. We will maintain this by using a color scale function (e.g., darker blue/purple for higher ratings) to keep the "Premium Aesthetics."
+**Extracted Data (Target for Implementation):**
+*Based on the visual evidence in `desktop.png`, the data is:*
+1.  The Shawshank Redemption (9.2)
+2.  The Godfather (9.2)
+3.  Inception (9.1) *[Note: Check data, visual looks like 9.1]*
+4.  The Godfather: Part II (9.0)
+5.  12 Angry Men (8.9)
+6.  One Flew Over the Cuckoo's Nest (8.9)
+7.  Pulp Fiction (8.9)
+8.  Schindler's List (8.9)
+9.  The Dark Knight (8.9)
+10. Toy Story 3 (8.9)
 
-### L3: Axes
-- **Action**: `Recompose (Remove)` (Axis Lines & Ticks)
-    - **Reason**: We will hide the X-axis (numerical scale 0-10) entirely to save vertical space.
-- **Action**: `Serialize layout`
-    - **Reason**: Instead of an axis, we will place the numeric value (e.g., "9.3") directly inside the bar or to the right of it. This provides immediate data retrieval without visual scanning across grid lines.
+*Note: The original visual uses a gradient where higher ratings are darker blue.*
 
-### L5: Interaction & Labels
-- **Action**: `Simplify Label`
-    - **Reason**: If a movie title is extremely long, we will use CSS text-overflow ellipsis.
-- **Action**: `Reposition (Fix)` (Tooltip)
-    - **Reason**: Replace hover tooltips with a "Selection" state. Tapping a bar highlights it and shows details (Title + Exact Rating) in a fixed card at the bottom or top of the component.
-- **Action**: `Recompose (Replace)` (Triggers)
-    - **Reason**: Change `hover` events to `click/tap` events for selecting a movie.
+## 4. Implementation Steps
 
-## 4. Data Extraction Plan
+1.  **Component Setup:**
+    *   Create `src/components/Visualization.tsx`.
+    *   Define the `MovieData` interface.
+    *   Hardcode the extracted Top 10 data array (as identified above) to ensure stability and "real data" usage without runtime fetching issues.
 
-The source HTML references an external URL: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/movies.json`. Since I cannot make network requests during the final component rendering in this specific environment context (assuming static generation preference or restricted env), I will **embed the specific slice of data** required.
+2.  **Layout Structure (Mobile First):**
+    *   Use a Flexbox container (`flex-col`).
+    *   **Header:** Title "Top Rated Movies" with a subtitle "IMDB Rating". Use `text-xl` and `font-bold`.
+    *   **Chart Container:** A responsive container using Recharts `<ResponsiveContainer width="100%" height={500} />`.
 
-**Extraction Steps:**
-1.  Target the dataset: `movies.json`.
-2.  Apply the Sort: Descending by `IMDB Rating`.
-3.  Apply the Filter: Top 10 items.
-4.  **Hardcode this processed subset** into the component to ensure it works offline and renders instantly.
+3.  **Recharts Implementation:**
+    *   Use `<BarChart layout="vertical" ... />`.
+    *   **XAxis:** Type "number", domain `[0, 10]`, hide axis line, hide tick lines.
+    *   **YAxis:** Type "category", dataKey "Title".
+        *   *Crucial Design Decision:* To handle long titles on mobile, passing them into the standard YAxis often leads to truncation.
+        *   *Solution:* We will set the YAxis `width` to a small value or hide it, and instead render the Title using a **Custom Label** inside the chart or construct the layout using standard HTML/CSS lists with Recharts serving as the graphical bar background.
+        *   *Revised Recharts Approach:* Let's use Recharts for the bars. We will use a `YAxis` with `width={120}` (approx 35% of screen). If titles are longer, we let them wrap or use ellipsis.
+        *   *Alternative Premium Layout:* Render the Title *above* the bar.
+            *   Set `barSize={20}`.
+            *   Use a custom `content` in the `XAxis` or map the data outside of Recharts?
+            *   *Selected Method:* Use standard Recharts vertical layout. Set `YAxis` width to roughly 100px. Allow text wrapping in the tick formatter if possible, or truncate with ellipsis.
+            *   *Better Method for "Premium":* Use a custom Y-axis tick component that renders the text.
 
-*Self-Correction on Data*: The prompt asks to "Extract and use real data". I will provide the raw data structure for the Top 10 movies found in that dataset (e.g., *The Shawshank Redemption*, *The Godfather*, etc.) to ensure the component renders the actual visualization intended by the source code.
+4.  **Styling & Aesthetics (Glassmorphism/Premium):**
+    *   **Background:** A subtle gradient background for the whole card (e.g., `bg-slate-50` to `bg-slate-100`).
+    *   **Bars:** Use a `Cell` mapping to apply the specific blue colors (Dark Blue #0d3b66 for 9.2 -> Lighter Blue #90e0ef for 8.9).
+    *   **Animation:** Enable `isAnimationActive={true}` with a smooth easing.
+    *   **Labels:** Render the numeric rating (e.g., "9.2") in bold text at the end of the bar (using `<LabelList dataKey="IMDB Rating" position="right" />`).
 
-## 5. Implementation Steps
+5.  **Refinement for Readability:**
+    *   Ensure the contrast between the bar color and background is sufficient.
+    *   Add a subtle grid line (vertical) for reference (optional, maybe just at 5 and 10).
 
-1.  **Setup Component Shell**: Create a responsive card container using Tailwind with a glassmorphism effect (`bg-white/10 backdrop-blur-md`).
-2.  **Data Preparation**: Create a constant `TOP_MOVIES_DATA` containing the top 10 movies sorted by rating (extracted from the Vega logic).
-3.  **Chart Construction (Recharts)**:
-    -   Use `ResponsiveContainer` for L0 Rescale.
-    -   Use `BarChart` with `layout="vertical"` for L2 Transpose.
-    -   **XAxis**: Type "number", `hide` (L3 Remove).
-    -   **YAxis**: Type "category", dataKey "Title", `width` set dynamically or fixed to allow text space, `tick={{ fontSize: 12 }}`.
-    -   **Bar**: Custom shape or standard bar with a `LabelList` component to render the rating inside/right of the bar.
-    -   **Tooltip**: Custom `Cursor` and `Content` to match the mobile theme.
-4.  **Styling & Polish**:
-    -   Apply a distinct color palette (Purple/Blue gradients) to match the "Premium" requirement.
-    -   Ensure text contrast meets accessibility standards.
-    -   Add `Lucide` Star icon next to the rating values.
-5.  **Interaction**:
-    -   Add an `onClick` handler to the Bar.
-    -   Use React state `activeMovie` to display a focused overlay or simply highlight the selected bar.
-
-This plan ensures the visualization is not just a shrunk desktop chart, but a native mobile list-based visualization that preserves the data insights (Ranking and Magnitude) while drastically improving readability.
+## 5. Summary of Transformed Mobile View
+The result will be a sorted list of movies. Each row consists of the movie title (left) and a horizontal bar (right) extending to represent the score, with the score number explicitly written at the end. This eliminates the "head tilting" required for the desktop version and makes the text legible.

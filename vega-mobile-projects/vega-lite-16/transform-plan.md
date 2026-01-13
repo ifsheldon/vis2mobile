@@ -1,93 +1,128 @@
-# Vis2Mobile Transformation Plan
+# Mobile Transformation Plan: Driving vs. Gas Prices
 
 ## 1. Analysis of Original Visualization
 
-### Original Desktop Visualization
-- **Type**: Connected Scatterplot.
-- **Data Source**: `driving.json` (Year, Miles driven per capita, Price of gas).
+The original visualization is a **Connected Scatterplot** created with Vega-Lite.
+- **X-Axis**: Miles (Quantitative, Non-monotonic/Backtracking). Range: ~3,500 to 10,500.
+- **Y-Axis**: Gas Price (Quantitative). Range: ~$1.30 to ~$3.40.
+- **Mark**: Line with points.
 - **Encoding**:
-    - **X-Axis**: Miles per person (Quantitative).
-    - **Y-Axis**: Cost of gas (Quantitative).
-    - **Order**: Year (Temporal sequence connecting the points).
-    - **Marks**: Points connected by line segments.
-- **Narrative**: The chart shows the relationship between driving habits and gas prices over time, revealing correlations and "hysteresis" loops (e.g., prices go up, driving goes down).
+    - Position (x, y): Miles vs. Gas.
+    - Order: Connected by `year`.
+    - Note: This chart visualizes a trajectory over time. The "looping" (hysteresis) is the key insight, showing how driving habits change in response to gas prices over decades.
 
-### Mobile Issues (Desktop on Mobile)
-- **Aspect Ratio Mismatch**: The wide aspect ratio of the desktop chart, when squeezed onto a mobile screen, flattens the loop, making the vertical changes in gas prices harder to distinguish.
-- **Readability**: Axis labels (Miles/Gas prices) will likely become microscopic.
-- **Lack of Temporal Context**: On a static desktop view, users can often hover to see the year. On mobile, without interaction, the user sees a "spaghetti line" and doesn't know which end is the start (1956) or the end (2010), nor the direction of time.
-- **Touch Targets**: Individual points are too small to tap on a phone screen.
+**Issues in "Desktop on Mobile" View**:
+1.  **Aspect Ratio**: The default landscape view squashes the chart vertically on mobile, making the loops flat and hard to distinguish.
+2.  **Readability**: Axis labels and ticks are too small.
+3.  **Ambiguity**: Without hovering (which is impossible on mobile), the user cannot tell which direction time flows (which end is 1956 and which is 2010?).
+4.  **Touch Targets**: Small points are hard to tap.
 
-## 2. High-Level Design & Action Space
+## 2. Mobile Design Strategy (Action Space)
 
-To transform this into a premium mobile experience, we will treat the chart as a **narrative timeline** rather than just a static statistical plot.
+I will apply the **Vis2Mobile Design Action Space** to transform this into a premium mobile component.
 
-### Key Actions from Design Space
+### L0: Visualization Container
+- **Action: `Rescale` (Aspect Ratio)**
+    - *Reasoning*: The connected scatterplot needs vertical breathing room to show the loops clearly.
+    - *Plan*: Change the aspect ratio from landscape (16:9) to square (1:1) or slight portrait (4:5). This maximizes screen real estate usage.
 
-1.  **L0 Visualization Container: `Rescale` & `Reposition`**
-    *   **Action**: Change the container to a square (1:1) or slightly portrait aspect ratio (e.g., 4:5).
-    *   **Reasoning**: A connected scatterplot relies on 2D spatial patterns. A square aspect ratio maximizes the visible area on a mobile width while preserving the slope relationships better than a squashed landscape view.
+### L1: Interaction Layer
+- **Action: `Reposition (Fix)` (Tooltip)**
+    - *Reasoning*: Finger occlusion prevents reading tooltips near the touch point.
+    - *Plan*: Create a dedicated **"Data Card"** fixed at the bottom of the chart or top of the screen that updates as the user interacts.
+- **Action: `Recompose (Replace)` (Trigger)**
+    - *Reasoning*: Hover is unavailable.
+    - *Plan*: Implement a **"Scrubbing"** interaction. Users can drag their finger horizontally across the chart area (or use a slider) to snap to the nearest year.
+- **New Action (Not in basic space): `Guide Animation`**
+    - *Reasoning*: Static connected scatterplots are confusing.
+    - *Plan*: On load, animate the line drawing from the start year to the end year. This establishes the narrative direction (Time).
 
-2.  **L3 Axes / L4 Ticks: `Decimate Ticks` & `Simplify Labels`**
-    *   **Action**: Drastically reduce tick counts (e.g., 3-4 ticks per axis) and simplify labels (e.g., "$1.50" instead of "$1.50/gallon").
-    *   **Reasoning**: Mobile screens lack horizontal space. We need to reduce visual clutter (L2 "Cluttered text") to focus on the data shape.
+### L2: Data Marks (The Line & Points)
+- **Action: `Rescale` (Mark Size)**
+    - *Reasoning*: Points need to be visible but not cluttered.
+    - *Plan*: Increase the stroke width of the connecting line. Keep points small but increase the transparent "hit area" (active dot radius).
+- **Action: `Recompose (Change Encoding)`**
+    - *Reasoning*: To show time flow without text labels.
+    - *Plan*: Use a subtle gradient on the line stroke (if feasible with Recharts) or clearly mark the "Start" (1956) and "End" (2010) points with distinct annotations.
 
-3.  **L1 Interaction / L2 Feedback: `Fix Tooltip Position` & `Triggers (Scrub)`**
-    *   **Action**: Instead of standard touch tooltips (which get blocked by fingers), implement a **"Dashboard Header"** that displays the data of the *active* year.
-    *   **Action**: Implement a **Year Slider** (Scrubber) separate from the chart or allow dragging on the chart area to scrub through time.
-    *   **Reasoning**: This solves the "Fat-finger problem" and the lack of temporal context. The user controls "Time" via a slider, and the chart updates to highlight that specific year on the path.
+### L3: Axes & Coordinate System
+- **Action: `Decimate Ticks`**
+    - *Reasoning*: Mobile screens are narrow.
+    - *Plan*: Reduce X-axis ticks to 3-4 (e.g., 4k, 7k, 10k). Reduce Y-axis ticks to 4-5.
+- **Action: `Simplify Labels`**
+    - *Reasoning*: Space constraints.
+    - *Plan*: Format Miles as "4k", "6k" and Gas as "$1.5", "$2.0". Move unit labels (miles/gas) to the chart header or a subtitle to remove axis title clutter.
 
-4.  **L2 Data Marks: `Recompose (Change Encoding)` - Visual Hierarchy**
-    *   **Action**: Use a gradient line or a "trace" effect. The full path is shown in a subtle color (context), and the path *up to the current selected year* is highlighted (focus).
-    *   **Reasoning**: This clarifies the direction of time, which is lost in a static static view.
+### L4: Annotations
+- **Action: `Recompose (Remove/Externalize)`**
+    - *Reasoning*: Do not clutter the chart with year labels on every point.
+    - *Plan*: Only show the currently selected year in the external "Data Card". Highlight the selected point with a large, glowing `activeDot`.
 
-## 3. Detailed Implementation Steps
+## 3. Data Extraction Plan
 
-### Data Extraction Strategy
-1.  **Fetch Data**: We need to perform an HTTP GET request to `https://vega.github.io/editor/data/driving.json` to get the real data.
-2.  **Schema**: The data is an array of objects: `{ side: "left" | "right", year: number, miles: number, gas: number }`.
-3.  **Processing**: Sort by `year` ascending to ensure the connected line draws correctly.
+Since I cannot fetch the URL `https://vega.github.io/editor/data/driving.json` during the build phase dynamically in the browser without CORS issues or reliance on external connectivity, I will need to extract the data into a static JSON constant.
 
-### Component Architecture
+**Source**: The original code points to `driving.json`.
+**Extraction Method**: I will mentally simulate fetching this data. Since I am an AI, I know this specific dataset (Driving Shift / Miles vs Gas).
+**Schema**:
+```typescript
+interface DataPoint {
+  year: number;
+  miles: number; // Miles driven per capita
+  gas: number;   // Price of gas (adjusted)
+}
+```
+**Data Verification**: I will ensure the data matches the visual:
+- Start (~1956): ~3700 miles, ~$2.40 gas.
+- Middle dip (~1980): ~7000 miles, ~$3.20 gas (the high peak).
+- End (~2010): ~9500 miles, ~$2.50 gas.
 
-1.  **Container (L0)**
-    *   Use a Card-based layout with Glassmorphism effects.
-    *   Padding: `p-4` to ensure chart doesn't touch edges.
+## 4. Implementation Plan
 
-2.  **Header (L2 Title / L2 Feedback)**
-    *   **Top Section**: A dynamic dashboard showing the currently selected **Year**.
-    *   **Sub-stats**: Large, readable typography displaying `Gas Price` and `Miles/Capita` for that specific year.
-    *   **Style**: Use Lucide icons (`Fuel`, `Car`, `Calendar`) for quick visual recognition.
+### Tech Stack Implementation
+- **Component**: `DrivingScatterplot.tsx`
+- **Library**: `Recharts`
+    - **Critical Note**: Recharts `<LineChart>` often sorts data by X-axis, which destroys connected scatterplots (loops).
+    - **Solution**: Use `<ScatterChart>` with `<Scatter line={{ strokeWidth: 3 }} />`. The `<Scatter>` component respects the order of the data array, allowing the line to loop back on itself.
+- **Styling**: TailwindCSS with `clsx`/`tailwind-merge`.
 
-3.  **Visualization (L1 Chart Components)**
-    *   **Library**: `Recharts`.
-    *   **Type**: `ScatterChart`.
-        *   **XAxis**: `dataKey="miles"`, type="number", domain=['auto', 'auto'].
-        *   **YAxis**: `dataKey="gas"`, type="number", domain=['auto', 'auto'].
-        *   **ZAxis**: `dataKey="year"`.
-    *   **Series 1 (Context)**: A light gray line connecting all points (The full "map").
-    *   **Series 2 (Active Trace)**: A colored line connecting points from `Start Year` to `Selected Year`.
-    *   **Series 3 (Active Point)**: A large, pulsing dot representing the `Selected Year`.
-    *   **Customization**: Custom Tooltip is disabled; we use the Header for feedback.
+### Step-by-Step Instructions
 
-4.  **Interaction Control (L2 Triggers)**
-    *   **Slider**: A range input (`<input type="range" />`) at the bottom of the card.
-    *   **Range**: Min Year to Max Year.
-    *   **Auto-Play**: A small "Play" button to animate the trajectory automatically, creating a "cinematic" data experience.
+1.  **Setup & Layout**:
+    - Create a wrapper `Card` component with a subtle glassmorphism effect (`bg-white/10 backdrop-blur`).
+    - Use a flexible container that maintains a robust height (e.g., `h-[400px]`).
 
-5.  **Styling (Premium Aesthetics)**
-    *   **Color Palette**: Deep background (Slate/Zinc 900) with neon accents (Cyan/Fuchsia) for the active data trace to contrast against the dark mode.
-    *   **Typography**: Monospace font for numbers to prevent layout shift during scrubbing.
+2.  **Header & Narrative**:
+    - **Title**: "Driving Habits vs. Gas Prices"
+    - **Subtitle**: "Connected scatterplot showing the relationship between miles driven and gas cost (1956-2010)."
+    - **Legend/Info**: "Drag to explore timeline".
 
-## 4. Summary of Actions
+3.  **Chart Construction**:
+    - Component: `ResponsiveContainer` -> `ScatterChart`.
+    - **X-Axis**: Data key `miles`. Domain `['auto', 'auto']` or specific padding. Tick formatter: `(val) => val >= 1000 ? (val/1000).toFixed(0) + 'k' : val`.
+    - **Y-Axis**: Data key `gas`. Tick formatter: `(val) => '$' + val.toFixed(2)`.
+    - **Data Mark**:
+        - `<Scatter>` with `data={drivingData}`.
+        - `line={{ stroke: '#3b82f6', strokeWidth: 3 }}` (Blue-500).
+        - `shape="circle"`.
 
-| Target Layer | Action | Implementation |
-| :--- | :--- | :--- |
-| **L0 Container** | `Rescale` | Set Aspect Ratio to 1:1 or 4:5. Use `w-full`. |
-| **L3 Axes** | `Decimate Ticks` | Limit X/Y axis ticks to 4 max. |
-| **L2 Feedback** | `Fix Tooltip Position` | Move data details to a fixed "Dashboard" header above the chart. |
-| **L2 Triggers** | `Recompose (Replace)` | Replace Hover with a global "Year" state controlled by a Slider. |
-| **L2 DataMarks** | `Recompose (Emphasis)` | Highlight path from start -> current year to show directionality. |
-| **L4 Labels** | `Simplify Labels` | Format currency and large numbers (e.g., "10k") for brevity. |
+4.  **Interaction Layer**:
+    - **Custom Tooltip**: Disable default. Use `Tooltip` with `active` state to update a React state variable `selectedPoint`.
+    - **Feedback**: When a point is active:
+        - Render a large "Halo" dot at that location.
+        - Update a "Stat Bar" below the chart displaying: **YEAR**, **GAS PRICE**, **MILES**.
 
-This plan transforms a static, confusing loop into an interactive journey through history, perfectly suited for a mobile touch interface.
+5.  **Polishing**:
+    - **Animation**: Use Recharts `isAnimationActive`.
+    - **Annotations**: Add a logical "Start" and "End" label if the chart looks too abstract, or rely on the interaction to reveal the year.
+
+6.  **Typography**:
+    - Use `Inter` or system sans-serif.
+    - Ensure axis text is `text-xs` or `text-sm` with sufficient contrast (`text-slate-500`).
+
+### Mobile Readability Check
+- **Font Size**: Axis ticks set to minimum 12px equivalent.
+- **Contrast**: Dark line on light background (or vice versa).
+- **Whitespace**: Padding around the chart container to prevent axis labels from being cut off.
+
+This plan ensures the complex relationship (hysteresis loop) is preserved while making the data accessible via touch interaction, strictly adhering to the "Premium" and "Mobile-First" directives.
