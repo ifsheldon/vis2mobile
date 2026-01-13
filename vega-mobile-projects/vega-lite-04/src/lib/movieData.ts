@@ -1,0 +1,95 @@
+export const movieData = {
+  averageRating: 6.28,
+  movies: [
+    {
+      Title: "The Shawshank Redemption",
+      "IMDB Rating": 9.2,
+      "Major Genre": "Drama",
+    },
+    {
+      Title: "The Godfather",
+      "IMDB Rating": 9.2,
+      "Major Genre": null,
+    },
+    {
+      Title: "Inception",
+      "IMDB Rating": 9.1,
+      "Major Genre": "Thriller/Suspense",
+    },
+    {
+      Title: "The Godfather: Part II",
+      "IMDB Rating": 9.0,
+      "Major Genre": null,
+    },
+    {
+      Title: "Pulp Fiction",
+      "IMDB Rating": 8.9,
+      "Major Genre": "Drama",
+    },
+    {
+      Title: "The Dark Knight",
+      "IMDB Rating": 8.9,
+      "Major Genre": "Action",
+    },
+    {
+      Title: "Schindler's List",
+      "IMDB Rating": 8.9,
+      "Major Genre": "Drama",
+    },
+    {
+      Title: "12 Angry Men",
+      "IMDB Rating": 8.9,
+      "Major Genre": "Drama",
+    },
+    {
+      Title: "One Flew Over the Cuckoo's Nest",
+      "IMDB Rating": 8.9,
+      "Major Genre": null,
+    },
+    {
+      Title: "Toy Story 3",
+      "IMDB Rating": 8.9,
+      "Major Genre": "Adventure",
+    },
+    {
+      Title: "Casablanca",
+      "IMDB Rating": 8.8,
+      "Major Genre": "Drama",
+    },
+    {
+      Title: "Shichinin no samurai",
+      "IMDB Rating": 8.8,
+      "Major Genre": "Action",
+    },
+    {
+      Title: "Goodfellas",
+      "IMDB Rating": 8.8,
+      "Major Genre": "Drama",
+    },
+    {
+      Title: "Cidade de Deus",
+      "IMDB Rating": 8.8,
+      "Major Genre": "Drama",
+    },
+    {
+      Title: "Fight Club",
+      "IMDB Rating": 8.8,
+      "Major Genre": "Drama",
+    },
+    {
+      Title: "C'era una volta il West",
+      "IMDB Rating": 8.8,
+      "Major Genre": "Western",
+    },
+    {
+      Title: "The Lord of the Rings: The Return of the King",
+      "IMDB Rating": 8.8,
+      "Major Genre": "Adventure",
+    },
+    {
+      Title: "The Lord of the Rings: The Fellowship of the Ring",
+      "IMDB Rating": 8.8,
+      "Major Genre": "Adventure",
+    },
+  ],
+};
