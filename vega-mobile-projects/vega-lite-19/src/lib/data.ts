@@ -1,57 +1,50 @@
-export interface PlanData {
-  sector: string;
-  republican: number;
-  passed: number;
-  democratic: number;
+export interface MovieData {
+  IMDB_Rating: number | null;
+  Rotten_Tomatoes_Rating: number | null;
 }
 
-export const data: PlanData[] = [
-  {
-    "sector": "Small-business aid",
-    "republican": 200,
-    "passed": 1010,
-    "democratic": 0
-  },
-  {
-    "sector": "Other measures",
-    "republican": 81,
-    "passed": 627,
-    "democratic": 302
-  },
-  {
-    "sector": "Business tax breaks",
-    "republican": 203,
-    "passed": 346,
-    "democratic": 36
-  },
-  {
-    "sector": "Stimulus checks",
-    "republican": 300,
-    "passed": 293,
-    "democratic": 436
-  },
-  {
-    "sector": "Health care",
-    "republican": 111,
-    "passed": 277,
-    "democratic": 382
-  },
-  {
-    "sector": "Unemployment benefits",
-    "republican": 110,
-    "passed": 274,
-    "democratic": 437
-  },
-  {
-    "sector": "State and local aid",
-    "republican": 105,
-    "passed": 256,
-    "democratic": 1118
-  },
-  {
-    "sector": "Safety net and other tax cuts",
-    "republican": 18,
-    "passed": 83,
-    "democratic": 736
+export interface BinnedPoint {
+  imdb: number;
+  rotten: number;
+  count: number;
+}
+
+interface RawMovieData {
+  "IMDB Rating": number | null;
+  "Rotten Tomatoes Rating": number | null;
+  [key: string]: any;
+}
+
+export async function fetchAndProcessMovieData(): Promise<BinnedPoint[]> {
+  const response = await fetch(
+    "https://vega.github.io/editor/data/movies.json",
+  );
+  const rawData: RawMovieData[] = await response.json();
+
+  const bins: Record<string, number> = {};
+
+  for (const movie of rawData) {
+    const imdb = movie["IMDB Rating"];
+    const rotten = movie["Rotten Tomatoes Rating"];
+
+    if (
+      imdb !== null &&
+      rotten !== null &&
+      imdb !== undefined &&
+      rotten !== undefined
+    ) {
+      // Vega-Lite "maxbins: 10" for IMDB (0-10) usually means step 1.0
+      // For Rotten Tomatoes (0-100) usually means step 10.0
+      const imdbBin = Math.floor(imdb);
+      const rottenBin = Math.floor(rotten / 10) * 10;
+
+      const key = `${imdbBin}-${rottenBin}`;
+      bins[key] = (bins[key] || 0) + 1;
+    }
   }
-];
+
+  return Object.entries(bins).map(([key, count]) => {
+    const [imdb, rotten] = key.split("-").map(Number);
+    return { imdb, rotten, count };
+  });
+}
