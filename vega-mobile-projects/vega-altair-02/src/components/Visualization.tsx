@@ -1,5 +1,6 @@
 "use client";
 
+import { Info } from "lucide-react";
 import { useState } from "react";
 import {
   Area,
@@ -11,7 +12,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Info } from "lucide-react";
 
 const dataset = [
   { x: 1, y: 28 },
@@ -71,7 +71,15 @@ export function Visualization() {
           <span className="text-5xl font-bold tracking-tight text-white transition-all duration-200 tabular-nums">
             {currentY !== null ? currentY : "—"}
           </span>
-          <span className="text-lg text-slate-400 font-medium">
+          <span
+            className={`text-lg font-medium transition-colors duration-200 ${
+              currentY !== null
+                ? currentY > 50
+                  ? "text-violet-400"
+                  : "text-blue-400"
+                : "text-slate-400"
+            }`}
+          >
             {currentY !== null
               ? currentY > 50
                 ? "High"
@@ -92,7 +100,7 @@ export function Visualization() {
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={dataset}
-            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+            margin={{ top: 10, right: 10, left: -20, bottom: 20 }}
             onMouseMove={(state) => {
               if (state.activePayload?.[0]) {
                 setActiveData(state.activePayload[0].payload);
@@ -123,8 +131,8 @@ export function Visualization() {
               dataKey="x"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "#94a3b8", fontSize: 12 }}
-              interval="preserveStartEnd"
+              tick={{ fill: "#94a3b8", fontSize: 10 }}
+              interval={3}
               dy={10}
             />
             <YAxis hide domain={[0, 100]} />
