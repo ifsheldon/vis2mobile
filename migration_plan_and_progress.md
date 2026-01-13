@@ -14,11 +14,12 @@
 4. Add/update dependencies in `gallery/package.json` as needed.
 5. Validate via `bun run check`, `bun run lint`, `bun run dev` + Playwright, fix issues.
 6. Commit and update progress.
+7. Save comparison screenshots in `gallery/screenshots/<project-id>/`.
 
 ## Project Queue (in order)
 - [x] vega-01
 - [x] vega-02
-- [ ] vega-03
+- [x] vega-03
 - [ ] vega-04
 - [ ] vega-05
 - [ ] vega-altair-01
@@ -87,3 +88,5 @@
 - 2026-01-13: Migrated vega-01 (Flight Explorer) into gallery.
 - 2026-01-13: Migrated vega-02 (Normal 2D) into gallery.
 - 2026-01-13: Adjusted vega-02 preview height to match mobile rendering.
+- 2026-01-13: Saved comparison screenshots for vega-01, vega-02, vega-03.
+- 2026-01-13: Migrated vega-03 (Stock Explorer) into gallery.
