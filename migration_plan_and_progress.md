@@ -22,7 +22,7 @@
 - [x] vega-03
 - [x] vega-04
 - [x] vega-05
-- [ ] vega-altair-01
+- [x] vega-altair-01
 - [ ] vega-altair-02
 - [ ] vega-altair-03
 - [ ] vega-altair-04
@@ -94,3 +94,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-04.
 - 2026-01-13: Migrated vega-05 (Barley Yield) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-05.
+- 2026-01-13: Migrated vega-altair-01 (Market Trends) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-01.
