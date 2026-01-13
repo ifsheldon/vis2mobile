@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>24.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "layer": [{"mark": {"type": "area", "color": "goldenrod", "opacity": 0.3}, "encoding": {"x": {"field": "date", "timeUnit": "yearmonth", "type": "temporal"}, "y": {"aggregate": "sum", "field": "count", "type": "quantitative"}}, "name": "view_894b29138c403a2f_0"}, {"mark": {"type": "area", "color": "goldenrod"}, "encoding": {"x": {"field": "date", "timeUnit": "yearmonth", "type": "temporal"}, "y": {"aggregate": "sum", "field": "count", "type": "quantitative"}}, "transform": [{"filter": {"param": "param_c97a99acfc68b794"}}]}], "data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/unemployment-across-industries.json"}, "params": [{"name": "param_c97a99acfc68b794", "select": {"type": "interval", "encodings": ["x"]}, "views": ["view_894b29138c403a2f_0"]}], "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json"};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>

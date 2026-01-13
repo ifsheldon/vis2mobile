@@ -39,7 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-assets
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -257,9 +256,3 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
-
-
-original_visualization
-mobile-vis-design-action-space.md
-transform-plan.md
-mobile-version.png

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>04.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"$schema": "https://vega.github.io/schema/vega-lite/v6.json", "description": "Source: https://vega.github.io/vega-lite/examples/joinaggregate_mean_difference.html ", "data": {"url": "https://vega.github.io/editor/data/movies.json"}, "transform": [{"filter": "datum['IMDB Rating'] != null"}, {"joinaggregate": [{"op": "mean", "field": "IMDB Rating", "as": "AverageRating"}]}, {"filter": "(datum['IMDB Rating'] - datum.AverageRating) > 2.5"}], "layer": [{"mark": "bar", "encoding": {"x": {"field": "IMDB Rating", "type": "quantitative", "title": "IMDB Rating"}, "y": {"field": "Title", "type": "ordinal"}}}, {"mark": {"type": "rule", "color": "red"}, "encoding": {"x": {"aggregate": "average", "field": "AverageRating", "type": "quantitative"}}}]};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>

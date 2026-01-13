@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>06.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"$schema": "https://vega.github.io/schema/vega-lite/v6.json", "description": "Source: https://vega.github.io/vega-lite/examples/area_density_stacked.html", "title": "Distribution of Body Mass of Penguins", "width": 400, "height": 80, "data": {"url": "https://vega.github.io/editor/data/penguins.json"}, "mark": "area", "transform": [{"density": "Body Mass (g)", "groupby": ["Species"], "extent": [2500, 6500]}], "encoding": {"x": {"field": "value", "type": "quantitative", "title": "Body Mass (g)"}, "y": {"field": "density", "type": "quantitative", "stack": "zero"}, "color": {"field": "Species", "type": "nominal"}}};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>

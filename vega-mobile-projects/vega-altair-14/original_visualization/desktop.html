@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>14.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}, "facet": {"spacing": 8}}, "description": "Source: https://altair-viz.github.io/gallery/us_population_over_time.html ", "data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/population.json"}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "sex", "scale": {"domain": ["Male", "Female"], "range": ["steelblue", "salmon"]}, "title": "Sex", "type": "nominal"}, "column": {"field": "age", "title": "Age", "type": "ordinal"}, "x": {"axis": {"labels": false, "ticks": false, "title": null}, "field": "sex", "type": "nominal"}, "y": {"field": "people", "scale": {"domain": [0, 12000000]}, "title": "Population", "type": "quantitative"}}, "params": [{"name": "Year", "select": {"type": "point", "fields": ["year"]}, "bind": {"input": "range", "max": 2000, "min": 1900, "name": "Year", "step": 10}, "value": 2000}], "title": "U.S. Population by Age and Sex", "transform": [{"calculate": "if((datum.sex === 1),'Male','Female')", "as": "sex"}, {"filter": {"param": "Year"}}], "width": 20, "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json"};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>
