@@ -333,26 +333,30 @@ export default function GalleryPage() {
 
 					{/* Gallery Grid */}
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-						{/* Empty placeholder */}
-						<div className="lg:col-span-2 flex flex-col items-center justify-center py-16 text-center">
-							<div className="text-zinc-400 dark:text-zinc-600 mb-4">
-								<svg
-									className="w-16 h-16 mx-auto"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={1.5}
-										d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-									/>
-								</svg>
+						<div className="space-y-4">
+							<div className="flex items-center justify-between">
+								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+									Flight Explorer (Vega 01)
+								</h2>
 							</div>
-							<p className="text-zinc-500 dark:text-zinc-400 text-lg font-medium">
-								Coming Soon
-							</p>
+
+							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
+								<div
+									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
+									style={{
+										width: selectedRatio.width,
+										height: selectedRatio.height,
+									}}
+								>
+									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
+
+									<iframe
+										src="/preview/vega/vega-01"
+										className="w-full h-full border-none bg-white dark:bg-black"
+										title="Flight Explorer Preview"
+									/>
+								</div>
+							</div>
 						</div>
 					</div>
 				</section>
