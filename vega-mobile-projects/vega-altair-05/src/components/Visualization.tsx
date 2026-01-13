@@ -37,7 +37,7 @@ export function Visualization() {
   };
 
   return (
-    <div className="w-full h-full bg-zinc-900 text-white p-4 flex flex-col">
+    <div className="w-full h-full bg-zinc-900 text-white p-4 pt-12 flex flex-col relative overflow-hidden">
       <div className="flex-shrink-0">
         <h1 className="text-xl font-bold text-center">Barley Yield Analysis</h1>
         <div className="flex justify-center my-4">
@@ -71,6 +71,9 @@ export function Visualization() {
             data={data}
             layout="vertical"
             margin={{ top: 5, right: 20, left: 80, bottom: 5 }}
+            onClick={(e) => {
+              if (!e) setSelectedVariety(null);
+            }}
           >
             <XAxis
               type="number"
@@ -99,13 +102,21 @@ export function Visualization() {
                 stackId="a"
                 fill={siteColors[site]}
                 onClick={handleBarClick}
+                isAnimationActive={true}
               >
-                {data.map((_entry, entryIndex) => (
+                {data.map((entry, entryIndex) => (
                   <Cell
-                    key={`cell-${_entry.variety}-${entryIndex}`}
+                    key={`cell-${entry.variety}-${entryIndex}`}
+                    opacity={
+                      selectedVariety === null ||
+                      selectedVariety.variety === entry.variety
+                        ? 1
+                        : 0.3
+                    }
                     radius={
                       index === sites.length - 1 ? [0, 4, 4, 0] : [0, 0, 0, 0]
                     }
+                    className="transition-opacity duration-300"
                   />
                 ))}
               </Bar>
@@ -114,7 +125,7 @@ export function Visualization() {
         </ResponsiveContainer>
       </div>
 
-      <div className="flex-shrink-0 mt-4">
+      <div className="flex-shrink-0 mt-4 mb-8">
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
           {sites.map((site) => (
             <div key={site} className="flex items-center text-xs">
@@ -130,40 +141,63 @@ export function Visualization() {
 
       <AnimatePresence>
         {selectedVariety && (
-          <motion.div
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "spring", damping: 20, stiffness: 150 }}
-            className="absolute bottom-0 left-0 right-0 bg-zinc-800 p-4 rounded-t-lg shadow-lg"
-          >
-            <button
-              type="button"
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/40 z-10"
               onClick={() => setSelectedVariety(null)}
-              className="absolute top-2 right-2 text-zinc-400 hover:text-white"
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="absolute bottom-0 left-0 right-0 bg-zinc-800 p-6 rounded-t-2xl shadow-2xl z-20 border-t border-zinc-700"
             >
-              Close
-            </button>
-            <h3 className="text-lg font-bold mb-2">
-              {selectedVariety.variety}
-            </h3>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              {sites
-                .map((site) => ({
-                  site,
-                  yield: selectedVariety[
-                    site as keyof ProcessedDataPoint
-                  ] as number,
-                }))
-                .sort((a, b) => b.yield - a.yield)
-                .map(({ site, yield: yieldValue }) => (
-                  <div key={site} className="flex justify-between">
-                    <span>{site}</span>
-                    <span className="font-mono">{yieldValue.toFixed(2)}</span>
-                  </div>
-                ))}
-            </div>
-          </motion.div>
+              <div className="w-12 h-1.5 bg-zinc-600 rounded-full mx-auto mb-6" />
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-xl font-bold text-white">
+                  {selectedVariety.variety}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setSelectedVariety(null)}
+                  className="bg-zinc-700 hover:bg-zinc-600 text-white px-3 py-1 rounded-full text-sm font-medium transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-3">
+                {sites
+                  .map((site) => ({
+                    site,
+                    yield: selectedVariety[
+                      site as keyof ProcessedDataPoint
+                    ] as number,
+                  }))
+                  .sort((a, b) => b.yield - a.yield)
+                  .map(({ site, yield: yieldValue }) => (
+                    <div
+                      key={site}
+                      className="flex justify-between items-center bg-zinc-700/50 p-3 rounded-lg"
+                    >
+                      <div className="flex items-center">
+                        <div
+                          className="w-3 h-3 rounded-full mr-3"
+                          style={{ backgroundColor: siteColors[site] }}
+                        />
+                        <span className="text-zinc-200">{site}</span>
+                      </div>
+                      <span className="font-mono font-bold text-lg text-white">
+                        {yieldValue.toFixed(2)}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
