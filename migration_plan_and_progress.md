@@ -29,7 +29,7 @@
 - [x] vega-altair-05
 - [x] vega-altair-06
 - [x] vega-altair-07
-- [ ] vega-altair-08
+- [x] vega-altair-08
 - [ ] vega-altair-09
 - [ ] vega-altair-11
 - [ ] vega-altair-12
@@ -108,3 +108,5 @@
 - 2026-01-13: Saved comparison screenshot for vega-altair-06.
 - 2026-01-13: Migrated vega-altair-07 (Employment Change) into gallery.
 - 2026-01-13: Saved comparison screenshot for vega-altair-07.
+- 2026-01-13: Migrated vega-altair-08 (placeholder) into gallery.
+- 2026-01-13: Saved comparison screenshot for vega-altair-08.
