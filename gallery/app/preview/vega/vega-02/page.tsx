@@ -3,5 +3,9 @@
 import { Visualization } from "@/components/vega/vega-02/Visualization";
 
 export default function Vega02PreviewPage() {
-	return <Visualization />;
+	return (
+		<div className="h-screen">
+			<Visualization />
+		</div>
+	);
 }
