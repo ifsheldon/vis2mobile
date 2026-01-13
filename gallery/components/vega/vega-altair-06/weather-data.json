@@ -1,0 +1,62 @@
+[
+	{
+		"month": "Jan",
+		"min": -4.4,
+		"max": 17.2
+	},
+	{
+		"month": "Feb",
+		"min": -6,
+		"max": 16.7
+	},
+	{
+		"month": "Mar",
+		"min": -1.7,
+		"max": 20.6
+	},
+	{
+		"month": "Apr",
+		"min": 1.7,
+		"max": 27.8
+	},
+	{
+		"month": "May",
+		"min": 3.3,
+		"max": 30.6
+	},
+	{
+		"month": "Jun",
+		"min": 6.1,
+		"max": 33.9
+	},
+	{
+		"month": "Jul",
+		"min": 9.4,
+		"max": 35
+	},
+	{
+		"month": "Aug",
+		"min": 10,
+		"max": 35.6
+	},
+	{
+		"month": "Sep",
+		"min": 7.2,
+		"max": 33.9
+	},
+	{
+		"month": "Oct",
+		"min": 3.3,
+		"max": 25.6
+	},
+	{
+		"month": "Nov",
+		"min": -4.9,
+		"max": 17.8
+	},
+	{
+		"month": "Dec",
+		"min": -7.1,
+		"max": 18.9
+	}
+]
