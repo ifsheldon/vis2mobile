@@ -2,7 +2,6 @@
 
 import { ExternalLink, Smartphone } from "lucide-react";
 import { useState } from "react";
-import { SideMenu } from "./components/SideMenu";
 
 const MOBILE_RATIOS = [
 	{ name: "iPhone X", width: 375, height: 812 },
@@ -16,7 +15,6 @@ export default function GalleryPage() {
 
 	return (
 		<main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-8 font-sans">
-			<SideMenu />
 			<div className="max-w-7xl mx-auto space-y-8">
 				{/* Header */}
 				<div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -51,7 +49,7 @@ export default function GalleryPage() {
 				</div>
 
 				{/* Cicero Examples Section */}
-				<section id="cicero" className="space-y-6 scroll-mt-24">
+				<section className="space-y-6">
 					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
 						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
 							Cicero Examples
@@ -321,7 +319,7 @@ export default function GalleryPage() {
 				</section>
 
 				{/* Vega Examples Section */}
-				<section id="vega" className="space-y-6 scroll-mt-24">
+				<section className="space-y-6">
 					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
 						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
 							Vega Examples
@@ -354,6 +352,32 @@ export default function GalleryPage() {
 										src="/preview/vega/vega-01"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Flight Explorer Preview"
+									/>
+								</div>
+							</div>
+						</div>
+
+						<div className="space-y-4">
+							<div className="flex items-center justify-between">
+								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+									Normal 2D (Vega 02)
+								</h2>
+							</div>
+
+							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
+								<div
+									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
+									style={{
+										width: selectedRatio.width,
+										height: selectedRatio.height,
+									}}
+								>
+									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
+
+									<iframe
+										src="/preview/vega/vega-02"
+										className="w-full h-full border-none bg-white dark:bg-black"
+										title="Normal 2D Preview"
 									/>
 								</div>
 							</div>
