@@ -1,57 +1,81 @@
-export interface PlanData {
-  sector: string;
-  republican: number;
-  passed: number;
-  democratic: number;
+export interface WeatherData {
+  month: string;
+  temp_max: number;
+  temp_min: number;
+  precipitation: number;
 }
 
-export const data: PlanData[] = [
+export const seattleWeatherData: WeatherData[] = [
   {
-    "sector": "Small-business aid",
-    "republican": 200,
-    "passed": 1010,
-    "democratic": 0
+    month: "Jan",
+    temp_max: 8.2,
+    temp_min: 2.7,
+    precipitation: 3.76,
   },
   {
-    "sector": "Other measures",
-    "republican": 81,
-    "passed": 627,
-    "democratic": 302
+    month: "Feb",
+    temp_max: 9.9,
+    temp_min: 4.1,
+    precipitation: 3.73,
   },
   {
-    "sector": "Business tax breaks",
-    "republican": 203,
-    "passed": 346,
-    "democratic": 36
+    month: "Mar",
+    temp_max: 12.4,
+    temp_min: 4.9,
+    precipitation: 4.89,
   },
   {
-    "sector": "Stimulus checks",
-    "republican": 300,
-    "passed": 293,
-    "democratic": 436
+    month: "Apr",
+    temp_max: 15.0,
+    temp_min: 6.4,
+    precipitation: 3.13,
   },
   {
-    "sector": "Health care",
-    "republican": 111,
-    "passed": 277,
-    "democratic": 382
+    month: "May",
+    temp_max: 19.3,
+    temp_min: 9.6,
+    precipitation: 1.67,
   },
   {
-    "sector": "Unemployment benefits",
-    "republican": 110,
-    "passed": 274,
-    "democratic": 437
+    month: "Jun",
+    temp_max: 22.4,
+    temp_min: 12.2,
+    precipitation: 1.11,
   },
   {
-    "sector": "State and local aid",
-    "republican": 105,
-    "passed": 256,
-    "democratic": 1118
+    month: "Jul",
+    temp_max: 26.0,
+    temp_min: 14.2,
+    precipitation: 0.39,
   },
   {
-    "sector": "Safety net and other tax cuts",
-    "republican": 18,
-    "passed": 83,
-    "democratic": 736
-  }
+    month: "Aug",
+    temp_max: 26.1,
+    temp_min: 14.8,
+    precipitation: 1.32,
+  },
+  {
+    month: "Sep",
+    temp_max: 21.9,
+    temp_min: 12.4,
+    precipitation: 1.96,
+  },
+  {
+    month: "Oct",
+    temp_max: 16.4,
+    temp_min: 9.4,
+    precipitation: 4.06,
+  },
+  {
+    month: "Nov",
+    temp_max: 11.0,
+    temp_min: 4.7,
+    precipitation: 5.35,
+  },
+  {
+    month: "Dec",
+    temp_max: 8.2,
+    temp_min: 3.3,
+    precipitation: 5.02,
+  },
 ];
