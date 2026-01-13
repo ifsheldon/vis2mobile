@@ -252,61 +252,70 @@ export function Visualization() {
               </p>
             </div>
           </div>
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-200">
-            <span className="rounded-full bg-white/10 px-3 py-1">
+          <div className="mt-4 flex flex-wrap items-center gap-2 text-[10px] font-medium text-slate-200">
+            <span className="rounded-full bg-white/10 px-2.5 py-1 backdrop-blur-sm border border-white/5">
               Total {formatNumber(totals.total)}
             </span>
-            <span className="rounded-full bg-sky-400/20 px-3 py-1">
+            <span className="rounded-full bg-sky-500/20 px-2.5 py-1 backdrop-blur-sm border border-sky-500/20 text-sky-200">
               Male {formatNumber(totals.male)}
             </span>
-            <span className="rounded-full bg-pink-400/20 px-3 py-1">
+            <span className="rounded-full bg-pink-500/20 px-2.5 py-1 backdrop-blur-sm border border-pink-500/20 text-pink-200">
               Female {formatNumber(totals.female)}
             </span>
           </div>
           {selectedBin && (
-            <div className="mt-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm shadow-lg backdrop-blur">
+            <div className="mt-4 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm shadow-xl backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-300">
               <div className="flex items-center justify-between">
-                <span className="text-xs uppercase tracking-[0.3em] text-slate-300">
-                  Age
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                  Selected Age
                 </span>
-                <span className="text-base font-semibold">
-                  {selectedBin.ageLabel}
+                <span className="text-base font-bold text-white">
+                  {selectedBin.ageLabel} years
                 </span>
               </div>
-              <div className="mt-2 flex items-center justify-between text-xs">
-                <span className="text-sky-200">
-                  Male {formatNumber(selectedBin.maleDisplay)}
-                </span>
-                <span className="text-pink-200">
-                  Female {formatNumber(selectedBin.femaleDisplay)}
-                </span>
-                <span className="text-slate-200">
-                  Total{" "}
-                  {formatNumber(
-                    selectedBin.maleDisplay + selectedBin.femaleDisplay,
-                  )}
-                </span>
+              <div className="mt-2.5 flex items-center justify-between text-[11px]">
+                <div className="flex flex-col">
+                  <span className="text-sky-300 font-semibold">Male</span>
+                  <span>{formatNumber(selectedBin.maleDisplay)}</span>
+                </div>
+                <div className="flex flex-col text-center">
+                  <span className="text-slate-300 font-semibold">Total</span>
+                  <span>
+                    {formatNumber(
+                      selectedBin.maleDisplay + selectedBin.femaleDisplay,
+                    )}
+                  </span>
+                </div>
+                <div className="flex flex-col text-right">
+                  <span className="text-pink-300 font-semibold">Female</span>
+                  <span>{formatNumber(selectedBin.femaleDisplay)}</span>
+                </div>
               </div>
             </div>
           )}
         </header>
 
-        <div className="flex-1 px-4 pb-6 pt-4">
+        <div className="flex-1 px-4 pb-4 pt-2">
           <div
             ref={chartRef}
-            className="relative h-full w-full rounded-[28px] border border-white/10 bg-white/5 shadow-[0_40px_80px_-45px_rgba(14,116,144,0.8)]"
+            className="relative h-full w-full rounded-[32px] border border-white/10 bg-slate-900/40 shadow-2xl overflow-hidden"
           >
             {status === "loading" && (
-              <div className="absolute inset-0 flex items-center justify-center text-sm text-slate-200">
-                Loading population data…
+              <div className="absolute inset-0 flex items-center justify-center text-sm text-slate-300">
+                <RefreshCcw className="mr-2 h-4 w-4 animate-spin" />
+                Loading dataset...
               </div>
             )}
             {status === "error" && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center text-sm text-slate-200">
-                <p>We couldn't load the population dataset.</p>
-                <p className="text-xs text-slate-400">
-                  Connect to the internet to fetch the data.
-                </p>
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center text-sm text-red-300 px-6">
+                <p>Failed to load the population dataset.</p>
+                <button
+                  type="button"
+                  onClick={() => window.location.reload()}
+                  className="mt-2 rounded-full bg-white/10 px-4 py-2 text-xs hover:bg-white/20 transition"
+                >
+                  Retry
+                </button>
               </div>
             )}
             {status === "idle" &&
@@ -328,9 +337,10 @@ export function Visualization() {
                     y={0}
                     width={chartWidth}
                     height={chartHeight}
-                    rx={28}
                     fill="transparent"
                   />
+
+                  {/* Grid Lines */}
                   <g>
                     {ticks.map((tick) => {
                       const offset = (tick / maxValue) * halfWidth;
@@ -342,18 +352,18 @@ export function Visualization() {
                             x1={leftX}
                             x2={leftX}
                             y1={paddingTop}
-                            y2={chartHeight - paddingBottom + 8}
-                            stroke="rgba(148,163,184,0.25)"
-                            strokeDasharray="4 6"
+                            y2={chartHeight - paddingBottom}
+                            stroke="rgba(255,255,255,0.05)"
+                            strokeWidth={1}
                           />
                           {tick > 0 && (
                             <line
                               x1={rightX}
                               x2={rightX}
                               y1={paddingTop}
-                              y2={chartHeight - paddingBottom + 8}
-                              stroke="rgba(148,163,184,0.25)"
-                              strokeDasharray="4 6"
+                              y2={chartHeight - paddingBottom}
+                              stroke="rgba(255,255,255,0.05)"
+                              strokeWidth={1}
                             />
                           )}
                         </g>
@@ -362,12 +372,14 @@ export function Visualization() {
                     <line
                       x1={midX}
                       x2={midX}
-                      y1={paddingTop - 4}
-                      y2={chartHeight - paddingBottom + 12}
-                      stroke="rgba(226,232,240,0.6)"
+                      y1={paddingTop - 10}
+                      y2={chartHeight - paddingBottom + 5}
+                      stroke="rgba(255,255,255,0.2)"
+                      strokeWidth={1}
                     />
                   </g>
 
+                  {/* Bars */}
                   <g>
                     {bins.map((bin, index) => {
                       const y =
@@ -378,42 +390,77 @@ export function Visualization() {
                         (bin.maleDisplay / maxValue) * halfWidth;
                       const femaleWidth =
                         (Math.abs(bin.female) / maxValue) * halfWidth;
+                      const isSelected = selectedAge === bin.ageLabel;
+
                       return (
-                        <g key={bin.ageLabel}>
+                        <g
+                          key={bin.ageLabel}
+                          className="cursor-pointer transition-opacity duration-300 focus:outline-none"
+                          style={{
+                            opacity: selectedAge && !isSelected ? 0.4 : 1,
+                          }}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() =>
+                            setSelectedAge(isSelected ? null : bin.ageLabel)
+                          }
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              setSelectedAge(isSelected ? null : bin.ageLabel);
+                            }
+                          }}
+                        >
+                          {/* Female Bar */}
                           <rect
                             x={midX - femaleWidth}
                             y={y}
                             width={femaleWidth}
                             height={barHeight}
-                            rx={6}
-                            fill="rgba(236,72,153,0.9)"
-                            onPointerDown={() => setSelectedAge(bin.ageLabel)}
+                            rx={barHeight / 2}
+                            fill={
+                              isSelected ? "#f472b6" : "rgba(236,72,153,0.8)"
+                            }
+                            className="transition-all duration-300"
                           />
+                          {/* Male Bar */}
                           <rect
                             x={midX}
                             y={y}
                             width={maleWidth}
                             height={barHeight}
-                            rx={6}
-                            fill="rgba(56,189,248,0.9)"
-                            onPointerDown={() => setSelectedAge(bin.ageLabel)}
+                            rx={barHeight / 2}
+                            fill={
+                              isSelected ? "#38bdf8" : "rgba(56,189,248,0.8)"
+                            }
+                            className="transition-all duration-300"
                           />
+
+                          {/* Age Spine Label */}
                           <rect
-                            x={midX - 32}
-                            y={y + barHeight / 2 - 8}
-                            width={64}
-                            height={16}
-                            rx={8}
-                            fill="rgba(15,23,42,0.85)"
-                            stroke="rgba(148,163,184,0.35)"
+                            x={midX - 22}
+                            y={y + barHeight / 2 - 9}
+                            width={44}
+                            height={18}
+                            rx={9}
+                            fill="rgba(15,23,42,0.95)"
+                            stroke={
+                              isSelected
+                                ? "rgba(255,255,255,0.4)"
+                                : "rgba(255,255,255,0.1)"
+                            }
+                            strokeWidth={1}
                           />
                           <text
                             x={midX}
-                            y={y + barHeight / 2 + 4}
+                            y={y + barHeight / 2 + 5}
                             textAnchor="middle"
-                            fontSize={11}
-                            fill="rgba(226,232,240,0.9)"
+                            fontSize={10}
+                            fontWeight={isSelected ? "bold" : "normal"}
+                            fill={
+                              isSelected ? "white" : "rgba(255,255,255,0.8)"
+                            }
                             fontFamily="ui-sans-serif, system-ui"
+                            className="pointer-events-none"
                           >
                             {bin.ageLabel}
                           </text>
@@ -422,6 +469,7 @@ export function Visualization() {
                     })}
                   </g>
 
+                  {/* Axis Labels */}
                   <g>
                     {ticks.map((tick) => {
                       const offset = (tick / maxValue) * halfWidth;
@@ -430,20 +478,22 @@ export function Visualization() {
                         <g key={`label-${tick}`}>
                           <text
                             x={midX - offset}
-                            y={chartHeight - 12}
+                            y={chartHeight - 14}
                             textAnchor="middle"
                             fontSize={10}
-                            fill="rgba(148,163,184,0.9)"
+                            fontWeight="500"
+                            fill="rgba(148,163,184,0.8)"
                           >
                             {label}
                           </text>
                           {tick > 0 && (
                             <text
                               x={midX + offset}
-                              y={chartHeight - 12}
+                              y={chartHeight - 14}
                               textAnchor="middle"
                               fontSize={10}
-                              fill="rgba(148,163,184,0.9)"
+                              fontWeight="500"
+                              fill="rgba(148,163,184,0.8)"
                             >
                               {label}
                             </text>
@@ -451,33 +501,29 @@ export function Visualization() {
                         </g>
                       );
                     })}
-                    <text
-                      x={midX}
-                      y={chartHeight - 26}
-                      textAnchor="middle"
-                      fontSize={11}
-                      fill="rgba(226,232,240,0.8)"
-                    >
-                      Population (mirror scale)
-                    </text>
                   </g>
 
+                  {/* Gender Labels */}
                   <g>
                     <text
-                      x={paddingX}
-                      y={paddingTop - 4}
-                      textAnchor="start"
-                      fontSize={11}
-                      fill="rgba(148,163,184,0.9)"
+                      x={midX - 30}
+                      y={paddingTop - 15}
+                      textAnchor="end"
+                      fontSize={12}
+                      fontWeight="bold"
+                      fill="#f472b6"
+                      className="uppercase tracking-tighter"
                     >
                       Female
                     </text>
                     <text
-                      x={chartWidth - paddingX}
-                      y={paddingTop - 4}
-                      textAnchor="end"
-                      fontSize={11}
-                      fill="rgba(148,163,184,0.9)"
+                      x={midX + 30}
+                      y={paddingTop - 15}
+                      textAnchor="start"
+                      fontSize={12}
+                      fontWeight="bold"
+                      fill="#38bdf8"
+                      className="uppercase tracking-tighter"
                     >
                       Male
                     </text>
