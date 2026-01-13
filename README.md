@@ -23,6 +23,7 @@ First, set up the environment.
 ```shell
 # Prepare Python environment
 uv sync
+uv run playwright install chromium
 # If you use codex
 codex mcp add playwright npx "@playwright/mcp@latest"
 ```
