@@ -166,7 +166,7 @@ export function Visualization() {
           <ComposedChart
             layout="vertical"
             data={chartData}
-            margin={{ top: 10, right: 10, bottom: 20, left: 10 }}
+            margin={{ top: 10, right: 20, bottom: 40, left: 10 }}
           >
             <CartesianGrid horizontal={false} stroke="#f4f4f5" />
             <XAxis
@@ -176,6 +176,14 @@ export function Visualization() {
               tick={{ fill: "#a1a1aa", fontSize: 12, fontWeight: 500 }}
               domain={["auto", "auto"]}
               tickCount={4}
+              label={{
+                value: "Barley Yield (bushels/acre)",
+                position: "insideBottom",
+                offset: -20,
+                fill: "#71717a",
+                fontSize: 12,
+                fontWeight: 600,
+              }}
             />
             <YAxis
               type="category"
@@ -184,10 +192,10 @@ export function Visualization() {
               tick={({ y, payload }) => (
                 <text
                   x={0}
-                  y={y - 16}
-                  fill="#3f3f46"
-                  fontSize={14}
-                  fontWeight={600}
+                  y={y - 18}
+                  fill="#18181b"
+                  fontSize={13}
+                  fontWeight={700}
                   textAnchor="start"
                 >
                   {payload.value}
