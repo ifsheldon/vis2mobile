@@ -1,107 +1,115 @@
 # Mobile Visualization Transformation Plan
 
-## 1. Analysis of Original Desktop Visualization
+## 1. Analysis of Original Visualization
 
-### Original Desktop State
+### Desktop Version (Original)
 - **Type**: Faceted Grouped Bar Chart with Error Bars.
-- **Data Source**: Agricultural yield data (`yield`, `variety`, `year`, `site`).
-- **Structure**:
-    - **Faceting**: Horizontally split by `site` (6 columns: Crookston, Duluth, Grand Rapids, Morris, University Farm, Waseca).
-    - **X-Axis**: `year` (Ordinal: 1931, 1932).
-    - **Y-Axis**: `Mean Yield` (Quantitative).
-    - **Marks**: Vertical bars grouped by year, with error bars representing Confidence Interval (CI).
-    - **Color**: Encodes `year` (Blue for 1931, Orange for 1932).
+- **Structure**: The chart is faceted by `site` (6 columns). Within each facet, data is grouped by `year` (1931 vs 1932).
+- **Encodings**:
+    - **X-axis**: Year (Categorical/Ordinal) - nested within Site.
+    - **Y-axis**: Mean Yield (Quantitative).
+    - **Color**: Year (Blue for 1931, Orange for 1932).
+    - **Mark**: Bar (Mean) + Error Bar (Confidence Interval).
+- **Data Intent**: Compare the yield performance of two specific years across six different agricultural sites.
 
 ### Mobile Rendering Issues (Desktop on Mobile)
-- **Distorted Layout**: Squeezing 6 faceted columns into a narrow mobile width results in extremely thin, unreadable bars.
-- **Unreadable Typography**: Axis labels (Site names) overlap or become microscopically small.
-- **Loss of Context**: The comparison aspect (comparing yield across sites) is lost because the charts are too small to discern height differences visually.
-- **Touch Targets**: The bars are too thin for reliable touch interaction.
+- **Aspect Ratio Conflict**: The horizontal arrangement of 6 facets forces the chart to be extremely wide. On a mobile screen, this results in either extreme scaling (making text unreadable) or horizontal scrolling (hiding context).
+- **Label Readability**: Site names like "University Farm" and "Grand Rapids" are long. In a vertical column layout, they will overlap or require extreme rotation/wrapping.
+- **Whitespace**: Faceting creates redundant axes and whitespace that consumes valuable mobile real estate.
+- **Touch Targets**: Thin bars in a compressed view are hard to tap for details.
 
-## 2. High-Level Strategy: "Serialize and Rotate"
+## 2. High-Level Strategy & Design Action Space
 
-To adapt this multi-column faceted chart for mobile, we must abandon the horizontal spread. The core design philosophy will be **Serialize Layout** (stacking charts vertically) and **Transpose Axes** (converting vertical bars to horizontal bars).
+The core transformation strategy is **"Transpose & Serialize"**. We will move from a horizontal faceted layout to a vertical list of cards (Serialize), and switch the internal chart orientation from vertical columns to horizontal bars (Transpose) to accommodate long site names.
 
-Vertical scrolling is the most natural interaction on mobile. By rotating the bars horizontally, we gain width for the bars to display length differences clearly, and we provide ample space for the text labels (Site names) which are currently legible only on desktop.
+### Applied Design Actions
 
-## 3. Detailed Action Plan (mapped to Design Action Space)
+#### **L1 Chart Components (Layout)**
+*   **Action**: `Serialize layout` (L1 Chart Components -> Transpose)
+*   **Reasoning**: Instead of 6 columns side-by-side (which fails on narrow screens), we will stack the sites vertically. Each Site becomes a distinct "Card" component. This utilizes the natural vertical scrolling behavior of mobile devices.
 
-### L1: Chart Components & Layout
-*   **Action: Transpose (Serialize layout)**
-    *   *Reasoning*: The desktop version uses horizontal faceting (columns). On mobile, we will stack the facets vertically. Each "Site" will become its own Card component arranged in a vertical list.
-*   **Action: Reposition**
-    *   *Reasoning*: Introduce consistent padding and margins between the new "Site Cards" to create breathing room (whitespace) and reduce visual clutter.
+#### **L2 Coordinate System**
+*   **Action**: `Transpose Axes` (L2 Coordinate System -> Transpose)
+*   **Reasoning**: We will convert the Vertical Bar Chart to a **Horizontal Bar Chart**.
+    *   *Justification*: Long labels ("University Farm") read naturally on the left of a horizontal bar. Vertical bars would require rotating these labels 90 degrees or abbreviating them, reducing readability.
 
-### L2: Coordinate System
-*   **Action: Transpose (Axis-Transpose)**
-    *   *Reasoning*: Convert **Vertical Bar Chart** to **Horizontal Bar Chart**.
-    *   *Justification*: Horizontal bars work better on mobile because they accommodate label text (Site names) on the left without rotation, and the bar length naturally follows the screen's reading direction. It prevents the "spaghetti" look of thin vertical bars.
+#### **L2 Data Marks**
+*   **Action**: `Rescale` (L4 Mark Instance)
+*   **Reasoning**: Increase the thickness (height) of the bars to be touch-friendly (finger-sized tap targets).
+*   **Action**: `Recompose (Change Encoding)` (L2 Data Marks)
+*   **Reasoning**: While we keep the bar length for Mean Yield, we will redesign the Error Bar. Instead of a standard black line, we can use a semi-transparent "pill" overlay or a distinct marker to make it look "Premium" and less like a scientific paper default.
 
-### L3: Axes & Gridlines
-*   **Action: Recompose (Remove)** - *Y-Axis on individual cards*
-    *   *Reasoning*: Since we are grouping by Site in cards, we don't need a repetitive Y-axis for "Year" on every card. We can use a legend or subtitle to indicate which bar color corresponds to which year.
-*   **Action: Set Domain (Shared Scale)**
-    *   *Reasoning*: To preserve the ability to compare Site A vs Site B (the original intent of the trellis plot), all individual charts must share the exact same X-Axis domain (e.g., 0 to Max Yield across all data). If each card auto-scales, visual comparison is impossible.
+#### **L3 Axes & Ticks**
+*   **Action**: `Recompose (Remove)` (L4 Axis Line / L3 Gridlines)
+*   **Reasoning**: Remove the vertical gridlines and axis lines inside every card to reduce noise ("Chart Junk"). We will use data labels or a subtle background grid.
+*   **Action**: `Simplify labels` (L5 Tick Label)
+*   **Reasoning**: The Yield axis (0-60) doesn't need to be repeated 6 times. We can either put a shared axis at the top (sticky) or, better for mobile, put the numerical value directly inside or next to the bar (Direct Labeling).
 
-### L2: Data Marks (Bar + ErrorBar)
-*   **Action: Rescale (Width)**
-    *   *Reasoning*: Increase the thickness of the bars significantly. In the horizontal orientation, bars should be tall enough (e.g., 32px height) to be easily tappable and visually distinct.
-*   **Action: Recompose (Aggregate)** - *Data Processing*
-    *   *Reasoning*: The original spec calculates `mean` and `CI` on the fly. We must implement a data processing step to calculate the Mean Yield and Standard Deviation/Confidence Interval for each Site/Year group before passing it to Recharts, as Recharts does not do statistical aggregation automatically.
+#### **L3 Legend**
+*   **Action**: `Reposition` (L3 Legend Block)
+*   **Reasoning**: Move the legend from the right side to a sticky header or a clear indicator at the top of the list. Since there are only two categories (1931, 1932), we can also use color-coded badges on the cards.
 
-### L4: Labels & Typography
-*   **Action: Recompose (Replace)** - *Titles*
-    *   *Reasoning*: Instead of a bottom X-axis label for "Site", place the "Site Name" as the bold header of each card.
-*   **Action: Simplify Labels**
-    *   *Reasoning*: Remove axis titles like "Mean Yield" to save space, moving this context to the main component Header or Subtitle.
+#### **L5 Interaction & Feedback**
+*   **Action**: `Fix tooltip position` (L2 Feedback)
+*   **Reasoning**: Instead of a hover tooltip, tapping a site card will trigger a specific state or show detailed numbers (Mean + Exact CI range) in a fixed bottom sheet or an expanded card view.
 
-### L5: Interaction & Feedback
-*   **Action: Reposition (Fix Tooltip)**
-    *   *Reasoning*: Use a custom Tooltip that snaps to the top or bottom of the card, or a simplified popover, rather than a floating tooltip that might be covered by a finger.
-*   **Action: Trigger (Click vs Hover)**
-    *   *Reasoning*: Ensure charts respond to tap (active state) to show the specific Mean and CI values.
+## 3. Data Extraction Plan
 
-## 4. Data Extraction Plan
+The data is embedded in the HTML file within the `spec` variable.
 
-The data is embedded in the HTML script tag under `datasets`.
-
-1.  **Extract Raw Data**: Isolate the JSON object `datasets['data-9cc0564cb5591205eeeca8d2429dd11b']`.
-2.  **Schema**:
+1.  **Source**: Identify `spec.datasets["data-9cc0564cb5591205eeeca8d2429dd11b"]`.
+2.  **Raw Data Fields**: `yield`, `variety`, `year`, `site`.
+3.  **Transformation Logic (Crucial Step)**:
+    *   The raw data lists individual yields for different varieties. The visualization shows **Mean Yield** and **Confidence Intervals**.
+    *   We cannot just plot the raw points. We must perform the aggregation:
+        *   Group by `site` and `year`.
+        *   Calculate `Mean`: $\frac{\sum yield}{count}$.
+        *   Calculate `Standard Error` or `CI`: The original spec uses `extent: "ci"`. We need to calculate the 95% Confidence Interval for the error bars.
+        *   Formula: $Mean \pm 1.96 \times \frac{\sigma}{\sqrt{n}}$ (Standard Deviation / sqrt of count).
+4.  **Output Structure for Component**:
     ```typescript
-    interface RawDataPoint {
-      yield: number;
-      variety: string;
-      year: number;
+    type SiteData = {
       site: string;
+      years: {
+        year: number;
+        meanYield: number;
+        ciMin: number;
+        ciMax: number;
+      }[];
     }
     ```
-3.  **Transformation Logic (Aggregation)**:
-    *   Group raw data by `site` and `year`.
-    *   For each group, calculate:
-        *   `mean_yield`: Average of `yield` values.
-        *   `ci_lower`, `ci_upper`: Calculate the 95% Confidence Interval (or Standard Error range) to reconstruct the error bars shown in the original image. *Note: The original Vega-Lite spec uses `extent: "ci"`. We will calculate standard error or simple CI to approximate this for the mobile view.*
-    *   **Resulting Structure for UI**:
-        ```typescript
-        interface SiteGroup {
-          site: string;
-          data: {
-            year: number;
-            mean: number;
-            ci: [number, number]; // [min, max] for error bar
-          }[];
-        }
-        ```
 
-## 5. Implementation Steps
+## 4. Implementation Steps
 
-1.  **Setup**: Initialize `src/components/Visualization.tsx` with required imports (`recharts`, `lucide-react`, etc.).
-2.  **Data Processing**: Implement the `processData` function to transform the raw JSON into the grouped structure with calculated means and error ranges. Find the global max yield to set a fixed X-axis domain.
-3.  **Layout Shell**: Create a main container with a global header (Title: "Barley Yield Analysis", Legend: Blue=1931, Orange=1932).
-4.  **Component Construction**:
-    *   Create a reusable `SiteCard` component.
-    *   Inside `SiteCard`, use `Recharts.ComposedChart` (Layout: 'vertical').
-    *   Render `<Bar />` for the mean yield.
-    *   Render `<ErrorBar />` inside the Bar to show the variance.
-    *   Apply the calculated fixed domain to the XAxis.
-5.  **Styling**: Apply Tailwind classes for a "Card" aesthetic (white bg, shadow-sm, rounded-lg) on a light gray background. Use modern colors (e.g., Indigo-500 for 1931, Rose-500 for 1932) to replace the default Vega colors.
-6.  **Refinement**: Ensure the font sizes for Site Titles are large (text-lg, font-semibold) and data labels are readable.
+### Step 1: Data Processing Utility
+*   Create a utility function to parse the raw JSON data.
+*   Implement the statistical aggregation (Mean and CI calculation) grouped by Site and Year.
+*   **No fake data**. Use the exact numbers from the source.
+
+### Step 2: Component Structure (Mobile-First)
+*   **Main Container**: A centered, max-width constrained container (e.g., `max-w-md`) to simulate mobile physics on desktop screens.
+*   **Header**: Sticky header showing the Title and a clear Legend (Color keys for 1931 vs 1932).
+*   **List Layout**: A vertical stack of `SiteCard` components.
+
+### Step 3: SiteCard Component
+*   **Header**: Site Name (Left aligned, bold typography).
+*   **Chart Area**:
+    *   Use `Recharts` ComposedChart with `layout="vertical"`.
+    *   **XAxis**: Type number (Yield), hide axis line to reduce clutter.
+    *   **YAxis**: Type category (Year), but effectively hidden or simplified since we color-code.
+    *   **Bars**: Two horizontal bars per card.
+    *   **Error Bars**: Use Recharts `<ErrorBar />` component or custom shape.
+*   **Styling**: Use Tailwind for glassmorphism (bg-opacity, blur), rounded corners, and soft shadows.
+*   **Color Palette**: Use a modern equivalent of the original.
+    *   1931: Indigo-500 (Modern Blue)
+    *   1932: Rose-500 or Amber-500 (Modern Orange).
+
+### Step 4: Interaction & Polish
+*   Add **LabelList** to bars so users don't have to guess the value.
+*   Add animation: Bars grow from left to right on scroll (using Framer Motion or Recharts default animation).
+*   Ensure typography follows a hierarchy: Site Name > Yield Value > Year Label.
+
+### Step 5: Verification
+*   Check if "University Farm" fits without wrapping.
+*   Check if Error Bars are visible and accurately reflect the calculated CI.
+*   Ensure vertical scrolling feels natural.

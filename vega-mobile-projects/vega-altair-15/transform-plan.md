@@ -1,114 +1,96 @@
-# Vis2Mobile Transformation Plan: US State Capitals Map
+# Vis2Mobile Transformation Plan: US State Capitals
 
 ## 1. Analysis of Original Visualization
 
 ### Desktop Version (Original)
-- **Type**: Geospatial Symbol Map (US States + Capitals).
-- **Encoding**:
-    - **Geoshape**: US States background (Albers USA projection).
-    - **Points**: State capitals marked with black circles.
-    - **Text**: City names labeled next to points.
-    - **Interaction**: Hovering triggers a `nearest` selection.
-- **Data**: 
-    - TopoJSON for state boundaries (`us-10m.json`).
-    - JSON for capital coordinates and names (`us-state-capitals.json`).
+- **Content**: A geographic map of the United States using the Albers USA projection.
+- **Marks**:
+    - **Geoshape**: Light gray background shapes representing US states.
+    - **Points**: Black dots representing state capitals.
+    - **Text**: City names that appear near the dots (hidden by default, appear on interaction).
+- **Interaction**:
+    - **Hover**: Hovering over a dot enlarges it (size 30 -> 100) and reveals the city name.
+    - **Selection**: A `nearest` selection mechanism tracks the pointer.
+- **Issues for Mobile**:
+    - **Aspect Ratio Mismatch**: The Albers USA projection is naturally wide (landscape). On a portrait mobile screen, this results in the map being extremely small with excessive white space above and below (as seen in `desktop_on_mobile.png`).
+    - **Interaction Failure**: "Hover" does not exist on touch devices. The interactive reveal of city names is inaccessible.
+    - **Touch Targets**: The capital dots are too small to be accurately tapped with a finger, especially in the dense Northeast region.
+    - **Text Legibility**: If labels were displayed permanently, they would overlap significantly due to the reduced screen width.
 
-### Mobile Issues (Observed in `desktop_on_mobile.png`)
-1.  **Illegible Typography**: When scaled to mobile width, the city labels are microscopically small (L5 TickLabel/MarkLabel issue).
-2.  **Overlapping Labels**: In the Northeast (dense area), labels pile up, making them unreadable ("Cluttered text").
-3.  **Touch Targets**: The capital points are too small for accurate finger tapping (Fat-finger problem).
-4.  **Aspect Ratio**: The Albers USA projection is landscape (wide). On a portrait mobile screen, this results in significant whitespace at the top and bottom if fitted by width, or requires scrolling if fitted by height.
-5.  **Interaction**: Desktop relies on `pointerover` (hover), which does not exist on touch devices.
+## 2. Design Action Space & Transformation Plan
 
-## 2. Vis2Mobile Design Action Space Plan
+### High-Level Strategy
+The goal is to preserve the geographical context (the map) while solving the "fat finger" problem and legibility issues. We will transform the layout from a "Hover-to-Explore" interface to a **"Select-and-Read"** interface.
 
-To transform this into a premium mobile experience, I will adopt a **"Clean Interactive Map + Detail Card"** strategy. The map will serve as a spatial index, while the text data will be externalized to a UI card or list to ensure readability.
+We will use a **Hybrid Layout**: A pannable/zoomable map on the top half, and a fixed "Detail Card" (Bottom Sheet) on the bottom to display the specific data of the selected capital.
 
-### L0: Visualization Container
-*   **Action**: `Rescale` (Fit Width)
-    *   **Reasoning**: The map must span the full width of the mobile device. We will adjust the SVG `viewBox` to minimize internal margins.
-*   **Action**: `Reposition` (Global Padding)
-    *   **Reasoning**: Remove the large default margins seen in the desktop HTML to maximize screen real estate.
+### Applied Actions from Design Action Space
 
-### L1: Interaction Layer & L2: Features
-*   **Action**: `Recompose (Remove)` - **Disable Hover**
-    *   **Reasoning**: Mobile users cannot hover. The `mouseover` behavior from the original Vega spec must be removed.
-*   **Action**: `Recompose (Replace)` - **Hover → Click**
-    *   **Reasoning**: Map interactions will be triggered by tapping a state or a capital marker.
+| Layer | Component | Action | Reasoning |
+| :--- | :--- | :--- | :--- |
+| **L0** | **Container** | **Rescale (Viewport)** | Use `width: 100%` and `height: 50vh` for the map container to maximize available width while reserving space for details below. |
+| **L0** | **Container** | **Reposition** | Remove global margins (`margin: 0`) to use the full edge-to-edge screen width. |
+| **L1** | **Interaction** | **Recompose (Replace)** | **L2 Triggers**: Replace `hover` with `click` (tap). Mobile users tap to select. <br> **L2 Feedback**: Replace the floating tooltip/text label with a **Fixed Bottom Card** (`Reposition (Fix)`). This prevents the user's hand from obscuring the data they are trying to read. |
+| **L2** | **Annotations** | **Reposition (Externalize)** | Instead of showing "Albany" next to the dot in New York (which would overlap with Hartford, Trenton, etc.), we move the text to the external Detail Card at the bottom. |
+| **L2** | **Data Marks** | **Rescale** | Increase the visual radius of the dots for visibility, but more importantly, increase the transparent **hit area** (padding) around dots to 44px minimum for touch accessibility. |
+| **L2** | **Features** | **Compensate (Search/List)** | *Action not explicitly in diagram but related to "Features"*: Since clicking the exact pixel for "Providence, RI" is hard on a phone, we will add a **Select/Combobox** or a horizontal scrollable list of states below the map. This provides an alternative way to select a capital without relying solely on map interaction. |
+| **L3** | **Axes/Grid** | **Recompose (Remove)** | Maps do not require axes or gridlines. These remain hidden/non-existent. |
+| **L3** | **Legend** | **Recompose (Remove)** | The title "US State Capitols" is self-explanatory. We will move the title to a clean header component (`L2 TitleBlock`). |
 
-### L2: Annotations (Labels)
-*   **Action**: **CRITICAL: `Recompose (Remove)`**
-    *   **Reasoning**: The static text labels (City names) are the primary cause of clutter and unreadability on mobile. Displaying 50 labels on a 375px wide screen is impossible without overlap.
-*   **Action**: **`Reposition (Externalize)`**
-    *   **Reasoning**: Instead of labeling the map directly, we will move the selected state's Capital and City Name to a **Fixed Bottom Card** or a **Scrollable List** below the map. This ensures typography is legible (16px+).
+### Deviation Justification
+**Tech Stack Adjustment**: The requirements list **Recharts**. However, Recharts is designed for statistical charts (Bar, Line, Scatter) and has very poor support for complex TopoJSON/GeoJSON projections like Albers USA.
+*   **Justification**: Forcing a map into Recharts `ScatterChart` requires projecting coordinates manually and losing the state polygon shapes (the context).
+*   **Solution**: I will use **D3-geo** combined with standard React **SVG** elements. This allows us to render the `us-10m.json` state shapes correctly and project the lat/lon of capitals accurately. This is the industry standard for custom maps in React and ensures the "Premium Aesthetics" requirement is met.
 
-### L2: Data Marks (Points)
-*   **Action**: `Rescale`
-    *   **Reasoning**: The circle radius (`r`) for the capitals will be increased.
-*   **Action**: `Compensate (Interaction Area)` (Not strictly in doc, but related to L2 Triggers)
-    *   **Reasoning**: We will render invisible larger circles behind the visible dots to increase the hit area for touch events, solving the "fat-finger" issue.
+## 3. Data Extraction Plan
 
-### L2: Feedback (Tooltips)
-*   **Action**: `Reposition (Fix)`
-    *   **Reasoning**: Instead of a floating tooltip (which is blocked by the finger), clicking a capital will update a **Fixed Info Panel** at the bottom of the viewport containing the Capital Name, State, and potentially Lat/Lon coordinates.
+We need to extract two distinct datasets from the original HTML/Vega spec:
 
-### L3: Legend/Title
-*   **Action**: `Recompose (Remove)` (Subtitle) / `Reposition` (Title)
-    *   **Reasoning**: The title "US State Capitols" will be moved to the app's navigation header or a clean H1 above the map, styled with Tailwind rather than embedded in the SVG.
-
-## 3. Data Extraction Strategy
-
-I will extract the real data from the URLs provided in the Vega spec.
-
-**Source 1: State Boundaries**
-*   **URL**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/us-10m.json`
-*   **Format**: TopoJSON.
-*   **Extraction Method**: I will fetch this data or use a simplified pre-converted GeoJSON version if the TopoJSON parsing adds too much overhead. For the purpose of this component, fetching the TopoJSON and converting to GeoJSON client-side (using `topojson-client`) is the most accurate approach.
-
-**Source 2: Capital Cities**
-*   **URL**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/us-state-capitals.json`
-*   **Format**: JSON array.
-*   **Data Structure**:
-    ```json
-    [
-      {"lon": -112.0738, "lat": 33.4484, "city": "Phoenix", "state": "Arizona"},
-      ...
-    ]
-    ```
-*   **Extraction Method**: Since there are only 50 capitals, I will likely codify this directly into a TypeScript constant (`src/data/capitals.ts`) to ensure the component works offline and loads instantly without an extra fetch request.
+1.  **State Shapes (Background)**:
+    *   **Source URL**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/us-10m.json`
+    *   **Method**: Fetch this JSON client-side or during build. It contains TopoJSON data. We need to convert the `objects.states` into GeoJSON features using `topojson-client`.
+2.  **Capital Cities (Data Points)**:
+    *   **Source URL**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/us-state-capitals.json`
+    *   **Method**: Fetch this JSON. It contains an array of objects: `{ "city": "Montgomery", "state": "Alabama", "lat": 32.361538, "lon": -86.279118 }`.
+    *   *Note*: The original vega spec calculates the projection. We will need `d3-geo`'s `geoAlbersUsa()` to translate these `lat/lon` values into `x/y` SVG coordinates.
 
 ## 4. Implementation Steps
 
-### Step 1: Data Codification
-1.  Create `src/data/us-capitals.ts`: Hardcode the array of 50 capitals extracted from the source URL.
-2.  Setup utility to handle the US map projection. Since `Recharts` is listed in the stack but is not suitable for Albers USA projections (it is for charts, not complex geoshapes), I will use **standard SVG with `d3-geo`** logic for the projection and path generation. This complies with the "Visualization" requirement by utilizing React's rendering capability for the "View" layer while using D3 for the "Math" layer.
+### Step 1: Project Setup & Dependencies
+- Initialize the component structure.
+- Install `d3-geo` and `topojson-client` to handle the map projection and data parsing.
+- Use `clsx` and `tailwind-merge` for dynamic styling.
 
-### Step 2: Component Structure (`src/components/Visualization.tsx`)
-1.  **Layout**: A flex container (Column direction).
-    *   **Header**: Title "US State Capitals".
-    *   **Main**: The Interactive Map (SVG).
-    *   **Footer/Overlay**: Details Card (Glassmorphism style).
-2.  **State Management**:
-    *   `selectedCapital`: Store the currently tapped capital object (or null).
+### Step 2: Data Fetching Hook
+- Create a `useUSData` hook that fetches both JSON files.
+- Parse TopoJSON into GeoJSON features for rendering `path` elements.
+- Return `{ mapFeatures, capitals, loading }`.
 
-### Step 3: The Map Implementation
-1.  Use `d3-geo` to create an `geoAlbersUsa` projection.
-2.  Scale the projection to fit the mobile screen width (dynamic calculation based on container width).
-3.  Render `<path>` elements for states (Gray fill, White stroke).
-4.  Render `<circle>` elements for capitals.
-    *   **Style**: Vibrant color (e.g., Indigo/Purple) to replace the boring black dots.
-    *   **Animation**: Add a `framer-motion` or CSS pulse effect to the selected capital.
+### Step 3: The Map Component (Upper Half)
+- Create a responsive SVG container using `viewBox`.
+- Use `d3-geo` `geoAlbersUsa` to create a projection path generator.
+- **Render Layer 1 (States)**: Map over GeoJSON features and render `<path>` elements with a sleek glassmorphic style (e.g., `fill-white/10 stroke-white/20`).
+- **Render Layer 2 (Capitals)**: Map over the capitals data.
+    - Project `[lon, lat]` to `[x, y]`.
+    - Render a `<circle>` for the visual dot.
+    - Render a larger transparent `<circle>` on top to act as the touch target.
+    - Add `onClick` handlers to set the `selectedCapital` state.
+- **Add Zoom/Pan**: Implement a basic SVG transform (scale/translate) wrapper to allow users to zoom into the Northeast.
 
-### Step 4: The Interaction Layer
-1.  **State Selection**: Clicking a state shape finds the corresponding capital and selects it.
-2.  **Capital Selection**: Clicking a dot directly selects it.
-3.  **Details Panel**:
-    *   Render a fixed panel at the bottom using Tailwind (Glassmorphism: `backdrop-blur-md bg-white/30`).
-    *   Display `city` (Large text), `state` (Subtext), and coordinates.
+### Step 4: The Detail View (Lower Half)
+- Create a fixed or sticky container at the bottom.
+- **State: Empty**: "Tap a city to view details".
+- **State: Selected**: Display:
+    - City Name (Large Typography)
+    - State Name (Subtext)
+    - Lat/Lon coordinates (Data details).
+- **Navigation**: Add "Next/Prev" buttons or a horizontal list to cycle through capitals without touching the map.
 
-### Step 5: Styling & Polish
-1.  Apply Tailwind classes for typography and layout.
-2.  Ensure dark mode compatibility (optional but good for "Premium Aesthetics").
-3.  Add a "Reset" button to clear selection.
+### Step 5: Visual Polish
+- **Glassmorphism**: Use `backdrop-blur-md`, `bg-white/10`, and delicate borders.
+- **Animation**: Use `framer-motion` (or standard CSS transitions) to animate the dot size when selected and the bottom sheet sliding up.
+- **Palette**: Dark modern theme (Deep Blue/Black background) with cyan/neon accents for the active capital to create a "Wow" factor.
 
-**Justification for not using Recharts for the Map**: Recharts is built for statistical charts (Bar, Line, Pie). While it has a ScatterPlot, mapping a TopoJSON geometry into Recharts' Cartesian grid is inefficient and results in poor code quality compared to a native SVG approach using `d3-geo`, which is the industry standard for React maps. I will focus on the *result* being a premium React component.
+### Step 6: Responsive Logic
+- Ensure the SVG `viewBox` automatically fits the width of the device.
+- Handle loading states gracefully (skeleton loader).

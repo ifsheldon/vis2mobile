@@ -3,119 +3,96 @@
 ## 1. Analysis of Original Visualization
 
 ### Desktop Version (Original)
-*   **Type**: Bubble Chart (Scatter plot with size encoding).
-*   **Axes**:
-    *   **X-Axis**: Temporal (Year 1900–2017).
-    *   **Y-Axis**: Nominal (Entity/Disaster Type: Drought, Epidemic, Flood, etc.).
-*   **Encodings**:
-    *   **Position**: Time (X) vs Type (Y).
-    *   **Size**: Quantitative (Deaths).
-    *   **Color**: Nominal (Matches Disaster Type).
-*   **Information Density**: Moderate. It compares the frequency and severity of different disaster types over a long century.
-*   **Key Narrative**: Highlighting the most deadly disaster types (Droughts/Epidemics in early 20th century vs Earthquakes/Extreme weather).
+- **Type**: Bubble Chart (Scatter Plot) / 2D Distribution.
+- **Axes**:
+    - **X-Axis**: Year (Temporal, 1900-2017). Broad horizontal span.
+    - **Y-Axis**: Entity (Disaster Type). Nominal categories (e.g., Earthquake, Flood), sorted by total deaths.
+    - **Mark**: Circle.
+        - **Size**: Number of Deaths (Quantitative).
+        - **Color**: Entity (Redundant with Y-axis position, used for distinction).
+- **Interactions**: Hover tooltips showing specific year, entity, and death count.
+- **Layout**: Wide aspect ratio. Labels for disaster types are on the left Y-axis.
 
-### Mobile Aspect Ratio Issues
-*   **Aspect Ratio Mismatch**: The desktop chart is wide (Landscape). Mobile is tall (Portrait).
-*   **Squished Time Axis**: Compressing 117 years into a mobile width (~350px) results in ~3px per year. Bubbles will severely overlap, making individual events indistinguishable.
-*   **Unreadable Labels**: The Y-axis labels ("Extreme temperature", "Mass movement (dry)") are long. In a standard chart scaling, these would either wrap awkwardly, be tiny, or consume 40% of the screen width.
-*   **Visual Clutter**: The "Bubble" size legend takes up space that is not available on mobile.
+### Mobile Issues (Desktop on Mobile)
+- **Aspect Ratio Mismatch**: The wide temporal X-axis gets crushed on a portrait mobile screen, making individual years indistinguishable.
+- **Overplotting**: Bubbles overlap significantly when compressed horizontally.
+- **Readability**: Y-axis labels (Disaster names) occupy too much horizontal space, reducing the data area.
+- **Interaction**: Hover-based tooltips are inaccessible on touch devices. Small bubbles are hard to tap ("Fat-finger problem").
 
-## 2. High-Level Design Strategy
+## 2. Mobile Design Strategy
 
-The core strategy is **Serialize Layout (Vertical Stacking) and Faceting**.
+To ensure readability and a "Premium Mobile-First" experience, we cannot simply shrink the desktop chart. We must leverage the vertical scrolling nature of mobile devices.
 
-Trying to force the single large chart into a mobile screen via simple resizing (`Rescale`) will fail due to the density of the time axis and the length of Y-axis labels.
+**Core Concept: Transposed Swimlane Timeline**
 
-Instead, we will break the visualization into **Small Multiples**. We will treat each "Disaster Type" as a separate card/row stacked vertically. This leverages the natural vertical scrolling behavior of mobile devices.
+Instead of reading Time left-to-right (which is limited by screen width), we will flow Time **top-to-bottom**. This allows the chart to be as long as necessary to separate the data points without overlapping.
 
-*   **From**: One large X/Y chart.
-*   **To**: A vertical list of timeline charts. Each item in the list represents one Disaster Type (e.g., a "Flood" card, a "Drought" card).
+1.  **Transpose Axes**: Swap X and Y.
+    -   **New Y-Axis (Vertical)**: Time (1900 - 2017).
+    -   **New X-Axis (Horizontal)**: Disaster Entities.
+2.  **Columnar Layout**: Each Disaster Entity gets a dedicated vertical "Swimlane" (column).
+3.  **Header Optimization**: Replace text labels for Disaster types with **Icons** in a sticky header to save horizontal space.
+4.  **Interaction**: Replace hover with a "Tap" interaction that opens a **Bottom Sheet** or **Drawer** with detailed metrics for that event.
 
-## 3. Design Action Space Plan
+## 3. Design Action Space Mapping
 
-### L0 & L1: Container & Chart Structure
-*   **Action**: `Serialize layout` (L1 - Chart Components).
-    *   **Reasoning**: Split the single chart into multiple distinct charts based on the "Entity" field.
-    *   **Implementation**: Create a flexible vertical layout (`flex-col`). Each "Entity" gets its own component block.
-*   **Action**: `Rescale` (L0 - Container).
-    *   **Reasoning**: Ensure the container fits 100% of the mobile viewport width.
+Based on `mobile-vis-design-action-space.md`, here are the specific actions:
 
-### L2: Coordinate System & Data Marks
-*   **Action**: `Recompose (Remove)` (L3 - Axes - Y Axis).
-    *   **Reasoning**: Since we are splitting into cards, we don't need a Y-axis on the left.
-    *   **Alternative**: Use the **L2 Title Block** of each specific card to display the Disaster Type (e.g., "Flood"). This saves horizontal space for the actual data.
-*   **Action**: `Rescale` (L5 - Mark Instance).
-    *   **Reasoning**: The bubble sizes need to be recalibrated for mobile. The maximum radius must be capped to prevent a single event from obscuring the entire timeline, while still maintaining relative differences.
-*   **Action**: `Change Encoding` (L2 - Data Marks).
-    *   **Reasoning**: To improve readability on the timeline, we will ensure bubbles have a slight transparency (opacity) and potentially a stroke to define boundaries in overlapping areas.
-
-### L3 & L4: Axes & Legends
-*   **Action**: `Recompose (Remove)` (L4 - Legend Title / Items).
-    *   **Reasoning**: A global color legend is redundant because each "Card" will be titled with the disaster name and colored accordingly.
-    *   **Action**: `Compensate (Toggle)` (L3 - Legend Block) - *Optional*: We can place a size legend (indicating death count scale) at the very bottom of the page or in an info modal, rather than taking up screen space permanently.
-*   **Action**: `Simplify labels` (L5 - Tick Label).
-    *   **Reasoning**: The X-axis (Year) on every single card might be repetitive.
-    *   **Refinement**: We will add a subtle X-axis (e.g., 1900, 1950, 2000) to the *bottom* of each card to ensure context is maintained as the user scrolls, but keep it minimal to save vertical height.
-
-### L5: Interaction & Feedback
-*   **Action**: `Reposition (Fix)` (L2 - Feedback).
-    *   **Reasoning**: Tooltips on hover do not work on mobile.
-    *   **Action**: `Triggers -> Click`. Tapping a bubble will trigger a **Fixed Bottom Sheet** or a **Highlight Card**.
-    *   **Detail**: When a user taps a bubble, a customized detail view appears at the bottom of the screen showing: "Event: Flood", "Year: 1931", "Deaths: 3.7M". This solves the "fat finger" problem by decoupling selection from data display.
-*   **Action**: `Recompose (Remove)` (L2 - Features - Zoom/Pan).
-    *   **Reasoning**: We will avoid complex zoom interactions on the X-axis to prevent conflict with vertical page scrolling. The vertical layout provides enough clarity.
+| Layer | Component | Action | Reasoning |
+| :--- | :--- | :--- | :--- |
+| **L0** | **Container** | `Rescale` | Set width to 100% and allow `height` to be auto-expanding (scrollable). |
+| **L2** | **CoordSys** | **`Transpose Axes`** | **CRITICAL ACTION.** Rotate the chart 90°. Time becomes vertical (infinite scroll), Entities become horizontal columns. This solves the width constraint. |
+| **L2** | **CoordSys** | `Reposition` | Implement a **Sticky Header** for the X-axis (Disaster Icons) so context is lost while scrolling down. |
+| **L3** | **Axes (Time)** | `setRange` | Expand the vertical range significantly (e.g., 1500px+) to reduce bubble overlap. |
+| **L3** | **Axes (Time)** | `decimateTicks` | Show distinct decade markers (1900, 1910...) on the left or sticky-positioned. |
+| **L4** | **AxisTitle** | `Recompose (Remove)` | Remove explicit "Year" label; the decade numbers are self-explanatory. |
+| **L4** | **TickLabel (Entity)**| `Recompose (Replace)` | Replace full text names (e.g., "Extreme temperature") with Lucide Icons or 2-letter codes to fit 7-8 columns on a 375px screen. |
+| **L3** | **MarkSet** | `rescaleMark` | Adjust bubble size scale. `r` should be relative to the column width (max width ~40px). |
+| **L1** | **Interaction** | `Recompose (Replace)` | `Hover` -> `Click`. Tapping a bubble triggers a detail view. |
+| **L2** | **Feedback** | `Reposition (Fix)` | Tooltips moved to a fixed **Bottom Sheet/Card** to avoid occlusion by the finger. |
 
 ## 4. Data Extraction Plan
 
-The data is sourced from `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/disasters.csv`.
+The original HTML uses a Vega dataset URL. I will fetch and process this real data.
 
-1.  **Fetch**: I will write a script to fetch the CSV content during the coding phase.
-2.  **Parse**: Use a CSV parser (like `d3-dsv` or standard string manipulation) to convert it to JSON.
-3.  **Type Definition**:
-    ```typescript
-    type DisasterEvent = {
-      Entity: string; // e.g., "All natural disasters", "Drought", "Earthquake"
-      Year: number;
-      Deaths: number;
-    };
-    ```
-4.  **Cleaning**:
-    *   Filter out `Entity === "All natural disasters"` (as per original spec `transform: [{"filter": "(datum.Entity !== 'All natural disasters')"}]`).
-    *   Group data by `Entity` to facilitate the "Small Multiples" layout.
-    *   Calculate Max Deaths to normalize the bubble size scale across all charts (global domain).
+**Source**: `https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/disasters.csv`
+
+**Processing Steps**:
+1.  **Fetch**: Retrieve CSV data.
+2.  **Filter**: Remove rows where `Entity === "All natural disasters"` (matching the original spec's filter).
+3.  **Extract Fields**: `Entity`, `Year`, `Deaths`.
+4.  **Sort (Columns)**: Calculate "Total Deaths" per Entity and sort the columns (X-axis) from left to right by highest impact (matching the original's Y-axis sorting logic).
+5.  **Sort (Rows)**: Ensure data is sorted by Year.
 
 ## 5. Implementation Steps
 
-1.  **Setup Component Structure**:
-    *   `Visualization.tsx`: Main container.
-    *   `DisasterRow.tsx`: Sub-component for a single disaster type timeline.
-    *   `DetailDrawer.tsx`: Component for displaying clicked bubble data.
+1.  **Setup & Utilities**:
+    -   Initialize `lucide-react` for disaster icons (Waves for Flood, Thermometer for Temp, Activity for Quake, etc.).
+    -   Create a color palette map for each disaster type.
 
-2.  **Data Processing**:
-    *   Fetch and parse the CSV data.
-    *   Determine the unique list of Entities.
-    *   Determine the global `[min, max]` for the `Deaths` field to ensure bubble sizes are comparable across different rows.
+2.  **Data Component**:
+    -   Create a function to load the `disasters.csv` data (simulated or fetched).
+    -   Process data: Group by Entity to determine column order.
 
-3.  **Layout Implementation (Next.js + Tailwind)**:
-    *   Create a vertical scroll container.
-    *   Header: "Global Deaths from Natural Disasters" (Modern Typography).
-    *   Map through entities to render `DisasterRow` components.
+3.  **Layout Construction (The Swimlane)**:
+    -   **Header**: A fixed `div` row containing Icons for each Disaster Type.
+    -   **Timeline Body**: A scrollable `div`.
+    -   **Grid System**: Use CSS Grid. Rows = Years, Columns = Entities.
+        -   *Alternative Implementation*: Use absolute positioning based on Year scale (scaleLinear) for smoother vertical placement than discrete grid rows.
 
-4.  **Chart Implementation (Recharts)**:
-    *   Use `ScatterChart` (Recharts' bubble equivalent).
-    *   XAxis: Type number (Year), Domain `[1900, 2018]`, Hide axis line/ticks for cleaner look (or use minimal ticks).
-    *   YAxis: Hidden (Height fixed per row).
-    *   ZAxis: Range `[0, MaxSize]` mapped to Deaths.
-    *   Tooltip: Custom trigger (onClick updates React state).
+4.  **Visual Components**:
+    -   **Y-Axis (Time)**: Render decade markers on the left edge.
+    -   **Bubbles**: Render circles at `(Column_Center, Year_Y)`.
+    -   **Sizing**: Map `Deaths` to `Circle Radius` (Scale `sqrt` for area accuracy).
 
-5.  **Styling & Polish**:
-    *   **Color Palette**: Map distinct colors to entities (e.g., Drought=Blue, Fire=Red, etc.).
-    *   **Typography**: Use system sans-serif with varying weights.
-    *   **Glassmorphism**: Apply to the Detail Drawer.
-    *   **Animation**: `Recharts` standard animation on load.
+5.  **Interaction Layer**:
+    -   Implement `selectedEvent` state.
+    -   Render a **Glassmorphic Detail Card** fixed at the bottom of the screen when a bubble is tapped.
+    -   Card shows: Full Disaster Name, Year, Death Count (formatted), and a "Close" button.
 
-6.  **Edge Case Handling**:
-    *   **Overplotting**: Use `fillOpacity` to show density.
-    *   **Zero Values**: Ensure years with 0 deaths (if any) don't clutter the view (Scatter plot handles sparse data well).
+6.  **Refinement**:
+    -   Add subtle grid lines (horizontal for decades, vertical for swimlanes).
+    -   Ensure touch targets are large enough (add invisible padding around small bubbles).
+    -   Apply Tailwind classes for a modern, clean look (slate/zinc colors, rounded corners).
 
-This plan ensures all original data is present but restructured for a vertical, touch-friendly experience, fulfilling the "Premium Aesthetics" and "Mobile-First UX" requirements.
+This plan transforms a "Wide Desktop Chart" into a "Vertical Mobile Timeline," perfectly suiting the device's constraints while keeping all data points.

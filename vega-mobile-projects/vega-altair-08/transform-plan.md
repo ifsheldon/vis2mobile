@@ -1,131 +1,136 @@
-# Mobile Visualization Transformation Plan
+# Vis2Mobile Plan: Barley Yield Stacked Bar Chart
 
 ## 1. Analysis of Original Visualization
 
-### Source Characteristics
-- **Type**: Horizontal Stacked Bar Chart.
-- **Data Dimensions**:
-    - **Y-Axis (Nominal)**: `variety` (e.g., Glabron, Manchuria, No. 457).
-    - **X-Axis (Quantitative)**: Sum of `yield`.
-    - **Color/Stack (Nominal)**: `site` (e.g., University Farm, Waseca, Morris).
-    - **Labels**: Numeric yield values embedded inside each stack segment.
-- **Visual Density**: High. The desktop version relies heavily on internal text labels (`mark: text`) to convey exact values, which causes immediate overlap and illegibility when squished horizontally on mobile (as seen in `desktop_on_mobile.png`).
+### Desktop Version Features
+- **Type:** Horizontal Stacked Bar Chart.
+- **Data Dimensions:**
+    - **Y-Axis:** Variety (Categorical: Glabron, Manchuria, etc.).
+    - **X-Axis:** Sum of Yield (Quantitative).
+    - **Color:** Site (Categorical: 6 distinct sites).
+    - **Text Labels:** Specific yield values embedded inside the bar segments.
+- **Layout:** Y-axis labels on the left, stacked bars in the center, legend on the right.
+- **Interaction:** Basic Vega-Lite tooltips (likely hover).
 
-### Mobile Usability Issues
-1.  **Text Overlap**: The text labels inside the bars are unreadable on mobile due to the reduced width of the segments.
-2.  **Aspect Ratio**: The original aspect ratio forces the bars to be too short and the text too small.
-3.  **Legend**: The legend on the right consumes nearly 20% of the horizontal width, compressing the actual chart area.
-4.  **Touch Targets**: The individual segments (e.g., "Grand Rapids" yield for "Velvet") are likely too small to tap accurately on a phone.
+### Mobile Rendering Issues (from `desktop_on_mobile.png`)
+1.  **Horizontal Compression:** The aspect ratio forces the bars to be extremely short, making visual comparison of lengths difficult.
+2.  **Unreadable Text:** The numeric labels inside the bar segments are overlapping, illegible, or completely hidden due to narrow segment widths.
+3.  **Wasted Space:** The Y-axis labels (Variety names) occupy about 20-25% of the horizontal width, and the Legend on the right occupies another chunk, leaving very little room for the actual data.
+4.  **Touch Targets:** The individual color segments are too small for precise finger tapping.
+5.  **Axis Readability:** The X-axis (Yield) at the bottom is dense and hard to associate with the top-most bars on a long vertical scroll.
 
-## 2. Vis2Mobile Design Action Plan
+## 2. High-Level Strategy & Design Rationale
 
-Based on the `mobile-vis-design-action-space.md`, the following actions define the transformation strategy.
+**Core Concept:** Transform the monolithic chart into a **"Card-based List View"**.
+
+Instead of trying to squeeze a single coordinate system into a mobile screen, we will treat each "Variety" as a distinct row item (a "Card"). This creates a scrollable vertical list.
+
+### Rationale:
+- **Readability:** By moving the Y-axis label (Variety) *above* the bar, we reclaim 100% of the screen width for the data visualization.
+- **Interaction:** Mobile users prefer scrolling vertical lists over panning zoomed-out charts.
+- **Clarity:** Removing the crowded internal text labels and replacing them with an interactive details view (or a clear summary) solves the clutter issue.
+
+## 3. Detailed Action Plan (Mapped to Design Action Space)
 
 ### L0: Visualization Container
-*   **Action**: `Rescale` (Viewport & Scrolling).
-    *   **Why**: The fixed height of the desktop view compresses the bars. We will use a fluid height container that allows the page to scroll vertically. This gives each "Variety" row enough breathing room (`min-height` per bar).
-    *   **Why**: `width: 100%` with a simplified layout to maximize the data-ink ratio.
+-   **Action:** `Rescale`
+    -   **Why:** Set width to 100% and height to `auto` (grow with content). The container will be a scrollable vertical flex column.
 
-### L1: Chart Components / L2: Coordinate System
-*   **Action**: Keep Horizontal Layout (No Transpose).
-    *   **Reasoning**: Horizontal bars are actually ideal for mobile when category names (Varieties) are long. It allows labels to be read horizontally without head-tilting or rotation.
-*   **Action**: `Reposition` (Margins).
-    *   **Why**: Maximize width. Move Y-axis labels to be left-aligned above the bar or integrated into the layout to save horizontal space for the bars themselves.
+### L1: Data Model
+-   **Action:** `Recompose (Aggregate)` (Implicit)
+    -   **Why:** The raw data lists individual entries per year (1931, 1932). The chart sums yield by site/variety. We must perform this aggregation (summing yields for the same site and variety across years) in the transformation logic to match the desktop chart's "Sum of yield".
+
+### L1: Interaction Layer & L2: Features
+-   **Action:** `Recompose (Replace)` Triggers
+    -   **Why:** Hover is unavailable. Recharts `Tooltip` will be set to trigger on `click/touch`.
+-   **Action:** `Reposition (Fix)` Feedback
+    -   **Why:** A standard floating tooltip often gets blocked by the finger. We will use a **"Summary Header"** or **"Active Card State"**. When a user taps a specific Variety bar, that card expands or highlights to show the specific breakdown of values (Site: Yield) in a clean list format, rather than relying on tiny text inside the bar.
+
+### L2: Coordinate System (Chart Components)
+-   **Action:** `Serialize Layout` (via L1/L2 approach)
+    -   **Why:** Instead of one large Y-Axis, we split the visualization into "Small Multiples" (one stacked bar per Variety).
+-   **Action:** `Transpose (Axis-Transpose)` -> **Keep Horizontal**
+    -   **Why:** We are technically keeping the horizontal orientation of the bars because it fits text labels better, but we are breaking the single axis into multiple rows.
+
+### L3: Axes
+-   **Action:** `Recompose (Remove)` Axis Titles & Lines
+    -   **Why:** We don't need a vertical Y-axis line connecting all bars. The grouping is done by UI Cards. We might keep a subtle X-axis grid or just show the Total Value text to save vertical space.
+-   **Action:** `Reposition` Tick Labels (Variety Names)
+    -   **Why:** Move Variety Name from the left of the chart to the **top-left corner of each bar's container**.
 
 ### L2: Data Marks (The Bars)
-*   **Action**: `Recompose (Remove)` (Internal Text Labels).
-    *   **Why**: The white text numbers inside the bars are the primary cause of clutter. On mobile, these are impossible to read. We will remove the text layer entirely from the SVG rendering.
-*   **Action**: `Rescale` (Bar Height).
-    *   **Why**: Increase the thickness of the bars to make them clearer and friendlier.
+-   **Action:** `Rescale` Mark Instance
+    -   **Why:** Increase the height of the bars (thickness) to make them visually substantial and premium.
+-   **Action:** `Recompose (Remove)` Mark Labels
+    -   **Why:** The internal numbers (e.g., "27.0", "48.9") are the main source of clutter. We will **remove them from inside the bars**.
+    -   **Compensation:** Display the **Total Yield** prominently next to the Variety Name. The breakdown values will be shown in the Legend/Tooltip interaction area when active.
 
-### L3: Legend Block
-*   **Action**: `Reposition` (Top/Bottom) & `Transpose`.
-    *   **Why**: Move the legend from the right side (where it steals chart width) to the top (header) or make it a scrollable horizontal list. This gives full width to the bars.
+### L3: Legend
+-   **Action:** `Reposition` & `Rescale`
+    -   **Why:** The right-side legend is impossible on mobile. Move it to the **Top (Sticky)** or **Bottom**.
+    -   **Layout:** Use a flex-wrap row layout with circular color indicators. This serves as a key for the colors used in the stacked bars.
 
-### L5: Interaction & Feedback (Crucial for "Premium" Feel)
-*   **Action**: `Recompose (Replace)` (Hover -> Tap).
-    *   **Why**: Hover is unavailable.
-*   **Action**: `Reposition (Fix)` (Tooltip -> Bottom Sheet/Card).
-    *   **Why**: Instead of a floating tooltip covering the finger, tapping a bar will open a "Details Card" at the bottom of the screen (or update a fixed summary area) showing the breakdown of values for that specific Variety. This compensates for the removal of the internal text labels.
+## 4. Data Extraction Plan
 
-## 3. Data Extraction Plan
+The data is embedded in the HTML file within the `spec` variable.
 
-The data is embedded directly in the HTML file's JSON spec. I will extract the `datasets` object.
-
-**Source Data Snippet**:
-```json
-"datasets": {
-  "data-9cc0564cb5591205eeeca8d2429dd11b": [
-    {"yield": 27, "variety": "Manchuria", "year": 1931, "site": "University Farm"},
-    ...
-  ]
-}
-```
-
-**Extraction Strategy**:
-1.  **Raw Data**: Copy the array from `datasets['data-9cc0564cb5591205eeeca8d2429dd11b']`.
-2.  **Aggregation**: The original chart sums yields by `variety` and `site` (aggregating over `year`).
-    *   *Processing*: I will perform a data transformation to group by `variety`.
-    *   *Structure Goal*:
+1.  **Locate Data Source:** The JSON object `datasets["data-9cc0564cb5591205eeeca8d2429dd11b"]`.
+2.  **Schema:**
+    ```typescript
+    type RawDatum = {
+      yield: number;
+      variety: string; // "Manchuria", "Glabron", etc.
+      year: number;    // 1931, 1932
+      site: string;    // "University Farm", "Waseca", etc.
+    };
+    ```
+3.  **Processing Steps (Transform):**
+    -   Group by `variety`.
+    -   Within each variety, group by `site`.
+    -   Sum the `yield` for each site (combining 1931 and 1932).
+    -   Calculate the `totalYield` for the variety (for sorting and display).
+    -   **Output Structure for Recharts:**
         ```typescript
-        interface ChartData {
-          variety: string;
-          totalYield: number;
+        type ChartData = {
+          name: string; // Variety name
+          total: number;
           sites: {
-            [siteName: string]: number; // yield per site
+            [siteName: string]: number; // Sum of yield for that site
           }
-        }
+        }[];
         ```
-3.  **Colors**: I will use the default Vega/Altair category10 color scheme usually implied, or pick premium colors matching the image (Blues, Oranges, Greens, Yellows) to replicate the aesthetic.
-    *   University Farm: Green
-    *   Waseca: Yellow
-    *   Morris: Teal/Light Blue
-    *   Crookston: Blue
-    *   Grand Rapids: Red/Orange
-    *   Duluth: Dark Orange
+4.  **Sorting:** To maintain the intention of the original visualization, we should sort the varieties by Total Yield descending (similar to the desktop visual flow).
 
-## 4. Implementation Steps
+## 5. Implementation Steps
 
-### Step 1: Data Preparation (`src/data/yieldData.ts`)
-*   Create a Typescript file to house the raw JSON data.
-*   Implement a helper function to Aggregate data: Group by `variety`, summing `yield` per `site`.
-*   Calculate the global max `totalYield` to set the X-axis domain properly.
+1.  **Project Setup:** Initialize Shadcn UI Card and Recharts.
+2.  **Data Utility:** Create `data.ts` to export the raw JSON and a helper function `processData()` to perform the aggregation described above.
+3.  **Component Construction (`Visualization.tsx`):**
+    -   **Layout:** Main container with padding.
+    -   **Legend Component:** A top-aligned, sticky header showing the color map for the 6 Sites.
+    -   **List Rendering:** Map through the processed data.
+    -   **Card Component:**
+        -   Header: Variety Name (Left) + Total Yield (Right).
+        -   Body: A single `<BarChart>` instance from Recharts (layout="vertical") containing one single stacked bar.
+            -   *Note:* Using separate chart instances ensures responsive scaling and clean layout control per row.
+    -   **Interaction:**
+        -   Add `onClick` to the Card.
+        -   When clicked, expand the card (Accordion style) or show a focused view listing the exact numeric breakdown per site (e.g., "Waseca: 63.8, Duluth: 28.1...").
+4.  **Styling (Tailwind):**
+    -   Use a "Glassmorphism" background for the cards.
+    -   Use a distinct, vibrant color palette for the sites (Recharts default or custom array matches the original).
+    -   Rounded corners on the bars (`radius={[4, 4, 4, 4]}`).
+5.  **Refinement:**
+    -   Ensure typography is legible (min 14px for body, 16px+ for headers).
+    -   Add subtle animation on mount.
 
-### Step 2: Component Shell (`src/components/Visualization.tsx`)
-*   **Container**: A standard `div` with `w-full` and padding.
-*   **Header**: Title "Crop Yield Analysis" and a subtitle summarizing the dataset.
-*   **Legend**: A horizontal, scrollable flex container at the top showing Site colors.
+## 6. Color Palette Strategy
+We will map the sites to a set of distinct colors.
+-   Crookston: Blue-ish
+-   Duluth: Orange-ish
+-   Grand Rapids: Red-ish
+-   Morris: Teal-ish
+-   University Farm: Green-ish
+-   Waseca: Yellow-ish
 
-### Step 3: Main Chart Implementation (Recharts)
-*   **Library**: `Recharts` using `BarChart`, `Bar`, `XAxis`, `YAxis`.
-*   **Layout**: `layout="vertical"`.
-*   **Responsiveness**: Use `ResponsiveContainer` but with a specified `min-height` based on the number of varieties (e.g., `height={data.length * 60}`).
-*   **Y-Axis**: Display `variety` names. Ensure font size is readable (e.g., 12px or 14px).
-*   **Bars**: Stacked bars (`stackId="a"`).
-    *   Map through the unique `site` list to generate `<Bar />` components.
-    *   **Animation**: Enable smooth entry animation.
-*   **Interactivity**:
-    *   Disable default Tooltip (too intrusive).
-    *   Add `onClick` to the `BarChart` or individual `Bar`s to select a `variety`.
-
-### Step 4: The "Details" Interaction (Premium Feature)
-*   **State**: `selectedVariety` (string | null).
-*   **UI**:
-    *   When a user clicks a bar (Variety), a **Glassmorphic Details Card** appears (either fixed at bottom or expanding inline).
-    *   This card displays the precise numeric values (which we removed from the visual bars) in a clean table or list format.
-    *   *Content*: "Manchuria Total: 350", followed by a list of sites and their specific yields.
-    *   This satisfies **L2 Annotations: Compensate (Number)** – moving dense numbers to a dedicated view.
-
-### Step 5: Styling (Tailwind)
-*   **Theme**: Light mode with clean typography (Inter/Sans).
-*   **Palette**: Use the extracted colors for the bars. Use slight transparency or borders to separate stacks.
-*   **Typography**: Bold headings, subtle axis labels.
-
-### Step 6: Final Review
-*   Check strict mode compliance.
-*   Verify no fake data is used.
-*   Ensure scrollability works on mobile.
-
-## 5. Justification of Deviation from Desktop
-*   **Removed Numbers on Bars**: Essential for mobile legibility. Replaced with on-tap detailed view.
-*   **Moved Legend**: Essential to reclaim horizontal width for the data.
+*Note: We will try to match the original hues but increase saturation slightly for the "Premium Aesthetics" requirement.*

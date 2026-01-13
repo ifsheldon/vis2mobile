@@ -1,109 +1,126 @@
 # Vis2Mobile Transformation Plan
 
-## 1. Analysis of the Original Visualization
+## 1. Analysis of Original Visualization
 
-### 1.1 Desktop Version Overview
-*   **Type**: Trellis (Faceted) Dot Plot.
-*   **Data Structure**:
-    *   **Row Facet (Site)**: 6 distinct locations (Grand Rapids, Duluth, University Farm, Morris, Crookston, Waseca).
-    *   **Y-Axis (Nominal)**: 10 Barley Varieties (Manchuria, Glabron, etc.).
-    *   **X-Axis (Quantitative)**: Yield (bushels/acre).
-    *   **Color (Nominal)**: Year (1931 vs 1932).
-*   **Narrative**: Comparing barley yields across different sites and varieties between two years. A key insight in this famous dataset (Becker's Barley) is the "Morris Mistake," where the yields for 1931 and 1932 appear swapped compared to other sites.
-*   **Visual density**: High. It shows roughly 120 data points spread across 6 separate coordinate systems stacked vertically.
+### Desktop Version Characteristics
+- **Type**: Faceted Dot Plot (also known as a Trellis Plot or Cleveland Dot Plot).
+- **Data Structure**:
+    - **Dimensions**: Site (Facet Row), Variety (Y-axis), Year (Color).
+    - **Measure**: Yield (X-axis).
+- **Layout**: 6 vertical panels (Sites), sharing a common X-axis scale (Yield 20-60+).
+- **Encoding**:
+    - Two colored points per row (Blue: 1932, Orange: 1931).
+    - Position along X-axis indicates yield.
+    - Facets group data by geographical site.
+- **Observations**: The visualization effectively allows comparison of yields across varieties within a site and highlights the "Morris Mistake" (where 1931/1932 yields might be swapped compared to other sites).
 
-### 1.2 Mobile Aspect Ratio Issues (`desktop_on_mobile.png`)
-*   **Vertical Compression**: Stacked facets force the Y-axis labels (Varieties) to be microscopic or overlap.
-*   **Unreadable Labels**: The X-axis title and tick labels are illegible.
-*   **Touch Targets**: The data points (circles) are too small for touch interaction.
-*   **Context Loss**: Scrolling through a very tall image makes it hard to remember the legend or axis context by the time the user reaches the bottom charts.
+### Mobile Readability Issues (Simulated)
+1.  **Extreme Vertical Length**: Stacking 6 charts vertically on a phone results in excessive scrolling, making it impossible to compare the first site (University Farm) with the last (Duluth).
+2.  **Horizontal Compression**: The variety labels (e.g., "Wisconsin No. 38") are long. In a standard side-by-side layout, they squeeze the data plotting area, making the differences in yield (the dots) clump together and hard to read.
+3.  **Small Touch Targets**: The dots are too small for touch interaction to see specific values.
+4.  **Legend Separation**: The legend is far from the data in a long scroll scenario.
 
-## 2. High-Level Strategy & Design Action Space
+## 2. High-Level Transformation Strategy
 
-To transform this into a premium mobile component, we must solve the vertical space constraint. The "Small Multiples" (Facets) approach used on desktop is visually overwhelming on a narrow mobile screen.
+The core strategy is to transform the **Small Multiples (Facets)** into a **Interactive Navigation (Tabs/Pagination)** pattern to save vertical space, and to transform the **Row Layout** into a **Serialized Stack** to save horizontal space.
 
-### Key Actions Selected from Design Space
+### Key Design Actions (From Action Space)
 
-#### 1. L1/L3 Small Multiples: `PaginatePanels` / `FilterPanels`
-*   **Action**: **Split states / Paginate**.
-*   **Reasoning**: Displaying 6 charts vertically is unreadable. I will transform the **Row Facet (Site)** into a **Tabbed Interface** or **Horizontal Scroll Selector**.
-*   **Benefit**: This allows the active chart to utilize the full screen width and sufficient height for readable text, while keeping the user context focused on one site at a time.
+#### 1. L1 Chart Components: `PaginatePanels` (Small Multiple Transformation)
+-   **Action**: Transform the vertically stacked facets (Sites) into a **Tabbed Interface** or **Carousel**.
+-   **Reasoning**: Showing 6 sites simultaneously on mobile destroys the aspect ratio or forces infinite scrolling. By showing one site at a time with a switcher, we preserve the fidelity of the dot plot for the active site.
+-   **Justification**: This aligns with the "Split states" strategy in the design space.
 
-#### 2. L2 Data Marks: `Rescale` & `Recompose (Change Encoding)`
-*   **Action**: **Rescale** marks and **Dumbbell Plot Encoding**.
-*   **Reasoning**:
-    *   *Rescale*: Increase the dot radius (`r`) for better visibility and touch usage.
-    *   *Change Encoding*: The original dots are floating. To enhance the comparison between 1931 and 1932 (the core narrative), I will connect the two dots for each variety with a line (creating a Dumbbell/DNA plot). This helps the eye group the years per variety without needing gridlines.
+#### 2. L3 MarkSet: `Serialize Layout` (Label-Marks Relation)
+-   **Action**: Instead of placing Variety labels *to the left* of the chart (consuming ~40% of width), place the label **above** the data track for each row.
+-   **Reasoning**: This liberates 100% of the screen width for the quantitative axis (Yield). This maximizes the resolution of the data, making small differences between 1931 and 1932 visible.
 
-#### 3. L5 Interaction: `Fix Tooltip Position` & `Triggers`
-*   **Action**: **Reposition (Fix)** and **Recompose (Replace)**.
-*   **Reasoning**: Hover is unavailable.
-    *   *Trigger*: Clicking a variety row will trigger the details.
-    *   *Feedback*: Instead of a floating tooltip, use a **Fixed Bottom Sheet** or a dedicated "Details Card" at the top/bottom of the view to show the precise yield numbers for both years for the selected variety.
+#### 3. L2 Data Marks: `Recompose (Change Encoding)` -> Dumbbell Plot
+-   **Action**: Explicitly connect the two dots (1931 and 1932) with a line.
+-   **Reasoning**: The cognitive task is comparing the *change* or *difference* between years. A connector line emphasizes this relationship better than floating dots, especially on a mobile screen where context can be lost.
 
-#### 4. L3 Axes: `Rescale` & `Simplify Labels`
-*   **Action**: **Rescale** font sizes and **Simplify**.
-*   **Reasoning**:
-    *   Y-Axis (Varieties): Needs roughly 12-14px font size to be readable.
-    *   X-Axis (Yield): Keep the grid, but potentially reduce tick count (`decimateTicks`) to prevent overcrowding.
+#### 4. L5 Interaction: `Fix Tooltip Position` & `Disable Hover`
+-   **Action**: Remove hover. When a user taps a specific variety row, display detailed yield numbers in a fixed bottom sheet or a highlighted summary card at the top.
+-   **Reasoning**: Fingers obscure tooltips. A dedicated data readout area ensures readability.
 
-#### 5. L3 Legend: `Reposition`
-*   **Action**: **Reposition** to Top/Inline.
-*   **Reasoning**: Move the Year legend (1931 vs 1932) to the top header area so it is visible immediately without scrolling.
+## 3. Detailed Implementation Plan
 
-## 3. Implementation Plan
+### Step 1: Data Extraction & Processing
+1.  **Extract**: Copy the JSON array from the `data-9cc0564cb5591205eeeca8d2429dd11b` object in the source HTML.
+2.  **Transform**:
+    -   Group data by `site`.
+    -   Within each site, group by `variety` to create objects containing both 1931 and 1932 values (e.g., `{ variety: "Manchuria", yield1931: 27, yield1932: 26.9 }`).
+    -   Calculate min/max yield across *all* data to establish a global X-axis domain (ensuring visual consistency when switching tabs).
 
-### Step 1: Data Extraction & Preparation
-*   Extract the `data-9cc0564cb5591205eeeca8d2429dd11b` array from the HTML source.
-*   Type definition: `BarleyData { yield: number, variety: string, year: number, site: string }`.
-*   **Transformation**: Group the flat data by `site`. Within each site, group by `variety` to create objects containing both 1931 and 1932 yields.
-    *   Target structure: `Record<SiteName, Array<{ variety: string, yield1931: number, yield1932: number }>>`.
-    *   Sort varieties by yield (sum of both years) to maintain the "sorted" intention of the original chart.
+### Step 2: Container & Navigation (L0 & L1)
+1.  **Layout**: Create a main container with `h-screen` and `flex-col`.
+2.  **Site Selector**: Implement a horizontal scrollable list (Pills/Tabs) at the top to select the `Site`.
+    -   *Styling*: Glassmorphism active state, muted inactive state.
+3.  **Main Chart Area**: A responsive container taking up the remaining height.
 
-### Step 2: Container & Layout Structure (L0)
-*   **Header**:
-    *   Title: "Barley Yield Analysis".
-    *   Legend: Visual indicators for 1931 (e.g., Purple) and 1932 (e.g., Teal) using Lucide icons or colored badges.
-*   **Navigation (The "Facet" Replacement)**:
-    *   Implement a horizontal scrolling list or distinct tabs for the 6 Sites.
-    *   Use Glassmorphism styling for the active tab to indicate selection.
+### Step 3: Visualization Component (Recharts)
+1.  **Component**: Use a customized `ScatterChart` or composite layout.
+2.  **Y-Axis**: Hidden (`width={0}`). We will render labels externally to the chart area to control layout (Label above Bar).
+3.  **X-Axis**:
+    -   `type="number"`.
+    -   Domain: Fixed based on global min/max (approx 10 to 70) to allow mental comparison between sites.
+    -   Move Axis to top or bottom, simplify ticks (Steps of 10).
+4.  **Custom Rendering**:
+    -   Iterate through the varieties of the selected site.
+    -   For each variety, render a "Card" or "Row":
+        -   **Text Row**: Variety Name (Bold, legible font).
+        -   **Chart Row**: A minimal Recharts instance (height ~40px) or SVG drawing just for this row (Dumbbell style).
+        -   *Alternative (Better for Recharts)*: One single tall chart, but use `Customized` SVG components to draw the labels *inside* the plot area at specific Y coordinates, or simply map data to Y-index and render labels as HTML overlays.
+    -   *Decision*: Render a list of HTML `div`s. Inside each `div`:
+        -   Header: Variety Name.
+        -   Body: A purely horizontal linear visualization (SVG or Recharts container) showing the 1931/1932 dots and connector.
+        -   *Why*: This gives easier control over the "Label above Mark" layout than hacking Recharts Y-Axis.
 
-### Step 3: Visualization Component (L1 Chart)
-*   Use `Recharts`:
-    *   **Type**: `ComposedChart` with Layout `vertical`.
-    *   **XAxis**: Type `number`, representing Yield.
-    *   **YAxis**: Type `category`, dataKey `variety`. Ensure `width` is sufficient for text labels (approx 80-100px) or allow text wrapping.
-    *   **Grid**: Vertical `CartesianGrid` (opacity reduced).
-    *   **Marks**:
-        *   Custom `Scatter` or `Line` segments to draw the "dumbbell" connector.
-        *   Two `Scatter` series: One for 1931, one for 1932.
-*   **Styling**:
-    *   1931 Color: A cool tone (e.g., Indigo-500).
-    *   1932 Color: A warm tone (e.g., Amber-500) or contrasting cool tone (e.g., Cyan-400) to match "Premium Aesthetics".
-    *   Background: Dark/Glassmorphic container.
+### Step 4: Aesthetics & Interaction
+1.  **Palette**:
+    -   1931: Amber/Orange (Matches original "1931" loosely, high contrast).
+    -   1932: Indigo/Blue (Matches original "1932", high contrast).
+    -   Background: Dark/Glassmorphism suited for mobile "premium" feel.
+2.  **Animations**:
+    -   Use `framer-motion` for switching between Sites (slide/fade effect).
+    -   Animate the dots growing into position.
+3.  **Interactivity**:
+    -   Tap a row to highlight it and show precise values (e.g., "1931: 27 vs 1932: 26.9 (+0.1)") in a "Heads Up Display" or just expand the row slightly to reveal text numbers.
 
-### Step 4: Interaction & Details (L5)
-*   **Active State**: Utilize a React state `activeData` to track which variety is clicked.
-*   **Detail View**: When a user taps a row (Variety), highlight that row (opacity change on others) and display a "Card" overlay or inline expansion showing the exact difference (Delta) between 1931 and 1932.
+## 4. Data Extraction
 
-## 4. Data Extraction Strategy
+The data will be extracted directly from the `spec.datasets` field in the provided HTML.
 
-I will copy the JSON array directly from the source HTML's `spec.datasets` object.
+**Sample Structure to be used in Typescript:**
 
-**Source Data Sample:**
-```json
-[
+```typescript
+type BarleyData = {
+  yield: number;
+  variety: string;
+  year: number;
+  site: string;
+};
+
+// Extracted from source
+const rawData: BarleyData[] = [
   {"yield": 27, "variety": "Manchuria", "year": 1931, "site": "University Farm"},
   {"yield": 48.86667, "variety": "Manchuria", "year": 1931, "site": "Waseca"},
-  ...
-]
+  // ... rest of the 120 records
+];
 ```
 
-**Processing Logic (Pseudo-code):**
-1.  `const rawData = [...]`
-2.  `const sites = unique(rawData.map(d => d.site))`
-3.  `const groupedBySite = sites.map(site => { return { site, data: processSiteData(site) } })`
-4.  `processSiteData`: Filter by site -> Pivot years to columns -> Calculate Total Yield (for sorting) -> Sort Descending.
+**Processed Structure for Component:**
 
-## 5. Justification for Deviations
-*   **Removing Simultaneous Facets**: The original desktop view shows all sites at once to allow vertical scanning for patterns (like the Morris site having swapped years). On mobile, this vertical scanning is physically impossible without extreme scrolling or shrinking. The **Tabbed** approach sacrifices simultaneous comparison for **readability**. To compensate, I will ensure the transition between tabs is smooth (animation), allowing the user to "flip" through sites to spot the pattern shift.
+```typescript
+type ProcessedSiteData = {
+  site: string;
+  varieties: {
+    name: string;
+    yield1931: number;
+    yield1932: number;
+    diff: number; // For sorting or color coding delta
+  }[];
+};
+```
+
+This plan ensures the "Morris Mistake" narrative (the anomaly in the Morris site data) remains discoverable while making the chart actually usable on a mobile device.

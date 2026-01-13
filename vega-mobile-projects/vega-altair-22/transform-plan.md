@@ -1,101 +1,92 @@
-# Mobile Visualization Plan: Layered Histogram
+# Vis2Mobile Transformation Plan
 
-## 1. Analysis of Desktop Visualization
+## 1. Analysis of Original Visualization
 
-**Original Visualization Characteristics:**
-*   **Type:** Layered Histogram (Overlapping Bar Chart).
-*   **Data Structure:** Three experimental trials (Trial A, Trial B, Trial C) measuring a quantitative variable.
-*   **Visual Encodings:**
-    *   X-Axis: Measurement values (binned, approx range -5 to 11).
-    *   Y-Axis: Count of records (Frequency).
-    *   Color: Nominal encoding for the 3 Trials (Blue, Orange, Red).
-    *   Opacity: Semi-transparent (0.3) to show overlapping distributions.
-*   **Desktop Layout:** Chart on the left, Legend on the right. High bin count (maxbins: 100), resulting in fine-grained, thin bars.
+- **Type**: Layered Histogram (Overlapping Bar Chart).
+- **Data Content**: Three experimental trials (Trial A, B, C) showing the distribution of "Measurement" values.
+- **Desktop Features**:
+    - Three color-coded distributions overlaid on top of each other.
+    - Opacity (0.3) used to show overlapping areas.
+    - Legend on the right side.
+    - Continuous quantitative axes.
+- **Mobile Issues (Desktop_on_mobile.png)**:
+    - **Overplotting**: With three layers, the visual clutter ("High graphical density") makes it hard to distinguish specific values or distinct shapes of distributions on a narrow screen.
+    - **Small Touch Targets**: The individual histogram bars are very thin, making it impossible to tap specific bins.
+    - **Legend Space**: The side-mounted legend compresses the chart width significantly.
+    - **Readable text**: Axis labels and titles are small.
 
-**Mobile Challenges:**
-1.  **Horizontal Space:** The side-by-side legend layout compresses the chart area significantly on mobile.
-2.  **Bin Density:** 100 bins on a mobile screen (approx 350-400px wide) result in bars that are only ~3px wide. This creates visual noise ("jaggedness") and makes distinct distributions hard to read.
-3.  **Overplotting:** With three overlapping semi-transparent layers, the visual information becomes muddy on a small screen, especially where all three overlap.
-4.  **Touch Interaction:** Hovering over specific thin bars to see counts is impossible on touch devices.
+## 2. High-Level Design Strategy
 
-## 2. Design Action Space & Transformation Plan
+The core strategy is to resolve the **Overplotting** issue inherent in layered histograms on small screens. While the desktop version relies on transparency, the mobile version should offer a clearer way to compare distributions.
 
-Based on the `mobile-vis-design-action-space.md`, here is the transformation plan:
+I plan to use a **Hybrid Layout Strategy**:
+1.  **Primary View**: A **Vertical Stacked Layout (Small Multiples)**. This aligns the three distributions vertically sharing the same X-axis. This allows for instant shape comparison without occlusion.
+2.  **Interaction**: A "Scrubbable" interface. Users can drag their finger across the X-axis to see the exact count values for all three trials simultaneously in a fixed data panel.
 
-### L1 Data Model
-*   **Action: `Recompose (Aggregate)` (Re-binning)**
-    *   **Reasoning:** The original 100 bins are too dense for mobile. I will re-aggregate the raw data into fewer bins (e.g., 25-30 bins). This increases the width of the bars (`L4 Mark Instance: Rescale`), making the distributions smoother and easier to read on a small screen without losing the overall shape.
+## 3. Design Actions (Mapped to Action Space)
 
-### L3 Legend Block
-*   **Action: `Reposition` (Move to Top)**
-    *   **Reasoning:** Moving the legend from the right side to the top (`L3 Legend Block`) frees up the entire screen width for the chart (`L0 Visualization Container: Rescale`).
-*   **Action: `Transpose` (Horizontal Layout)**
-    *   **Reasoning:** Align legend items horizontally to fit the top bar context efficiently.
+### L0: Visualization Container
+-   **Action: `Rescale`**: Set chart width to 100% of the container and adjust height to fill the available vertical space comfortably (e.g., `h-96` or `aspect-[3/4]`), discarding the fixed `300x300` desktop config.
 
-### L1 Interaction Layer / L2 Features
-*   **Action: `Recompose (Add Filter/Focus)`**
-    *   **Reasoning:** To solve the "muddy overlap" issue on mobile, I will make the legend interactive. Tapping a Legend Item will toggle the visibility or opacity of that specific Trial. This allows users to view one or two distributions clearly without visual interference.
+### L1: Chart Components & Layout
+-   **Action: `Serialize Layout` (Stack Panels)**: Instead of one chart with three overlapping layers, I will render three separate, synchronized charts vertically (or a clear Ridgeline-style plot). This solves the "Cluttered Density" issue.
+-   **Action: `Reposition` (Legend)**: Move the legend from the right side to the top (`inline`) or use the charts' titles themselves as the legend. This reclaims horizontal space for the data.
 
-### L5 Feedback (Tooltip)
-*   **Action: `Reposition (Fix)`**
-    *   **Reasoning:** Instead of a floating tooltip that gets covered by the finger, I will use a custom Tooltip component that snaps to the top or uses a fixed overlay area, or simply ensure the Recharts tooltip is styled large enough and positioned intelligently.
+### L2: Data Marks
+-   **Action: `Rescale` (Reduce width/bin count)**: The desktop version has `maxbins: 100`. On mobile, 100 bins are too many (rendering <3px bars). I will perform data re-binning to a lower resolution (e.g., 30-40 bins) or calculate optimal bin width based on screen width to ensure bars are visible.
 
-### L3 Axes & L4 Ticks
-*   **Action: `Decimate Ticks`**
-    *   **Reasoning:** Reduce the number of X-axis ticks to prevent label overlap (`Cluttered text`).
-*   **Action: `Recompose (Remove)`**
-    *   **Reasoning:** Remove the Y-axis gridlines (`L3 Gridlines`) to reduce visual noise, keeping only horizontal guides if necessary, or removing them entirely for a cleaner "Premium" look.
+### L3: Axes
+-   **Action: `Decimate Ticks`**: Reduce X-axis ticks to 3-5 key values (Min, 0, Max) to prevent label overlap.
+-   **Action: `Recompose (Remove)` (Axis Title)**: Remove the "Count of Records" Y-axis label to save space; the distribution shape implies frequency. The X-axis title "Measurement" will be placed in the footer or subtitle.
+-   **Action: `Recompose (Remove)` (Y-Axis)**: Since the exact height of the bar is hard to read on mobile, I will hide the Y-axis lines/ticks and rely on the Tooltip/Data Panel for specific numbers.
 
-## 3. Data Extraction Plan
+### L5: Interaction & Feedback
+-   **Action: `Fix Tooltip Position`**: Instead of a floating tooltip that covers the data, I will create a "Data Stats Bar" at the bottom of the component. When the user scrubs the chart, this bar updates with the specific values for the active bin.
+-   **Action: `Triggers`**: Change from Hover (Desktop) to Touch/Drag (Mobile).
 
-The data is embedded in the HTML file under `datasets`. I need to extract and transform it from "Wide" format to "Long" format suitable for Recharts and manual binning.
+## 4. Data Extraction Plan
 
-**Source Data Snippet:**
-```json
-[
-  {"Trial A": 0.397, "Trial B": -0.600, "Trial C": 1.649},
-  {"Trial A": -0.110, "Trial B": -1.075, "Trial C": 2.710},
-  ...
-]
-```
+The data is embedded in the HTML file as a JSON object under `spec.datasets`.
 
-**Transformation Logic (in Component):**
-1.  **Flatten:** Iterate through the array. For each object, create 3 entries: `{ type: "Trial A", value: 0.397 }`, `{ type: "Trial B", value: -0.600 }`, etc.
-2.  **Calculate Extents:** Find global Min (-5) and Max (11) values.
-3.  **Binning:**
-    *   Define `Bin Count` = 30 (optimized for mobile).
-    *   `Bin Width` = (Max - Min) / Bin Count.
-    *   Create an array of bin objects: `{ binStart: number, binEnd: number, "Trial A": 0, "Trial B": 0, "Trial C": 0 }`.
-4.  **Populate:** Iterate flattened data, determine which bin it falls into, and increment the counter for that specific Trial.
-5.  **Result:** An array suitable for Recharts `<BarChart>` where each object represents a bin and contains counts for all 3 trials.
+1.  **Raw Data Parsing**:
+    -   Extract the array from `data-ba9a14f45a079c5af300d599df77bdbf`.
+    -   Structure: `[{ "Trial A": number, "Trial B": number, "Trial C": number }, ...]`.
 
-## 4. Implementation Steps
+2.  **Data Transformation (Folding & Binning)**:
+    -   **Flatten**: Convert the wide format to a long format: `[{ type: "Trial A", value: 0.39 }, ...]`.
+    -   **Binning Logic** (Critical Step):
+        -   Calculate the global Min and Max across all trials.
+        -   Determine a bin step size (e.g., `(Max - Min) / 40`).
+        -   Create buckets/bins.
+        -   Iterate through all data points and assign them to bins.
+        -   Resulting Structure for Recharts:
+            ```json
+            [
+              { "binStart": -5.0, "binEnd": -4.5, "Trial A": 0, "Trial B": 5, "Trial C": 1 },
+              { "binStart": -4.5, "binEnd": -4.0, "Trial A": 1, "Trial B": 12, "Trial C": 3 },
+              ...
+            ]
+            ```
+    -   This pre-processed data will be fed into Recharts `Bar` components.
 
-1.  **Scaffold Component:** Create `src/components/Visualization.tsx`.
-2.  **Data Processing:**
-    *   Copy the raw JSON data into a constant.
-    *   Implement the `processData` function to flatten and bin the data as described above.
-3.  **Layout Structure:**
-    *   Use a `Card` container with glassmorphism effects (`backdrop-blur`, `bg-opacity`).
-    *   Header: Title "Experiment Analysis" + Subtitle "Distribution of measurements across trials".
-    *   Legend: Custom buttons row at the top. Active state = colored; Inactive = grayed out.
-4.  **Chart Implementation (Recharts):**
-    *   Use `<ResponsiveContainer>` (L0 Rescale).
-    *   Use `<BarChart>` with the binned data.
-    *   XAxis: formatted to show range (e.g., "-5").
-    *   YAxis: hide axis line (`L4 Recompose`), show only essential ticks.
-    *   **Marks:** Three `<Bar>` components.
-        *   `dataKey="Trial A"`, `dataKey="Trial B"`, etc.
-        *   **Crucial:** Do *not* use `stackId` (to make them layered/overlapping).
-        *   **Styling:** Use `fillOpacity={0.6}` to simulate the desktop's transparency. When a user focuses on one, increase its opacity to 1.0 and lower others to 0.1.
-5.  **Interaction:**
-    *   State: `activeSeries` (array of selected trials).
-    *   `CustomTooltip`: Design a clean tooltip showing the bin range and the count for active trials.
-6.  **Refinement:**
-    *   Add smooth animations (Framer Motion or Recharts default) for state changes.
-    *   Ensure typography is legible (Tailwind `text-sm`, `text-xs` for axes).
+## 5. Implementation Steps
 
-## 5. Mobile Readability Assurance
-*   **Bin Width:** By manually reducing bins to ~30, each bar will be roughly 10px wide on a mobile screen, which is legible.
-*   **Contrast:** Using distinct but harmonious colors (Blue/Orange/Red palette) with varying opacity ensures overlap regions are visible but not confusing.
-*   **Focus Mode:** The interactive legend allows users to "de-clutter" the view instantly, a key mobile usability feature lacking in the static desktop image.
+1.  **Scaffold Component**: Create `src/components/Visualization.tsx`.
+2.  **Data Logic**: Implement the `processData` function to extract, fold, and bin the raw data from the provided JSON source.
+3.  **UI Shell**: Build the container with a Glassmorphism header (Title/Subtitle) and a fixed bottom Stats Panel.
+4.  **Recharts Implementation**:
+    -   Use `ResponsiveContainer`.
+    -   Implement a custom `BarChart`.
+    -   Since I planned a "Serialize Layout", I might use a Composite Chart (one X-axis, multiple Bar clusters) or actually stack separate Recharts instances. To ensure performance and alignment, a **Single Chart** with custom arranged bars or simply overlapping bars (with a toggle to isolate them) is often smoother in Recharts than syncing multiple charts.
+    -   *Refined Plan*: I will implement the **Overlapping View** but add a **Segmented Control** (Tabs) to filter: "All", "Trial A", "Trial B", "Trial C". This achieves the "Serialize/Filter" goal without complex layout shifts. "All" allows overview, specific tabs allow detail.
+5.  **Styling**: Apply Tailwind classes for distinct colors (Blue, Orange, Red/Pink as per original but refined palette) and typography.
+6.  **Interaction**: Add `Tooltip` with `cursor={{fill: 'transparent'}}` and a custom `content` that renders null (to suppress default) but updates a React state to show data in the bottom Stats Panel.
+
+## 6. Justification for Deviation (if any)
+
+-   *Action Space deviation*: The Action Space suggests "Serialize Layout" (Stacking). However, purely stacking 3 histograms vertically consumes a lot of vertical height (scrolling).
+-   *Proposed Solution*: **Filter Panels (Tabs)**. By adding a tab switcher, we allow the user to see the "messy" overview if they want, but easily isolate (filter) to "Trial A/B/C" to see the clean shape. This acts as a user-controlled "Recompose (Remove)" action.
+
+## 7. JSON Data Source (For Extraction)
+
+I will use the JSON data provided in the `<script>` tag of the source HTML: `spec.datasets['data-ba9a14f45a079c5af300d599df77bdbf']`. No fake data will be generated.

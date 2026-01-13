@@ -1,90 +1,103 @@
 # Vis2Mobile Transformation Plan
 
-## 1. Analysis of Original & Mobile Issues
+## 1. Analysis of Original Visualization
 
-### Original Visualization (Desktop)
-*   **Type:** Faceted Density Plot (Ridgeline Plot) created with Vega-Lite.
-*   **Data Structure:** Tidy data representing penguin measurements (Beak Length, Beak Depth, Flipper Length).
-*   **Layout:** Three vertically stacked area charts.
-*   **Key Visual Characteristic:** All three charts share a **single continuous X-Axis domain** (roughly 0 to 240).
-*   **Flaw in Desktop View:** Because "Beak Depth" (~15mm) and "Flipper Length" (~200mm) are on the same scale, the Beak distributions are squashed into thin spikes on the left, and Flipper Length is a blob on the right. There is massive wasted whitespace.
+### **Source Characteristics**
+- **Type**: Faceted Density Plot (Ridge Plot variant).
+- **Data Source**: `spec.datasets` contains raw data for Penguin species (Adelie, Chinstrap, Gentoo) with measurements: Beak Length, Beak Depth, Flipper Length, Body Mass.
+- **Vega-Lite Transforms**:
+    1.  **Fold**: Collapses columns ("Beak Length", "Beak Depth", "Flipper Length") into two columns: `Measurement Type` (key) and `value`.
+    2.  **Density**: Calculates Kernel Density Estimation (KDE) for the `value` grouped by `Measurement Type`.
+- **Layout**: Three vertically stacked rows (Facet).
+- **Scales**:
+    - **X-Axis**: **Shared Global Scale** (0 to ~240). This results in "Beak Depth" (values ~15-20) being squeezed to the far left, and "Flipper Length" (values ~170-230) being at the far right. There is significant wasted whitespace in the middle of each row.
+    - **Y-Axis**: Density value (independent range per row).
 
-### Mobile Rendering Issues (`desktop_on_mobile.png`)
-1.  **Unreadable Axes:** The shared x-axis labels will be microscopic.
-2.  **Vertical Text:** The row labels ("Measurement Type", "Beak Depth", etc.) are rotated 270 degrees on the left. This requires users to tilt their heads to read on mobile.
-3.  **Wasted Space:** The "Shared Axis" approach is catastrophic for mobile width. 70% of the screen width is empty white space in every row.
-4.  **Interaction:** Hover-based density details are impossible on touch screens.
+### **Mobile & Design Issues (`desktop_on_mobile.png`)**
+- **Illegible Text**: Axis labels and headers are too small.
+- **Wasted Space**: The global X-axis scale is inefficient for mobile. A 15mm beak depth plotted on a 0-240mm scale occupies <10% of the screen width. On a mobile device (e.g., 375px wide), the data curve would be less than 40px wide.
+- **Interaction**: No touch-friendly way to read specific values.
+- **Layout**: The left-side Y-axis labels ("Measurement Type") consume ~25% of the horizontal space, further compressing the charts.
 
 ## 2. High-Level Design Strategy
 
-The core strategy is **"Deconstruct & optimize Resolution"**.
+My strategy focuses on **maximizing data visibility** and **readability** on a narrow screen.
 
-Instead of treating this as one monolithic chart with a shared axis, we will treat it as a **Dashboard of 3 Independent Cards**, one for each measurement.
+1.  **Layout Topology**: Convert the "Small Multiples" grid into a **Vertical Card Stack**.
+2.  **Space Reclamation**: Move row labels (e.g., "Beak Depth") from the left axis to a **Header** above each chart. This allows the chart to span the full width (100%) of the container.
+3.  **Scale Optimization (Crucial Change)**: I will abandon the shared global X-axis. Instead, I will use **Independent Domains** for each measurement type.
+    - *Reasoning*: On mobile, we cannot afford 80% whitespace. "Beak Depth" needs to span the full width to show the distribution shape clearly. I will add clear X-axis ticks to indicate the range change.
+4.  **Premium Aesthetics**: Use **Glassmorphism** cards, smooth **Gradient Fills** for the density areas, and **Lucide Icons** to represent the measurements visually.
 
-### Key Design Decisions:
-1.  **Independent Axes (Crucial):** We must break the shared x-axis. "Beak Depth" should range from ~10-25mm, and "Flipper Length" from ~170-230mm. This allows the *shape* of the distribution to fill the mobile width, making the data actually visible.
-2.  **Layout Serialization:** Move row labels from the left (vertical) to the top of each chart (horizontal).
-3.  **Interactive Scrubbing:** Replace passive tooltips with an active "Touch & Drag" scrubber that highlights the specific value and density at the finger's position.
-4.  **Premium Aesthetics:** Use a glassmorphic card design with vibrant gradients (e.g., Teal to Blue) to make the density curves pop against a dark/light mode background.
+## 3. Design Action Space & Justification
 
-## 3. Vis2Mobile Action Space Mapping
+### **L0: Visualization Container**
+-   **Action: `Rescale`**
+    -   Set `width: 100%` and `height: auto`. The container will flow vertically.
 
-Based on `mobile-vis-design-action-space.md`, here are the specific actions:
+### **L1: Data Model (Crucial Step)**
+-   **Action: `Recompose (Aggregate/Transform)`**
+    -   **Context**: The raw data is points. The visualization is density (Area).
+    -   **Plan**: I must implement a **Kernel Density Estimation (KDE)** function in the React component (or utility) to process the raw data into smooth curves `[{value: x, density: y}]`. This mimics the Vega-Lite `density` transform.
 
-| Layer | Component | Action | Reasoning |
-| :--- | :--- | :--- | :--- |
-| **L0** | Container | **Rescale (Fit Width)** | Ensure charts expand to fill the device width (`w-full`) rather than a fixed pixel width. |
-| **L1** | Chart Component | **Serialize Layout** | The vertical stack is good, but we will treat them as distinct cards with independent spacing (`gap-6`) rather than a single connected grid. |
-| **L2** | Title Block | **Reposition** | Move the specific measurement name (e.g., "Beak Length") from the Y-axis/Row Header to a prominent Card Title above the chart. |
-| **L2** | Title Block | **Simplify** | Remove the generic "Measurement Type" label entirely; the individual titles explain themselves. |
-| **L3** | Axes | **Recompose (Change Domain)** | **Critical Action:** Switch from a shared global domain `[0, 240]` to independent domains based on the min/max of each metric. This solves the "wasted space" issue. |
-| **L3** | Axes | **Recompose (Remove Y-Axis)** | The absolute "Density" float value (e.g., 0.04) is abstract and less important than the *shape*. We will remove the Y-axis lines/ticks to save horizontal space and just show the shape. |
-| **L3** | Ticks | **Decimate Ticks** | Reduce X-axis tick count to 4-5 to prevent label overlap on narrow screens. |
-| **L5** | Interaction | **Trigger (Replace Hover)** | Replace `hover` with `Touch/Drag` (Recharts `activeDot` and `CategoricalChartState`) to view specific values. |
-| **L5** | Feedback | **Reposition (Fix Tooltip)** | Instead of a floating tooltip covering the finger, display the active value in a fixed summary area within the Card Header. |
+### **L1: Chart Components**
+-   **Action: `Serialize Layout`**
+    -   Stack the three density charts vertically with consistent spacing (`gap-6`).
 
-## 4. Data Extraction & Processing Plan
+### **L2: Title Block**
+-   **Action: `Reposition` (Headers)**
+    -   Move specific measurement labels ("Beak Length") from the Y-Axis to the top-left of each chart panel.
+    -   Style: Bold, readable typography (Tailwind `text-lg font-semibold`).
 
-The source HTML contains the raw data in a JSON object inside `datasets`. The Vega-Lite spec performs a transform (Fold -> Density) *at runtime*. Recharts does not calculate density (KDE) automatically; it only plots points.
+### **L3: Axes (X-Axis)**
+-   **Action: `Change Domain` (Action Space: Axis)**
+    -   **Original**: Global [0, 240].
+    -   **Mobile**: Independent domains (e.g., Beak Depth [10, 25], Flipper [170, 240]).
+    -   **Justification**: Essential for mobile visibility.
+-   **Action: `Decimate Ticks`**
+    -   Limit X-axis ticks to 3-5 items to prevent overlapping text.
 
-**I must implement a Kernel Density Estimation (KDE) function.**
+### **L3: Axes (Y-Axis)**
+-   **Action: `Recompose (Remove)`**
+    -   Remove visual Y-axis lines and ticks. The absolute "density" value (e.g., 0.15 vs 0.20) is less important than the *shape* of the distribution.
+    -   **Compensate**: If exact density matters, show it in a Tooltip.
 
-1.  **Extraction:** Copy the `datasets['data-783f637a646b8ff8439f6e7d741cecf0']` array from the source.
-2.  **Cleaning:** Filter out `null` values for the relevant keys.
-3.  **Transformation (The KDE Step):**
-    *   Create a simple Gaussian Kernel function.
-    *   For each measurement type (Beak Length, Beak Depth, Flipper Length):
-        *   Extract the array of numbers.
-        *   Determine min/max and create a linear scale (the "bins").
-        *   Run the KDE function to generate `[{ x: value, density: computed_density }]` for ~50-100 points along the range.
-    *   This transformed data will be passed to Recharts `<AreaChart />`.
+### **L1: Interaction Layer**
+-   **Action: `Trigger (Click/Touch)` instead of Hover**
+    -   Implement a **Custom Cursor** that snaps to the finger's position.
+-   **Action: `Feedback (Fix Tooltip Position)`**
+    -   Display the selected value (e.g., "18.5 mm") in a fixed overlay or a dynamic header label rather than a floating tooltip that might be obscured by the finger.
+
+## 4. Data Extraction Plan
+
+I will not use fake data. I will extract the raw array from the source HTML's `datasets['data-783f637a646b8ff8439f6e7d741cecf0']`.
+
+**Steps:**
+1.  Copy the `datasets` object into a constant `RAW_DATA`.
+2.  Create a utility function `processData(data)`:
+    -   Filter out `null` values for the relevant fields.
+    -   Extract arrays for: `Beak Length (mm)`, `Beak Depth (mm)`, `Flipper Length (mm)`.
+    -   Implement a generic **KDE (Kernel Density Estimation)** function.
+        -   *Input*: Array of numbers.
+        -   *Output*: Array of objects `{ value: number, density: number }` suitable for Recharts `Area`.
+    -   The KDE function will need a bandwidth parameter (can be estimated using "Silverman's rule of thumb").
 
 ## 5. Implementation Steps
 
-### Step 1: Project Setup & Components
-*   Initialize `src/components/Visualization.tsx`.
-*   Import `AreaChart`, `Area`, `XAxis`, `ResponsiveContainer`, `Tooltip`, `ReferenceLine` from `recharts`.
-*   Import Lucide icons (`Ruler`, `Activity`, `Info`).
+1.  **Setup**: Initialize basic card structure using Tailwind.
+2.  **Data Processing**:
+    -   Write the KDE algorithm in TypeScript.
+    -   Process `RAW_DATA` into three separate datasets: `beakLengthData`, `beakDepthData`, `flipperLengthData`.
+3.  **Component Construction (`DensityChart`)**:
+    -   Create a reusable component receiving `data`, `color`, `title`, and `unit`.
+    -   Use `Recharts` -> `AreaChart`.
+    -   Configure `XAxis`: `type="number"`, `domain={['auto', 'auto']}`, `tickCount={5}`.
+    -   Configure `YAxis`: Hidden.
+    -   Configure `Area`: Use `monotone` curve, gradient fill (using `defs`).
+    -   Add `CartesianGrid` (vertical only, subtle).
+4.  **Styling**:
+    -   Use a dark/vibrant theme ("Premium"). Dark background, bright distinct colors for the three metrics (e.g., Cyan for Flipper, Pink for Beak Length, Purple for Beak Depth) to differentiate them since they are now separate charts.
+    -   Add `Tooltip` (custom cursor) that updates a state to show the active value prominently.
+5.  **Refinement**: Ensure fonts are legible (>14px for body, >18px for headers) and touch targets are adequate.
 
-### Step 2: Data Processing Logic
-*   Paste the raw JSON data into a constant.
-*   Implement `kernelDensityEstimator(kernel, X)` and `epanechnikov(bandwidth)` or Gaussian helper functions.
-*   Write a `useMemo` hook to process the raw data into three separate arrays (one for each metric), calculating density curves dynamically.
-
-### Step 3: Layout Structure (Mobile First)
-*   Create a main container with `flex flex-col gap-6 p-4`.
-*   Create a reusable `DensityCard` component. This component will accept a title, color theme, and the specific data subset.
-*   **Header:** Title + Icon (e.g., "Flipper Length") + Current Value Indicator (placeholder for interaction).
-
-### Step 4: Chart Implementation
-*   Inside `DensityCard`, place `<ResponsiveContainer width="100%" height={160}>`.
-*   Use `<AreaChart>` with the calculated KDE data.
-*   **Styling:** Use `defs` for SVG Linear Gradients (fade from top to bottom) to give a premium glass look.
-*   **Axes:** Render `<XAxis>` with `type="number"`, `domain={['auto', 'auto']}` (or specific calculated range), and minimal ticks. Hide YAxis.
-
-### Step 5: Interaction & Polish
-*   Implement a custom `CustomTooltip` that is hidden but updates a state variable in the parent `DensityCard` to show the "Active Value" in the card header (Action: **Reposition Feedback**).
-*   Add entry animations using Tailwind `animate-in` or Framer Motion (if available, otherwise CSS transitions).
-*   Ensure typography uses distinct weights (Bold for values, subtext for units).
-
-This plan ensures we don't just "shrink" the desktop chart, but fundamentally "reflow" it for a superior mobile experience while strictly adhering to the real data.
+This plan ensures the original statistical insight (distribution of measurements) is preserved while drastically improving readability and usability on mobile devices.
