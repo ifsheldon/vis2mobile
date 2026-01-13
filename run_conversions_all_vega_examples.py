@@ -22,14 +22,14 @@ PROJECTS_DIR = "vega-mobile-projects"
 # All projects to process
 PROJECTS = [
     # vega
-    "vega-01",
-    "vega-02",
-    "vega-03",
-    "vega-04",
-    "vega-05",
+    # "vega-01", # finished by FL
+    # "vega-02", # finished by FL
+    # "vega-03", # finished by FL
+    # "vega-04", # finished by FL
+    # "vega-05", # finished by FL
     # vega_altair
     # "vega-altair-01", # finished by FL
-    "vega-altair-02",
+    # "vega-altair-02", # finished by FL
     # "vega-altair-03", # finished by FL
     # "vega-altair-04", # finished by FL
     # "vega-altair-05", # finished by FL
@@ -37,7 +37,7 @@ PROJECTS = [
     # "vega-altair-07", # finished by Sizhe
     # "vega-altair-08", # finished by Sizhe
     # "vega-altair-09", # finished by Sizhe
-    "vega-altair-10",
+    "vega-altair-10",  # not good
     # "vega-altair-11", # finished by FL
     # "vega-altair-12", # finished by Sizhe
     # "vega-altair-13", # finished by FL
@@ -47,7 +47,7 @@ PROJECTS = [
     # "vega-altair-17", # finished by Sizhe
     # "vega-altair-18", # finished by FL
     # "vega-altair-19", # finished by FL
-    "vega-altair-20",
+    # "vega-altair-20", # finished by FL
     # "vega-altair-21", # finished by Sizhe
     # "vega-altair-22", # finished by Sizhe
     # "vega-altair-23", # finished by Sizhe
@@ -55,20 +55,20 @@ PROJECTS = [
     # "vega-altair-25", # finished by Sizhe
     # "vega-altair-26", # finished by Sizhe
     # "vega-altair-27", # finished by FL
-    "vega-altair-28",
-    "vega-altair-29",
-    "vega-altair-30",
-    "vega-altair-31",
+    # "vega-altair-28", # finished by FL
+    # "vega-altair-29", # finished by FL
+    # "vega-altair-30", # finished by FL
+    # "vega-altair-31", # finished by FL
     "vega-altair-32",
     "vega-altair-33",
-    "vega-altair-34",
-    "vega-altair-35",
-    "vega-altair-36",
-    "vega-altair-37",
-    "vega-altair-38",
-    "vega-altair-39",
-    "vega-altair-40",
-    "vega-altair-41",
+    # "vega-altair-34", # finished by FL
+    # "vega-altair-35", # finished by FL
+    # "vega-altair-36", # finished by FL
+    # "vega-altair-37", # finished by FL
+    # "vega-altair-38", # finished by FL
+    # "vega-altair-39", # finished by FL
+    # "vega-altair-40", # finished by FL
+    # "vega-altair-41", # finished by FL
     # vega_lite, finished by FL
     # "vega-lite-01",
     # "vega-lite-02",
