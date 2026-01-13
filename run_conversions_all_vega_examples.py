@@ -135,6 +135,7 @@ def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
                 log.flush()
                 cmd = [
                     "codex",
+                    "exec",
                     "--model",
                     "gpt-5.2-codex",
                     "--enable",
