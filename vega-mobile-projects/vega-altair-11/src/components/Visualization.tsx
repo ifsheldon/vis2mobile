@@ -1,179 +1,194 @@
 "use client";
 
+import { Calendar, Clock, Info } from "lucide-react";
 import { useMemo, useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  LabelList,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-const rawTasks = [
+const rawData = [
   { task: "A", start: 1, end: 3 },
   { task: "B", start: 3, end: 8 },
   { task: "C", start: 8, end: 10 },
 ];
 
-type Task = {
-  task: string;
-  start: number;
-  end: number;
-  duration: number;
-};
-
-const domainMin = 0;
-const domainMax = 10;
-const ticks = [0, 2, 4, 6, 8, 10];
-
 export function Visualization() {
-  const tasks = useMemo<Task[]>(() => {
-    return rawTasks.map((item) => ({
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const data = useMemo(() => {
+    return rawData.map((item) => ({
       ...item,
       duration: item.end - item.start,
     }));
   }, []);
 
-  const [activeTask, setActiveTask] = useState<Task | null>(tasks[0] ?? null);
-  const span = domainMax - domainMin;
-  const tickPositions = useMemo(
-    () =>
-      ticks.map((tick) => ({
-        value: tick,
-        left: ((tick - domainMin) / span) * 100,
-      })),
-    [span],
-  );
-
-  const handleSelect = (task: Task) => {
-    setActiveTask((current) => (current?.task === task.task ? null : task));
+  const handleBarClick = (_: unknown, index: number) => {
+    setActiveIndex(index === activeIndex ? null : index);
   };
 
-  return (
-    <div className="flex min-h-full w-full items-center justify-center bg-slate-950 px-4 py-6 text-slate-100">
-      <section className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_24px_70px_rgba(15,23,42,0.55)] backdrop-blur-xl">
-        <header className="mb-5">
-          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-slate-400">
-            Project Schedule
-          </p>
-          <h1 className="mt-2 text-xl font-semibold text-slate-50 [font-family:'Avenir_Next',_'Avenir',_'Segoe_UI',_sans-serif]">
-            Mobile Gantt Overview
-          </h1>
-          <p className="mt-2 text-sm text-slate-300">
-            Tap a bar to reveal the exact start, end, and duration.
-          </p>
-        </header>
+  const activeTask = activeIndex !== null ? data[activeIndex] : null;
 
-        <div
-          className="mb-5 rounded-2xl border border-white/10 bg-slate-900/60 p-4"
-          aria-live="polite"
-        >
-          {activeTask ? (
-            <div className="flex items-center justify-between gap-4">
+  return (
+    <div className="flex flex-col h-full w-full bg-slate-950 text-slate-100 font-sans p-4 pt-10">
+      {/* Header section */}
+      <header className="mb-6">
+        <div className="flex items-center gap-2 mb-1">
+          <Calendar className="w-4 h-4 text-indigo-400" />
+          <span className="text-[0.65rem] font-bold uppercase tracking-widest text-slate-400">
+            Project Timeline
+          </span>
+        </div>
+        <h1 className="text-2xl font-bold text-white tracking-tight">
+          Gantt Overview
+        </h1>
+        <p className="text-sm text-slate-400 mt-1">
+          Timeline of task execution and dependencies.
+        </p>
+      </header>
+
+      {/* Active Details Card */}
+      <div className="mb-6 h-28">
+        {activeTask ? (
+          <div className="w-full h-full rounded-2xl bg-indigo-600/20 border border-indigo-500/30 p-4 flex flex-col justify-center animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="flex justify-between items-start">
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                  Active Task
+                <p className="text-xs font-semibold text-indigo-300 uppercase tracking-tighter">
+                  Selected Task
                 </p>
-                <p className="mt-1 text-lg font-semibold text-slate-50">
+                <h2 className="text-xl font-bold text-white">
                   Task {activeTask.task}
-                </p>
+                </h2>
               </div>
-              <div className="text-right text-sm text-slate-200">
-                <p>
-                  {activeTask.start} -&gt; {activeTask.end}
-                </p>
-                <p className="text-xs text-slate-400">
-                  Duration {activeTask.duration}
-                </p>
+              <div className="bg-indigo-500/20 px-3 py-1 rounded-full border border-indigo-400/30">
+                <span className="text-xs font-bold text-indigo-200">
+                  {activeTask.duration} Days
+                </span>
               </div>
             </div>
-          ) : (
-            <p className="text-sm text-slate-400">
-              Tap a bar to pin its timing details here.
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-4">
-          {tasks.map((task) => {
-            const leftPercent = ((task.start - domainMin) / span) * 100;
-            const widthPercent = (task.duration / span) * 100;
-            const isActive = activeTask?.task === task.task;
-
-            return (
-              <div
-                key={task.task}
-                className="grid grid-cols-[3.25rem_1fr] items-center gap-3"
-              >
-                <div className="text-sm font-semibold text-slate-200">
-                  {task.task}
-                </div>
-                <div className="relative h-11 overflow-hidden rounded-xl border border-white/10 bg-slate-900/40">
-                  <svg
-                    className="pointer-events-none absolute inset-0 h-full w-full"
-                    viewBox="0 0 100 100"
-                    preserveAspectRatio="none"
-                    aria-hidden="true"
-                  >
-                    {tickPositions.map((tick) => (
-                      <line
-                        key={`grid-${tick.value}`}
-                        x1={tick.left}
-                        x2={tick.left}
-                        y1={0}
-                        y2={100}
-                        stroke="rgba(148,163,184,0.3)"
-                        strokeDasharray="4 6"
-                        strokeWidth={0.6}
-                        vectorEffect="non-scaling-stroke"
-                      />
-                    ))}
-                  </svg>
-                  <button
-                    type="button"
-                    onClick={() => handleSelect(task)}
-                    className={`absolute top-1/2 h-8 -translate-y-1/2 rounded-full px-3 text-xs font-semibold text-white shadow-lg transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-300 ${
-                      isActive
-                        ? "bg-gradient-to-r from-indigo-400 via-fuchsia-500 to-pink-500"
-                        : "bg-gradient-to-r from-indigo-500 to-fuchsia-600"
-                    }`}
-                    style={{
-                      left: `${leftPercent}%`,
-                      width: `${widthPercent}%`,
-                    }}
-                    aria-pressed={isActive}
-                    aria-label={`Task ${task.task} runs from ${task.start} to ${task.end}`}
-                  >
-                    <span className="truncate">{`T${task.task}`}</span>
-                  </button>
-                </div>
+            <div className="mt-2 flex items-center gap-4 text-sm text-slate-300">
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                <span>Start: {activeTask.start}</span>
               </div>
-            );
-          })}
-        </div>
-
-        <div className="mt-6 grid grid-cols-[3.25rem_1fr] items-center gap-3">
-          <div className="text-xs uppercase tracking-[0.2em] text-slate-400">
-            Time
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                <span>End: {activeTask.end}</span>
+              </div>
+            </div>
           </div>
-          <div className="relative h-6">
-            {tickPositions.map((tick) => {
-              const alignClass =
-                tick.value === domainMin
-                  ? "translate-x-0"
-                  : tick.value === domainMax
-                    ? "-translate-x-full"
-                    : "-translate-x-1/2";
-
-              return (
-                <div
-                  key={`tick-${tick.value}`}
-                  className="absolute top-0 flex flex-col items-center text-[0.7rem] text-slate-400"
-                  style={{ left: `${tick.left}%` }}
-                >
-                  <span className={`font-medium ${alignClass}`}>
-                    {tick.value}
-                  </span>
-                  <span className="mt-1 h-2 w-px bg-white/20" />
-                </div>
-              );
-            })}
+        ) : (
+          <div className="w-full h-full rounded-2xl bg-slate-900/50 border border-slate-800 p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+              <Info className="w-5 h-5 text-slate-500" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-slate-300">
+                Tap a bar to see details
+              </p>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Start, end dates and total duration.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        )}
+      </div>
+
+      {/* Chart Container */}
+      <div className="flex-1 min-h-[300px] w-full bg-slate-900/40 rounded-3xl border border-white/5 p-4 backdrop-blur-sm">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            layout="vertical"
+            margin={{ top: 5, right: 30, left: -20, bottom: 5 }}
+            barCategoryGap="20%"
+          >
+            <CartesianGrid
+              horizontal={false}
+              stroke="rgba(255,255,255,0.05)"
+              strokeDasharray="3 3"
+            />
+            <XAxis type="number" domain={[0, 10]} hide />
+            <YAxis
+              dataKey="task"
+              type="category"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#94a3b8", fontSize: 14, fontWeight: 600 }}
+            />
+            <Tooltip cursor={false} content={<div className="hidden" />} />
+
+            {/* The "Invisible" offset bar */}
+            <Bar
+              dataKey="start"
+              stackId="a"
+              fill="transparent"
+              isAnimationActive={false}
+            />
+
+            {/* The actual Gantt bar */}
+            <Bar
+              dataKey="duration"
+              stackId="a"
+              radius={[8, 8, 8, 8]}
+              onClick={handleBarClick}
+              className="cursor-pointer"
+            >
+              {data.map((item) => (
+                <Cell
+                  key={item.task}
+                  fill={item.task === activeTask?.task ? "#818cf8" : "#4f46e5"}
+                  fillOpacity={item.task === activeTask?.task ? 1 : 0.8}
+                  stroke={item.task === activeTask?.task ? "#c7d2fe" : "none"}
+                  strokeWidth={2}
+                  className="transition-all duration-300"
+                />
+              ))}
+              <LabelList
+                dataKey="task"
+                position="center"
+                content={(props) => {
+                  const { x, y, width, height, value } = props;
+                  if (
+                    typeof x !== "number" ||
+                    typeof y !== "number" ||
+                    typeof width !== "number" ||
+                    typeof height !== "number"
+                  )
+                    return null;
+                  if (width < 30) return null;
+                  return (
+                    <text
+                      x={x + width / 2}
+                      y={y + height / 2}
+                      fill="white"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      className="text-[10px] font-bold pointer-events-none"
+                    >
+                      {value}
+                    </text>
+                  );
+                }}
+              />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* X-Axis labels at the bottom */}
+      <div className="mt-4 px-4 flex justify-between text-[0.6rem] font-bold text-slate-500 uppercase tracking-widest">
+        <span>Day 0</span>
+        <span>Day 5</span>
+        <span>Day 10</span>
+      </div>
     </div>
   );
 }
