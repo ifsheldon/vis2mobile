@@ -21,7 +21,7 @@
 - [x] vega-02
 - [x] vega-03
 - [x] vega-04
-- [ ] vega-05
+- [x] vega-05
 - [ ] vega-altair-01
 - [ ] vega-altair-02
 - [ ] vega-altair-03
@@ -92,3 +92,5 @@
 - 2026-01-13: Migrated vega-03 (Stock Explorer) into gallery.
 - 2026-01-13: Migrated vega-04 (Country Breakdown) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-04.
+- 2026-01-13: Migrated vega-05 (Barley Yield) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-05.
