@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>15.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "description": "Source: https://altair-viz.github.io/gallery/us_state_capitals.html", "layer": [{"data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/us-10m.json", "format": {"feature": "states", "type": "topojson"}}, "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}, "projection": {"type": "albersUsa"}, "title": "US State Capitols"}, {"data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/us-state-capitals.json"}, "mark": {"type": "point"}, "encoding": {"color": {"value": "black"}, "latitude": {"field": "lat", "type": "quantitative"}, "longitude": {"field": "lon", "type": "quantitative"}, "size": {"condition": [{"test": {"not": {"param": "param_edc58f4e642edc95"}}, "value": 30}], "value": 100}}, "name": "view_92090dbcd1db1266_1"}, {"data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/us-state-capitals.json"}, "mark": {"type": "text", "align": "right", "dy": -5}, "encoding": {"latitude": {"field": "lat", "type": "quantitative"}, "longitude": {"field": "lon", "type": "quantitative"}, "opacity": {"condition": [{"test": {"not": {"param": "param_edc58f4e642edc95"}}, "value": 0}], "value": 1}, "text": {"field": "city", "type": "nominal"}}}], "height": 400, "params": [{"name": "param_edc58f4e642edc95", "select": {"type": "point", "fields": ["lat", "lon"], "nearest": true, "on": "pointerover"}, "views": ["view_92090dbcd1db1266_1"]}], "width": 650, "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json"};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>20.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300, "strokeOpacity": 0}}, "description": "Source:https://altair-viz.github.io/gallery/pyramid.html ", "data": {"name": "data-dc67222c0d414c2719b571f17c8d5072"}, "mark": {"type": "arc", "outerRadius": 80}, "encoding": {"color": {"field": "category", "legend": {"legendX": 160, "legendY": 50, "orient": "none", "title": null}, "scale": {"domain": ["Sky", "Shady side of a pyramid", "Sunny side of a pyramid"], "range": ["#416D9D", "#674028", "#DEAC58"]}, "type": "nominal"}, "order": {"field": "value", "type": "quantitative"}, "theta": {"field": "value", "scale": {"range": [2.356, 8.639]}, "type": "quantitative"}}, "height": 150, "width": 150, "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json", "datasets": {"data-dc67222c0d414c2719b571f17c8d5072": [{"category": "Sky", "value": 75}, {"category": "Shady side of a pyramid", "value": 10}, {"category": "Sunny side of a pyramid", "value": 15}]}};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>

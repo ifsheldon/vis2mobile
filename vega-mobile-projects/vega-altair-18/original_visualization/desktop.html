@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>18.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}, "text": {"align": "left", "dx": 1, "dy": 3}}, "description": "Source: https://altair-viz.github.io/gallery/co2_concentration.html", "layer": [{"mark": {"type": "line"}, "encoding": {"color": {"field": "decade", "legend": null, "scale": {"scheme": "magma"}, "type": "ordinal"}, "x": {"axis": {"tickCount": 11, "title": "Year into Decade"}, "field": "scaled_date", "type": "quantitative"}, "y": {"field": "CO2", "scale": {"zero": false}, "title": "CO2 concentration in ppm", "type": "quantitative"}}, "title": "Carbon Dioxide in the Atmosphere", "transform": [{"calculate": "year(datum.Date)", "as": "year"}, {"calculate": "floor(datum.year / 10)", "as": "decade"}, {"calculate": "(datum.year % 10) + (month(datum.Date)/12)", "as": "scaled_date"}, {"window": [{"op": "first_value", "field": "scaled_date", "as": "first_date"}, {"op": "last_value", "field": "scaled_date", "as": "last_date"}], "frame": [null, null], "groupby": ["decade"], "sort": [{"field": "scaled_date", "order": "ascending"}]}, {"calculate": "datum.first_date === datum.scaled_date ? 'first' : datum.last_date === datum.scaled_date ? 'last' : null", "as": "end"}]}, {"mark": {"type": "text", "baseline": "top"}, "encoding": {"text": {"field": "year", "type": "nominal"}, "x": {"axis": {"tickCount": 11, "title": "Year into Decade"}, "field": "scaled_date", "type": "quantitative"}, "y": {"field": "CO2", "scale": {"zero": false}, "title": "CO2 concentration in ppm", "type": "quantitative"}}, "title": "Carbon Dioxide in the Atmosphere", "transform": [{"calculate": "year(datum.Date)", "as": "year"}, {"calculate": "floor(datum.year / 10)", "as": "decade"}, {"calculate": "(datum.year % 10) + (month(datum.Date)/12)", "as": "scaled_date"}, {"window": [{"op": "first_value", "field": "scaled_date", "as": "first_date"}, {"op": "last_value", "field": "scaled_date", "as": "last_date"}], "frame": [null, null], "groupby": ["decade"], "sort": [{"field": "scaled_date", "order": "ascending"}]}, {"calculate": "datum.first_date === datum.scaled_date ? 'first' : datum.last_date === datum.scaled_date ? 'last' : null", "as": "end"}, {"filter": "(datum.end === 'first')"}]}, {"mark": {"type": "text", "baseline": "bottom"}, "encoding": {"text": {"field": "year", "type": "nominal"}, "x": {"axis": {"tickCount": 11, "title": "Year into Decade"}, "field": "scaled_date", "type": "quantitative"}, "y": {"field": "CO2", "scale": {"zero": false}, "title": "CO2 concentration in ppm", "type": "quantitative"}}, "title": "Carbon Dioxide in the Atmosphere", "transform": [{"calculate": "year(datum.Date)", "as": "year"}, {"calculate": "floor(datum.year / 10)", "as": "decade"}, {"calculate": "(datum.year % 10) + (month(datum.Date)/12)", "as": "scaled_date"}, {"window": [{"op": "first_value", "field": "scaled_date", "as": "first_date"}, {"op": "last_value", "field": "scaled_date", "as": "last_date"}], "frame": [null, null], "groupby": ["decade"], "sort": [{"field": "scaled_date", "order": "ascending"}]}, {"calculate": "datum.first_date === datum.scaled_date ? 'first' : datum.last_date === datum.scaled_date ? 'last' : null", "as": "end"}, {"filter": "(datum.end === 'last')"}]}], "data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/co2-concentration.csv"}, "height": 375, "width": 600, "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json"};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>
