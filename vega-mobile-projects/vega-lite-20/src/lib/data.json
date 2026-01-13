@@ -1,0 +1,50 @@
+[
+  {
+    "genre": "Horror",
+    "rating": 5.68
+  },
+  {
+    "genre": "Comedy",
+    "rating": 5.85
+  },
+  {
+    "genre": "Romantic Comedy",
+    "rating": 5.87
+  },
+  {
+    "genre": "Action",
+    "rating": 6.11
+  },
+  {
+    "genre": "Concert/Performance",
+    "rating": 6.33
+  },
+  {
+    "genre": "Adventure",
+    "rating": 6.35
+  },
+  {
+    "genre": "Thriller/Suspense",
+    "rating": 6.36
+  },
+  {
+    "genre": "Musical",
+    "rating": 6.45
+  },
+  {
+    "genre": "Drama",
+    "rating": 6.77
+  },
+  {
+    "genre": "Black Comedy",
+    "rating": 6.82
+  },
+  {
+    "genre": "Western",
+    "rating": 6.84
+  },
+  {
+    "genre": "Documentary",
+    "rating": 7.0
+  }
+]
