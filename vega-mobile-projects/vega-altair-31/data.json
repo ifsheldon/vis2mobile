@@ -1,0 +1,30 @@
+{
+  "sites": [
+    "Crookston",
+    "Duluth",
+    "Grand Rapids",
+    "Morris",
+    "University Farm",
+    "Waseca"
+  ],
+  "data": [
+    {
+      "year": "1931",
+      "Crookston": 42.85,
+      "Duluth": 30.633335000000002,
+      "Grand Rapids": 29.71667,
+      "Morris": 28.733335,
+      "University Farm": 36.583330000000004,
+      "Waseca": 52.716665000000006
+    },
+    {
+      "year": "1932",
+      "Crookston": 32.099995,
+      "Duluth": 24.283335,
+      "Grand Rapids": 20.266665,
+      "Morris": 43.36667,
+      "University Farm": 27.750005,
+      "Waseca": 39.883335
+    }
+  ]
+}
