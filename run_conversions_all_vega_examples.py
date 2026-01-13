@@ -9,10 +9,12 @@ import subprocess
 import asyncio
 import os
 from pathlib import Path
-from concurrent.futures import ProcessPoolExecutor
 import sys
+from random import randint
+from copy import deepcopy
 
 USE_CODEX = False
+USE_FLASH = True
 
 # Base directory for vega mobile projects
 PROJECTS_DIR = "vega-mobile-projects"
@@ -68,32 +70,32 @@ PROJECTS = [
     # "vega-altair-40",
     # "vega-altair-41",
     # vega_lite
-    "vega-lite-01",
-    "vega-lite-02",
-    "vega-lite-03",
-    "vega-lite-04",
-    "vega-lite-05",
-    "vega-lite-06",
-    "vega-lite-07",
-    "vega-lite-08",
-    "vega-lite-09",
-    "vega-lite-10",
-    "vega-lite-11",
-    "vega-lite-12",
-    "vega-lite-13",
-    "vega-lite-14",
-    "vega-lite-15",
-    "vega-lite-16",
-    "vega-lite-17",
-    "vega-lite-18",
-    "vega-lite-19",
-    "vega-lite-20",
-    "vega-lite-21",
-    "vega-lite-22",
+    "vega-lite-01",  # was invalid
+    "vega-lite-02",  # was invalid
+    # "vega-lite-03",  # valid
+    "vega-lite-04",  # was invalid
+    # "vega-lite-05",  # valid
+    "vega-lite-06",  # was invalid
+    "vega-lite-07",  # was invalid
+    "vega-lite-08",  # was invalid
+    # "vega-lite-09",  # valid
+    # "vega-lite-10",  # valid
+    # "vega-lite-11",  # valid
+    "vega-lite-12",  # was invalid
+    # "vega-lite-13",  # valid
+    "vega-lite-14",  # was invalid
+    "vega-lite-15",  # was invalid
+    "vega-lite-16",  # was invalid
+    # "vega-lite-17",  # valid
+    # "vega-lite-18",  # valid
+    "vega-lite-19",  # was invalid
+    "vega-lite-20",  # was invalid
+    "vega-lite-21",  # was invalid
+    "vega-lite-22",  # was invalid
 ]
 
 # Number of concurrent projects to run
-CONCURRENCY = 2
+CONCURRENCY = 6
 
 
 def run_project(
@@ -135,7 +137,7 @@ def run_project(
                 )
 
             # Run gemini or codex based on USE_CODEX flag
-            prompt = "read README.md and finish transforming desktop visualization into a mobile version"
+            prompt = "read README.md and finish transforming desktop visualization into a mobile version. find available port for bun dev in envar `PORT`"
 
             if USE_CODEX:
                 log.write("\n--- Running: codex ---\n")
@@ -152,25 +154,39 @@ def run_project(
                 ]
                 cli_name = "codex"
             else:
-                log.write("\n--- Running: gemini ---\n")
-                log.flush()
-                cmd = [
-                    "gemini",
-                    "--yolo",
-                    "--model",
-                    "gemini-3-pro-preview",
-                    "--prompt",
-                    prompt,
-                ]
+                if USE_FLASH:
+                    log.write("\n--- Running: gemini flash  ---\n")
+                    log.flush()
+                    cmd = [
+                        "gemini",
+                        "--yolo",
+                        "--model",
+                        "gemini-3-flash-preview",
+                        "--prompt",
+                        prompt,
+                    ]
+                else:
+                    log.write("\n--- Running: gemini pro  ---\n")
+                    log.flush()
+                    cmd = [
+                        "gemini",
+                        "--yolo",
+                        "--model",
+                        "gemini-3-pro-preview",
+                        "--prompt",
+                        prompt,
+                    ]
                 cli_name = "gemini"
 
+            env = deepcopy(os.environ)
+            env["PORT"] = str(randint(3000, 20000))
             result = subprocess.run(
                 cmd,
                 cwd=project_dir,
                 stdout=log,
                 stderr=subprocess.STDOUT,
                 text=True,
-                env=os.environ,
+                env=env,
             )
 
             if result.returncode != 0:
