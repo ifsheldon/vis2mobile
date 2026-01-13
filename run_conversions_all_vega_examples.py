@@ -150,9 +150,9 @@ def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
                 cmd = [
                     "gemini",
                     "--yolo",
-                    "--prompt",
                     "--model",
                     "gemini-3-pro-preview",
+                    "--prompt",
                     prompt,
                 ]
                 cli_name = "gemini"
