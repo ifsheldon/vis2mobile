@@ -147,7 +147,14 @@ def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
             else:
                 log.write("\n--- Running: gemini ---\n")
                 log.flush()
-                cmd = ["gemini", "--yolo", "--prompt", prompt]
+                cmd = [
+                    "gemini",
+                    "--yolo",
+                    "--prompt",
+                    "--model",
+                    "gemini-3-pro-preview",
+                    prompt,
+                ]
                 cli_name = "gemini"
 
             result = subprocess.run(
