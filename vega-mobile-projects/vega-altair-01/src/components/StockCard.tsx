@@ -85,15 +85,21 @@ export function StockCard({ symbol, data, color }: StockCardProps) {
           <AreaChart
             data={data}
             margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
-            onMouseMove={(e: any) => {
-              if (e.activePayload?.[0]) {
-                setActiveData(e.activePayload[0].payload);
+            onMouseMove={(
+              // biome-ignore lint/suspicious/noExplicitAny: Recharts event types are complex
+              e: any,
+            ) => {
+              if (e?.activePayload?.[0]) {
+                setActiveData(e.activePayload[0].payload as StockData);
               }
             }}
             onMouseLeave={() => setActiveData(null)}
-            onTouchMove={(e: any) => {
-              if (e.activePayload?.[0]) {
-                setActiveData(e.activePayload[0].payload);
+            onTouchMove={(
+              // biome-ignore lint/suspicious/noExplicitAny: Recharts event types are complex
+              e: any,
+            ) => {
+              if (e?.activePayload?.[0]) {
+                setActiveData(e.activePayload[0].payload as StockData);
               }
             }}
             onTouchEnd={() => setActiveData(null)}
