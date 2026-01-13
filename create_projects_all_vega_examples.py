@@ -11,78 +11,157 @@ import sys
 
 
 # All projects to create: (visualization_path, project_name)
+# Projects with valid (non-empty) screenshots are commented out
 PROJECTS = [
     # vega
-    ("vega-examples/vega/01.html", "test-vega-01"),
-    ("vega-examples/vega/02.html", "test-vega-02"),
-    ("vega-examples/vega/03.html", "test-vega-03"),
-    ("vega-examples/vega/04.html", "test-vega-04"),
-    ("vega-examples/vega/05.html", "test-vega-05"),
+    # ("vega-examples/vega/01.html", "vega-mobile-projects/vega-01"),  # valid
+    ("vega-examples/vega/02.html", "vega-mobile-projects/vega-02"),  # empty screenshot
+    ("vega-examples/vega/03.html", "vega-mobile-projects/vega-03"),  # empty screenshot
+    # ("vega-examples/vega/04.html", "vega-mobile-projects/vega-04"),  # valid
+    # ("vega-examples/vega/05.html", "vega-mobile-projects/vega-05"),  # valid
     # vega_altair
-    ("vega-examples/vega_altair/01.html", "test-vega-altair-01"),
-    ("vega-examples/vega_altair/02.html", "test-vega-altair-02"),
-    ("vega-examples/vega_altair/03.html", "test-vega-altair-03"),
-    ("vega-examples/vega_altair/04.html", "test-vega-altair-04"),
-    ("vega-examples/vega_altair/05.html", "test-vega-altair-05"),
-    ("vega-examples/vega_altair/06.html", "test-vega-altair-06"),
-    ("vega-examples/vega_altair/07.html", "test-vega-altair-07"),
-    ("vega-examples/vega_altair/08.html", "test-vega-altair-08"),
-    ("vega-examples/vega_altair/09.html", "test-vega-altair-09"),
-    ("vega-examples/vega_altair/10.html", "test-vega-altair-10"),
-    ("vega-examples/vega_altair/11.html", "test-vega-altair-11"),
-    ("vega-examples/vega_altair/12.html", "test-vega-altair-12"),
-    ("vega-examples/vega_altair/13.html", "test-vega-altair-13"),
-    ("vega-examples/vega_altair/14.html", "test-vega-altair-14"),
-    ("vega-examples/vega_altair/15.html", "test-vega-altair-15"),
-    ("vega-examples/vega_altair/16.html", "test-vega-altair-16"),
-    ("vega-examples/vega_altair/17.html", "test-vega-altair-17"),
-    ("vega-examples/vega_altair/18.html", "test-vega-altair-18"),
-    ("vega-examples/vega_altair/19.html", "test-vega-altair-19"),
-    ("vega-examples/vega_altair/20.html", "test-vega-altair-20"),
-    ("vega-examples/vega_altair/21.html", "test-vega-altair-21"),
-    ("vega-examples/vega_altair/22.html", "test-vega-altair-22"),
-    ("vega-examples/vega_altair/23.html", "test-vega-altair-23"),
-    ("vega-examples/vega_altair/24.html", "test-vega-altair-24"),
-    ("vega-examples/vega_altair/25.html", "test-vega-altair-25"),
-    ("vega-examples/vega_altair/26.html", "test-vega-altair-26"),
-    ("vega-examples/vega_altair/27.html", "test-vega-altair-27"),
-    ("vega-examples/vega_altair/28.html", "test-vega-altair-28"),
-    ("vega-examples/vega_altair/29.html", "test-vega-altair-29"),
-    ("vega-examples/vega_altair/30.html", "test-vega-altair-30"),
-    ("vega-examples/vega_altair/31.html", "test-vega-altair-31"),
-    ("vega-examples/vega_altair/32.html", "test-vega-altair-32"),
-    ("vega-examples/vega_altair/33.html", "test-vega-altair-33"),
-    ("vega-examples/vega_altair/34.html", "test-vega-altair-34"),
-    ("vega-examples/vega_altair/35.html", "test-vega-altair-35"),
-    ("vega-examples/vega_altair/36.html", "test-vega-altair-36"),
-    ("vega-examples/vega_altair/37.html", "test-vega-altair-37"),
-    ("vega-examples/vega_altair/38.html", "test-vega-altair-38"),
-    ("vega-examples/vega_altair/39.html", "test-vega-altair-39"),
-    ("vega-examples/vega_altair/40.html", "test-vega-altair-40"),
-    ("vega-examples/vega_altair/41.html", "test-vega-altair-41"),
+    # ("vega-examples/vega_altair/01.html", "vega-mobile-projects/vega-altair-01"),  # valid
+    # ("vega-examples/vega_altair/02.html", "vega-mobile-projects/vega-altair-02"),  # valid
+    # ("vega-examples/vega_altair/03.html", "vega-mobile-projects/vega-altair-03"),  # valid
+    # ("vega-examples/vega_altair/04.html", "vega-mobile-projects/vega-altair-04"),  # valid
+    # ("vega-examples/vega_altair/05.html", "vega-mobile-projects/vega-altair-05"),  # valid
+    # ("vega-examples/vega_altair/06.html", "vega-mobile-projects/vega-altair-06"),  # valid
+    # ("vega-examples/vega_altair/07.html", "vega-mobile-projects/vega-altair-07"),  # valid
+    # ("vega-examples/vega_altair/08.html", "vega-mobile-projects/vega-altair-08"),  # valid
+    # ("vega-examples/vega_altair/09.html", "vega-mobile-projects/vega-altair-09"),  # valid
+    (
+        "vega-examples/vega_altair/10.html",
+        "vega-mobile-projects/vega-altair-10",
+    ),  # empty screenshot
+    # ("vega-examples/vega_altair/11.html", "vega-mobile-projects/vega-altair-11"),  # valid
+    (
+        "vega-examples/vega_altair/12.html",
+        "vega-mobile-projects/vega-altair-12",
+    ),  # empty screenshot
+    # ("vega-examples/vega_altair/13.html", "vega-mobile-projects/vega-altair-13"),  # valid
+    # ("vega-examples/vega_altair/14.html", "vega-mobile-projects/vega-altair-14"),  # valid
+    (
+        "vega-examples/vega_altair/15.html",
+        "vega-mobile-projects/vega-altair-15",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_altair/16.html",
+        "vega-mobile-projects/vega-altair-16",
+    ),  # empty screenshot
+    # ("vega-examples/vega_altair/17.html", "vega-mobile-projects/vega-altair-17"),  # valid
+    (
+        "vega-examples/vega_altair/18.html",
+        "vega-mobile-projects/vega-altair-18",
+    ),  # empty screenshot
+    # ("vega-examples/vega_altair/19.html", "vega-mobile-projects/vega-altair-19"),  # valid
+    # ("vega-examples/vega_altair/20.html", "vega-mobile-projects/vega-altair-20"),  # valid
+    # ("vega-examples/vega_altair/21.html", "vega-mobile-projects/vega-altair-21"),  # valid
+    # ("vega-examples/vega_altair/22.html", "vega-mobile-projects/vega-altair-22"),  # valid
+    (
+        "vega-examples/vega_altair/23.html",
+        "vega-mobile-projects/vega-altair-23",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_altair/24.html",
+        "vega-mobile-projects/vega-altair-24",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_altair/25.html",
+        "vega-mobile-projects/vega-altair-25",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_altair/26.html",
+        "vega-mobile-projects/vega-altair-26",
+    ),  # empty screenshot
+    # ("vega-examples/vega_altair/27.html", "vega-mobile-projects/vega-altair-27"),  # valid
+    # ("vega-examples/vega_altair/28.html", "vega-mobile-projects/vega-altair-28"),  # valid
+    # ("vega-examples/vega_altair/29.html", "vega-mobile-projects/vega-altair-29"),  # valid
+    # ("vega-examples/vega_altair/30.html", "vega-mobile-projects/vega-altair-30"),  # valid
+    # ("vega-examples/vega_altair/31.html", "vega-mobile-projects/vega-altair-31"),  # valid
+    (
+        "vega-examples/vega_altair/32.html",
+        "vega-mobile-projects/vega-altair-32",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_altair/33.html",
+        "vega-mobile-projects/vega-altair-33",
+    ),  # empty screenshot
+    # ("vega-examples/vega_altair/34.html", "vega-mobile-projects/vega-altair-34"),  # valid
+    # ("vega-examples/vega_altair/35.html", "vega-mobile-projects/vega-altair-35"),  # valid
+    # ("vega-examples/vega_altair/36.html", "vega-mobile-projects/vega-altair-36"),  # valid
+    # ("vega-examples/vega_altair/37.html", "vega-mobile-projects/vega-altair-37"),  # valid
+    # ("vega-examples/vega_altair/38.html", "vega-mobile-projects/vega-altair-38"),  # valid
+    (
+        "vega-examples/vega_altair/39.html",
+        "vega-mobile-projects/vega-altair-39",
+    ),  # empty screenshot
+    # ("vega-examples/vega_altair/40.html", "vega-mobile-projects/vega-altair-40"),  # valid
+    # ("vega-examples/vega_altair/41.html", "vega-mobile-projects/vega-altair-41"),  # valid
     # vega_lite
-    ("vega-examples/vega_lite/01.html", "test-vega-lite-01"),
-    ("vega-examples/vega_lite/02.html", "test-vega-lite-02"),
-    ("vega-examples/vega_lite/03.html", "test-vega-lite-03"),
-    ("vega-examples/vega_lite/04.html", "test-vega-lite-04"),
-    ("vega-examples/vega_lite/05.html", "test-vega-lite-05"),
-    ("vega-examples/vega_lite/06.html", "test-vega-lite-06"),
-    ("vega-examples/vega_lite/07.html", "test-vega-lite-07"),
-    ("vega-examples/vega_lite/08.html", "test-vega-lite-08"),
-    ("vega-examples/vega_lite/09.html", "test-vega-lite-09"),
-    ("vega-examples/vega_lite/10.html", "test-vega-lite-10"),
-    ("vega-examples/vega_lite/11.html", "test-vega-lite-11"),
-    ("vega-examples/vega_lite/12.html", "test-vega-lite-12"),
-    ("vega-examples/vega_lite/13.html", "test-vega-lite-13"),
-    ("vega-examples/vega_lite/14.html", "test-vega-lite-14"),
-    ("vega-examples/vega_lite/15.html", "test-vega-lite-15"),
-    ("vega-examples/vega_lite/16.html", "test-vega-lite-16"),
-    ("vega-examples/vega_lite/17.html", "test-vega-lite-17"),
-    ("vega-examples/vega_lite/18.html", "test-vega-lite-18"),
-    ("vega-examples/vega_lite/19.html", "test-vega-lite-19"),
-    ("vega-examples/vega_lite/20.html", "test-vega-lite-20"),
-    ("vega-examples/vega_lite/21.html", "test-vega-lite-21"),
-    ("vega-examples/vega_lite/22.html", "test-vega-lite-22"),
+    (
+        "vega-examples/vega_lite/01.html",
+        "vega-mobile-projects/vega-lite-01",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_lite/02.html",
+        "vega-mobile-projects/vega-lite-02",
+    ),  # empty screenshot
+    # ("vega-examples/vega_lite/03.html", "vega-mobile-projects/vega-lite-03"),  # valid
+    (
+        "vega-examples/vega_lite/04.html",
+        "vega-mobile-projects/vega-lite-04",
+    ),  # empty screenshot
+    # ("vega-examples/vega_lite/05.html", "vega-mobile-projects/vega-lite-05"),  # valid
+    (
+        "vega-examples/vega_lite/06.html",
+        "vega-mobile-projects/vega-lite-06",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_lite/07.html",
+        "vega-mobile-projects/vega-lite-07",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_lite/08.html",
+        "vega-mobile-projects/vega-lite-08",
+    ),  # empty screenshot
+    # ("vega-examples/vega_lite/09.html", "vega-mobile-projects/vega-lite-09"),  # valid
+    # ("vega-examples/vega_lite/10.html", "vega-mobile-projects/vega-lite-10"),  # valid
+    # ("vega-examples/vega_lite/11.html", "vega-mobile-projects/vega-lite-11"),  # valid
+    (
+        "vega-examples/vega_lite/12.html",
+        "vega-mobile-projects/vega-lite-12",
+    ),  # empty screenshot
+    # ("vega-examples/vega_lite/13.html", "vega-mobile-projects/vega-lite-13"),  # valid
+    (
+        "vega-examples/vega_lite/14.html",
+        "vega-mobile-projects/vega-lite-14",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_lite/15.html",
+        "vega-mobile-projects/vega-lite-15",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_lite/16.html",
+        "vega-mobile-projects/vega-lite-16",
+    ),  # empty screenshot
+    # ("vega-examples/vega_lite/17.html", "vega-mobile-projects/vega-lite-17"),  # valid
+    # ("vega-examples/vega_lite/18.html", "vega-mobile-projects/vega-lite-18"),  # valid
+    (
+        "vega-examples/vega_lite/19.html",
+        "vega-mobile-projects/vega-lite-19",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_lite/20.html",
+        "vega-mobile-projects/vega-lite-20",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_lite/21.html",
+        "vega-mobile-projects/vega-lite-21",
+    ),  # empty screenshot
+    (
+        "vega-examples/vega_lite/22.html",
+        "vega-mobile-projects/vega-lite-22",
+    ),  # empty screenshot
 ]
 
 VEGA_ASSET_PATH = "./vega-examples/assets/"
