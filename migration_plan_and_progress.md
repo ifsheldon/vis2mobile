@@ -27,7 +27,7 @@
 - [x] vega-altair-03
 - [x] vega-altair-04
 - [x] vega-altair-05
-- [ ] vega-altair-06
+- [x] vega-altair-06
 - [ ] vega-altair-07
 - [ ] vega-altair-08
 - [ ] vega-altair-09
@@ -104,3 +104,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-04.
 - 2026-01-13: Migrated vega-altair-05 (Barley Yield Analysis) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-05.
+- 2026-01-13: Migrated vega-altair-06 (Seattle Weather) into gallery.
+- 2026-01-13: Saved comparison screenshot for vega-altair-06.
