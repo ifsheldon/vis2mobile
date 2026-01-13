@@ -31,7 +31,7 @@
 - [x] vega-altair-07
 - [x] vega-altair-08
 - [x] vega-altair-09
-- [ ] vega-altair-11
+- [x] vega-altair-11
 - [ ] vega-altair-12
 - [ ] vega-altair-13
 - [ ] vega-altair-14
@@ -112,3 +112,5 @@
 - 2026-01-13: Saved comparison screenshot for vega-altair-08.
 - 2026-01-13: Migrated vega-altair-09 (Barley Yields) into gallery.
 - 2026-01-13: Saved comparison screenshot for vega-altair-09.
+- 2026-01-13: Migrated vega-altair-11 (Gantt Overview) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-11.
