@@ -1,0 +1,12 @@
+{
+    "name": "vis2mobile",
+    "private": true,
+    "workspaces": [
+        "vega-mobile-projects/*",
+        "!vega-mobile-projects/vega-altair-10",
+        "!vega-mobile-projects/vega-altair-32",
+        "!vega-mobile-projects/vega-altair-33",
+        "html-mobile-projects/budgets",
+        "mobile-vis-template"
+    ]
+}
