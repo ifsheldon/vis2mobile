@@ -1,57 +1,99 @@
-export interface PlanData {
-  sector: string;
-  republican: number;
-  passed: number;
-  democratic: number;
+export interface WeatherData {
+  day: string;
+  id: number;
+  record: { high: number; low: number };
+  normal: { high: number; low: number };
+  actual?: { high: number; low: number };
+  forecast?: {
+    high: { high: number; low: number };
+    low: { high: number; low: number };
+  };
 }
 
-export const data: PlanData[] = [
+export const weatherData: WeatherData[] = [
   {
-    "sector": "Small-business aid",
-    "republican": 200,
-    "passed": 1010,
-    "democratic": 0
+    day: "M",
+    record: { high: 62, low: 15 },
+    normal: { high: 50, low: 38 },
+    actual: { high: 48, low: 36 },
+    id: 0,
   },
   {
-    "sector": "Other measures",
-    "republican": 81,
-    "passed": 627,
-    "democratic": 302
+    day: "T",
+    record: { high: 62, low: 23 },
+    normal: { high: 50, low: 38 },
+    actual: { high: 50, low: 40 },
+    id: 1,
   },
   {
-    "sector": "Business tax breaks",
-    "republican": 203,
-    "passed": 346,
-    "democratic": 36
+    day: "W",
+    record: { high: 61, low: 20 },
+    normal: { high: 50, low: 38 },
+    actual: { high: 55, low: 36 },
+    id: 2,
   },
   {
-    "sector": "Stimulus checks",
-    "republican": 300,
-    "passed": 293,
-    "democratic": 436
+    day: "T",
+    record: { high: 67, low: 21 },
+    normal: { high: 50, low: 38 },
+    actual: { high: 51, low: 33 },
+    id: 3,
   },
   {
-    "sector": "Health care",
-    "republican": 111,
-    "passed": 277,
-    "democratic": 382
+    day: "F",
+    record: { high: 61, low: 23 },
+    normal: { high: 50, low: 38 },
+    actual: { high: 50, low: 30 },
+    id: 4,
   },
   {
-    "sector": "Unemployment benefits",
-    "republican": 110,
-    "passed": 274,
-    "democratic": 437
+    day: "S",
+    record: { high: 67, low: 20 },
+    normal: { high: 50, low: 38 },
+    forecast: {
+      high: { high: 53, low: 49 },
+      low: { high: 40, low: 35 },
+    },
+    id: 5,
   },
   {
-    "sector": "State and local aid",
-    "republican": 105,
-    "passed": 256,
-    "democratic": 1118
+    day: "S",
+    record: { high: 63, low: 23 },
+    normal: { high: 50, low: 39 },
+    forecast: {
+      high: { high: 55, low: 49 },
+      low: { high: 42, low: 37 },
+    },
+    id: 6,
   },
   {
-    "sector": "Safety net and other tax cuts",
-    "republican": 18,
-    "passed": 83,
-    "democratic": 736
-  }
+    day: "M",
+    record: { high: 61, low: 26 },
+    normal: { high: 51, low: 39 },
+    forecast: {
+      high: { high: 53, low: 49 },
+      low: { high: 43, low: 40 },
+    },
+    id: 7,
+  },
+  {
+    day: "T",
+    record: { high: 61, low: 24 },
+    normal: { high: 51, low: 39 },
+    forecast: {
+      high: { high: 52, low: 46 },
+      low: { high: 44, low: 40 },
+    },
+    id: 8,
+  },
+  {
+    day: "W",
+    record: { high: 63, low: 20 },
+    normal: { high: 51, low: 39 },
+    forecast: {
+      high: { high: 53, low: 46 },
+      low: { high: 43, low: 38 },
+    },
+    id: 9,
+  },
 ];
