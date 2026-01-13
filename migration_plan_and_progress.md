@@ -20,7 +20,7 @@
 - [x] vega-01
 - [x] vega-02
 - [x] vega-03
-- [ ] vega-04
+- [x] vega-04
 - [ ] vega-05
 - [ ] vega-altair-01
 - [ ] vega-altair-02
@@ -90,3 +90,5 @@
 - 2026-01-13: Adjusted vega-02 preview height to match mobile rendering.
 - 2026-01-13: Saved comparison screenshots for vega-01, vega-02, vega-03.
 - 2026-01-13: Migrated vega-03 (Stock Explorer) into gallery.
+- 2026-01-13: Migrated vega-04 (Country Breakdown) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-04.
