@@ -25,7 +25,7 @@
 - [x] vega-altair-01
 - [x] vega-altair-02
 - [x] vega-altair-03
-- [ ] vega-altair-04
+- [x] vega-altair-04
 - [ ] vega-altair-05
 - [ ] vega-altair-06
 - [ ] vega-altair-07
@@ -100,3 +100,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-02.
 - 2026-01-13: Migrated vega-altair-03 (Energy Trends) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-03.
+- 2026-01-13: Migrated vega-altair-04 (Energy Source Share) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-04.
