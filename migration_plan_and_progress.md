@@ -86,3 +86,4 @@
 - 2026-01-13: Plan created.
 - 2026-01-13: Migrated vega-01 (Flight Explorer) into gallery.
 - 2026-01-13: Migrated vega-02 (Normal 2D) into gallery.
+- 2026-01-13: Adjusted vega-02 preview height to match mobile rendering.
