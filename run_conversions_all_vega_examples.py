@@ -7,6 +7,7 @@ Stdout and stderr are saved to <project-name>.log
 
 import subprocess
 import asyncio
+import os
 from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor
 import sys
@@ -116,6 +117,7 @@ def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
                 stdout=log,
                 stderr=subprocess.STDOUT,
                 text=True,
+                env=os.environ,
             )
             if result.returncode != 0:
                 log.write(
@@ -163,6 +165,7 @@ def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
                 stdout=log,
                 stderr=subprocess.STDOUT,
                 text=True,
+                env=os.environ,
             )
 
             if result.returncode != 0:
