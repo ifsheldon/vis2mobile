@@ -61,7 +61,7 @@ export function Visualization() {
 
   const chartWidth = 320;
   const margin = { top: 12, bottom: 16, left: 14, right: 14 };
-  const centerGap = 46;
+  const centerGap = 52;
   const rowHeight = 16;
   const rowGap = 6;
   const chartHeight = data.length
@@ -145,7 +145,7 @@ export function Visualization() {
                   const y = margin.top + index * (rowHeight + rowGap);
                   const maleWidth = (row.male / maxValue) * halfWidth;
                   const femaleWidth = (row.female / maxValue) * halfWidth;
-                  const maleX = centerX - maleWidth;
+                  const maleX = centerX - centerGap / 2 - maleWidth;
                   const femaleX = centerX + centerGap / 2;
 
                   return (
@@ -182,9 +182,10 @@ export function Visualization() {
                       </rect>
                       <text
                         x={centerX}
-                        y={y + rowHeight / 2 + 4}
+                        y={y + rowHeight / 2}
+                        dy=".35em"
                         textAnchor="middle"
-                        className="fill-slate-500 text-[11px]"
+                        className="fill-slate-500 text-[10px] font-medium"
                       >
                         {formatAgeLabel(row.age)}
                       </text>
@@ -192,10 +193,20 @@ export function Visualization() {
                   );
                 })}
               </svg>
-              <div className="mt-3 flex items-center justify-between px-2 text-[11px] text-slate-500">
-                <span>{formatCompact.format(maxValue)}</span>
-                <span>0</span>
-                <span>{formatCompact.format(maxValue)}</span>
+              <div
+                className="mt-3 flex items-center justify-between text-[10px] text-slate-400 font-medium"
+                style={{
+                  paddingLeft: `${margin.left}px`,
+                  paddingRight: `${margin.right}px`,
+                }}
+              >
+                <span className="flex-1 text-left">
+                  {formatCompact.format(maxValue)}
+                </span>
+                <span className="flex-1 text-center">0</span>
+                <span className="flex-1 text-right">
+                  {formatCompact.format(maxValue)}
+                </span>
               </div>
             </div>
           )}
