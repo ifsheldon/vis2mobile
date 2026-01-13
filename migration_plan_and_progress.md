@@ -28,7 +28,7 @@
 - [x] vega-altair-04
 - [x] vega-altair-05
 - [x] vega-altair-06
-- [ ] vega-altair-07
+- [x] vega-altair-07
 - [ ] vega-altair-08
 - [ ] vega-altair-09
 - [ ] vega-altair-11
@@ -106,3 +106,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-05.
 - 2026-01-13: Migrated vega-altair-06 (Seattle Weather) into gallery.
 - 2026-01-13: Saved comparison screenshot for vega-altair-06.
+- 2026-01-13: Migrated vega-altair-07 (Employment Change) into gallery.
+- 2026-01-13: Saved comparison screenshot for vega-altair-07.
