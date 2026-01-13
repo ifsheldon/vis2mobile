@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import { bin, extent } from "d3-array";
+import { bin } from "d3-array";
+import { useEffect, useMemo, useState } from "react";
 
 export type Flight = {
   date: string;
@@ -99,19 +99,32 @@ export function useFlightData() {
     };
   }, [data, steps]);
 
-  // 2. Filter Data based on current selection
+  // 2. Filter Data based on current selection (Ignoring specific dimensions for cross-filtering)
+  // We need three sets of filtered data, each ignoring one dimension
   const filteredData = useMemo(() => {
-    if (data.length === 0) return [];
+    if (data.length === 0) return { delay: [], distance: [], time: [] };
 
-    return data.filter(
-      (d) =>
-        d.delay >= filters.delay[0] &&
-        d.delay <= filters.delay[1] &&
-        d.distance >= filters.distance[0] &&
-        d.distance <= filters.distance[1] &&
-        d.time >= filters.time[0] &&
-        d.time <= filters.time[1],
-    );
+    const filterBy = (ignore: keyof FilterState) => {
+      return data.filter((d) => {
+        const matchesDelay =
+          ignore === "delay" ||
+          (d.delay >= filters.delay[0] && d.delay <= filters.delay[1]);
+        const matchesDistance =
+          ignore === "distance" ||
+          (d.distance >= filters.distance[0] &&
+            d.distance <= filters.distance[1]);
+        const matchesTime =
+          ignore === "time" ||
+          (d.time >= filters.time[0] && d.time <= filters.time[1]);
+        return matchesDelay && matchesDistance && matchesTime;
+      });
+    };
+
+    return {
+      delay: filterBy("delay"),
+      distance: filterBy("distance"),
+      time: filterBy("time"),
+    };
   }, [data, filters]);
 
   // 3. Create Bins for Filtered Data (Foreground)
@@ -120,6 +133,7 @@ export function useFlightData() {
 
     const createBins = (
       field: keyof Flight,
+      filteredSet: Flight[],
       domain: [number, number],
       step: number,
     ) => {
@@ -133,10 +147,8 @@ export function useFlightData() {
           ),
         );
 
-      const bins = binner(filteredData);
+      const bins = binner(filteredSet);
 
-      // We map to a consistent structure.
-      // Note: Recharts needs a flat array with both global and filtered counts for the composed chart
       return bins.map((b) => ({
         x0: b.x0,
         x1: b.x1,
@@ -145,22 +157,37 @@ export function useFlightData() {
     };
 
     return {
-      delay: createBins("delay", DOMAINS.delay, steps.delay),
-      distance: createBins("distance", DOMAINS.distance, steps.distance),
-      time: createBins("time", DOMAINS.time, steps.time),
+      delay: createBins(
+        "delay",
+        filteredData.delay,
+        DOMAINS.delay,
+        steps.delay,
+      ),
+      distance: createBins(
+        "distance",
+        filteredData.distance,
+        DOMAINS.distance,
+        steps.distance,
+      ),
+      time: createBins("time", filteredData.time, DOMAINS.time, steps.time),
     };
-  }, [filteredData, steps, data.length]); // depend on data.length to ensure sync
+  }, [filteredData, steps, data.length]);
 
   // 4. Merge for Recharts
   // Structure: { range: "10-20", global: 100, filtered: 20, x0: 10, x1: 20 }
   const chartData = useMemo(() => {
-    const merge = (global: any[], filtered: any[]) => {
+    interface BinResult {
+      x0: number | undefined;
+      x1: number | undefined;
+      count: number;
+    }
+    const merge = (global: BinResult[], filtered: BinResult[]) => {
       return global.map((g, i) => {
         const f = filtered[i];
         return {
           name: `${g.x0}`, // simplified label
-          x0: g.x0,
-          x1: g.x1,
+          x0: g.x0 ?? 0,
+          x1: g.x1 ?? 0,
           global: g.count,
           filtered: f ? f.count : 0,
         };
@@ -174,8 +201,25 @@ export function useFlightData() {
     };
   }, [globalBins, filteredBins]);
 
+  // Totally filtered data (matches ALL filters) for stats
+  const totalFilteredCount = useMemo(() => {
+    if (data.length === 0) return 0;
+    return data.filter((d) => {
+      return (
+        d.delay >= filters.delay[0] &&
+        d.delay <= filters.delay[1] &&
+        d.distance >= filters.distance[0] &&
+        d.distance <= filters.distance[1] &&
+        d.time >= filters.time[0] &&
+        d.time <= filters.time[1]
+      );
+    }).length;
+  }, [data, filters]);
+
   return {
     loading,
+    totalCount: data.length,
+    totalFilteredCount,
     filters,
     setFilters,
     steps,

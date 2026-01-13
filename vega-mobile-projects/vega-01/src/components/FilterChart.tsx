@@ -1,12 +1,13 @@
-import React from "react";
-import {
-  ResponsiveContainer,
-  ComposedChart,
-  Bar,
-  Tooltip,
-} from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RangeSlider } from "@/components/ui/range-slider";
+import {
+  Bar,
+  ComposedChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 interface ChartDataPoint {
   name: string;
@@ -37,38 +38,61 @@ export function FilterChart({
   color = "#3b82f6", // blue-500
   unit = "",
 }: FilterChartProps) {
-  // Local state for slider to ensure smooth dragging without waiting for heavy re-render
-  // But we also need to sync with parent if parent updates (e.g. reset)
-  // Actually, let's try direct control first. If laggy, we decouple.
-
   return (
-    <Card className="w-full bg-slate-900/50 border-slate-700/50 backdrop-blur-xl">
+    <Card className="w-full bg-slate-900/50 border-slate-700/50 backdrop-blur-xl overflow-hidden">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-sm font-medium text-slate-200 uppercase tracking-wider">
+          <CardTitle className="text-sm font-semibold text-slate-300 uppercase tracking-widest">
             {title}
           </CardTitle>
-          <span className="text-xs font-mono text-blue-400">
-            {filterRange[0]}
-            {unit} - {filterRange[1]}
-            {unit}
-          </span>
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20">
+            <span className="text-[10px] font-bold text-blue-400 font-mono">
+              {filterRange[0]}
+              {unit} — {filterRange[1]}
+              {unit}
+            </span>
+          </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="h-[120px] w-full">
+      <CardContent className="space-y-4 pt-2">
+        <div className="h-[140px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={data}
-              margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-              barCategoryGap={0}
-              barGap={0}
+              margin={{ top: 5, right: 10, bottom: 0, left: 10 }}
+              barCategoryGap="10%"
             >
+              <XAxis
+                dataKey="x0"
+                type="number"
+                domain={domain}
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#64748b", fontSize: 10 }}
+                ticks={[
+                  domain[0],
+                  domain[0] + (domain[1] - domain[0]) / 2,
+                  domain[1],
+                ]}
+                interval={0}
+              />
+              <YAxis hide domain={[0, "auto"]} />
+
               {/* Global (Background) Data */}
-              <Bar dataKey="global" fill="#334155" isAnimationActive={false} />
+              <Bar
+                dataKey="global"
+                fill="#1e293b"
+                isAnimationActive={false}
+                radius={[2, 2, 0, 0]}
+              />
 
               {/* Filtered (Foreground) Data */}
-              <Bar dataKey="filtered" fill={color} isAnimationActive={true} />
+              <Bar
+                dataKey="filtered"
+                fill={color}
+                isAnimationActive={true}
+                radius={[2, 2, 0, 0]}
+              />
 
               <Tooltip
                 cursor={{ fill: "rgba(255,255,255,0.05)" }}
@@ -76,20 +100,37 @@ export function FilterChart({
                   if (active && payload && payload.length) {
                     const d = payload[0].payload;
                     return (
-                      <div className="rounded-md border border-slate-700 bg-slate-900/95 p-2 shadow-xl text-xs text-slate-200">
-                        <div className="font-bold mb-1">
-                          Range: {d.x0} - {d.x1}
+                      <div className="rounded-lg border border-slate-700 bg-slate-900/95 p-2.5 shadow-2xl text-[11px] text-slate-200 backdrop-blur-md">
+                        <div className="font-bold mb-1.5 text-slate-100 border-b border-white/10 pb-1">
+                          Range: {d.x0}
+                          {unit} - {d.x1}
+                          {unit}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-slate-500" />
-                          <span>Total: {d.global}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: color }}
-                          />
-                          <span>Selected: {d.filtered}</span>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-2 h-2 rounded-full bg-slate-600" />
+                              <span>Total</span>
+                            </div>
+                            <span className="font-mono text-slate-400">
+                              {d.global.toLocaleString()}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-1.5">
+                              <div
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: color }}
+                              />
+                              <span>Selected</span>
+                            </div>
+                            <span
+                              className="font-mono font-bold"
+                              style={{ color }}
+                            >
+                              {d.filtered.toLocaleString()}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     );
@@ -102,7 +143,7 @@ export function FilterChart({
         </div>
 
         {/* Range Slider Control */}
-        <div className="px-1">
+        <div className="px-2 pb-2">
           <RangeSlider
             min={domain[0]}
             max={domain[1]}

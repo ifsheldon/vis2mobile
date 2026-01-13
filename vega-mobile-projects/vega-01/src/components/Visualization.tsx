@@ -1,9 +1,6 @@
 "use client";
 
-import React from "react";
 import { FilterChart } from "@/components/FilterChart";
-import { useFlightData, DOMAINS, type StepState } from "@/hooks/use-flight-data";
-import { Loader2, Plane, Settings2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,11 +8,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DOMAINS,
+  type StepState,
+  useFlightData,
+} from "@/hooks/use-flight-data";
 import { cn } from "@/lib/utils";
+import * as SliderPrimitive from "@radix-ui/react-slider";
+import { Loader2, Plane, Settings2 } from "lucide-react";
+import React from "react";
 
 export function Visualization() {
-  const { loading, filters, setFilters, steps, setSteps, chartData } =
-    useFlightData();
+  const {
+    loading,
+    totalCount,
+    totalFilteredCount,
+    filters,
+    setFilters,
+    steps,
+    setSteps,
+    chartData,
+  } = useFlightData();
 
   if (loading) {
     return (
@@ -46,23 +59,22 @@ export function Visualization() {
 
       {/* Main Content */}
       <main className="mx-auto flex max-w-md flex-col gap-4 p-4">
-        {/* Intro / Stats Summary (Optional Enhancement) */}
+        {/* Intro / Stats Summary */}
         <div className="grid grid-cols-2 gap-4">
           <div className="rounded-xl border border-white/5 bg-white/5 p-3 text-center backdrop-blur-sm">
             <div className="text-xs text-slate-400 uppercase tracking-widest">
               Dataset
             </div>
-            <div className="text-lg font-bold text-slate-200">231,083</div>
+            <div className="text-lg font-bold text-slate-200">
+              {totalCount.toLocaleString()}
+            </div>
           </div>
           <div className="rounded-xl border border-white/5 bg-white/5 p-3 text-center backdrop-blur-sm">
             <div className="text-xs text-slate-400 uppercase tracking-widest">
               Active
             </div>
-            {/* We could calculate active count here if we wanted, sum of filtered bins */}
             <div className="text-lg font-bold text-blue-400">
-              {chartData.delay
-                .reduce((acc, curr) => acc + curr.filtered, 0)
-                .toLocaleString()}
+              {totalFilteredCount.toLocaleString()}
             </div>
           </div>
         </div>
@@ -111,11 +123,20 @@ export function Visualization() {
   );
 }
 
-function SettingsDialog({ steps, setSteps }: { steps: StepState; setSteps: React.Dispatch<React.SetStateAction<StepState>> }) {
+function SettingsDialog({
+  steps,
+  setSteps,
+}: {
+  steps: StepState;
+  setSteps: React.Dispatch<React.SetStateAction<StepState>>;
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-800 text-slate-400 transition-colors hover:bg-slate-700 hover:text-white">
+        <button
+          type="button"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-800 text-slate-400 transition-colors hover:bg-slate-700 hover:text-white"
+        >
           <Settings2 className="h-5 w-5" />
         </button>
       </DialogTrigger>
@@ -125,7 +146,10 @@ function SettingsDialog({ steps, setSteps }: { steps: StepState; setSteps: React
         </DialogHeader>
         <div className="space-y-6 py-4">
           <div className="space-y-3">
-            <label htmlFor="delay-step" className="text-sm font-medium text-slate-400">
+            <label
+              htmlFor="delay-step"
+              className="text-sm font-medium text-slate-400"
+            >
               Delay Step Size ({steps.delay})
             </label>
             <SimpleSlider
@@ -134,13 +158,14 @@ function SettingsDialog({ steps, setSteps }: { steps: StepState; setSteps: React
               max={50}
               step={1}
               value={[steps.delay]}
-              onValueChange={([val]) =>
-                setSteps((s) => ({ ...s, delay: val }))
-              }
+              onValueChange={([val]) => setSteps((s) => ({ ...s, delay: val }))}
             />
           </div>
           <div className="space-y-3">
-            <label htmlFor="time-step" className="text-sm font-medium text-slate-400">
+            <label
+              htmlFor="time-step"
+              className="text-sm font-medium text-slate-400"
+            >
               Time Step Size ({steps.time})
             </label>
             <SimpleSlider
@@ -149,13 +174,14 @@ function SettingsDialog({ steps, setSteps }: { steps: StepState; setSteps: React
               max={5}
               step={0.1}
               value={[steps.time]}
-              onValueChange={([val]) =>
-                setSteps((s) => ({ ...s, time: val }))
-              }
+              onValueChange={([val]) => setSteps((s) => ({ ...s, time: val }))}
             />
           </div>
           <div className="space-y-3">
-            <label htmlFor="dist-step" className="text-sm font-medium text-slate-400">
+            <label
+              htmlFor="dist-step"
+              className="text-sm font-medium text-slate-400"
+            >
               Distance Step Size ({steps.distance})
             </label>
             <SimpleSlider
@@ -176,7 +202,6 @@ function SettingsDialog({ steps, setSteps }: { steps: StepState; setSteps: React
 }
 
 // Re-using the slider logic but simplifying styles for the settings panel
-import * as SliderPrimitive from "@radix-ui/react-slider";
 const SimpleSlider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
