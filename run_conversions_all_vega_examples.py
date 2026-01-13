@@ -14,91 +14,96 @@ import sys
 
 USE_CODEX = False
 
+# Base directory for vega mobile projects
+PROJECTS_DIR = "vega-mobile-projects"
+
 # All projects to process
 PROJECTS = [
     # vega
-    # "test-vega-01",
-    # "test-vega-02",
-    # "test-vega-03",
-    # "test-vega-04",
-    # "test-vega-05",
+    # "vega-01",
+    # "vega-02",
+    # "vega-03",
+    # "vega-04",
+    # "vega-05",
     # vega_altair
-    # "test-vega-altair-01",
-    # "test-vega-altair-02",
-    "test-vega-altair-03",
-    "test-vega-altair-04",
-    "test-vega-altair-05",
-    "test-vega-altair-06",
-    "test-vega-altair-07",
-    "test-vega-altair-08",
-    "test-vega-altair-09",
-    # "test-vega-altair-10",
-    # "test-vega-altair-11",
-    # "test-vega-altair-12",
-    # "test-vega-altair-13",
-    # "test-vega-altair-14",
-    # "test-vega-altair-15",
-    # "test-vega-altair-16",
-    # "test-vega-altair-17",
-    # "test-vega-altair-18",
-    # "test-vega-altair-19",
-    # "test-vega-altair-20",
-    # "test-vega-altair-21",
-    # "test-vega-altair-22",
-    # "test-vega-altair-23",
-    # "test-vega-altair-24",
-    # "test-vega-altair-25",
-    # "test-vega-altair-26",
-    # "test-vega-altair-27",
-    # "test-vega-altair-28",
-    # "test-vega-altair-29",
-    # "test-vega-altair-30",
-    # "test-vega-altair-31",
-    # "test-vega-altair-32",
-    # "test-vega-altair-33",
-    # "test-vega-altair-34",
-    # "test-vega-altair-35",
-    # "test-vega-altair-36",
-    # "test-vega-altair-37",
-    # "test-vega-altair-38",
-    # "test-vega-altair-39",
-    # "test-vega-altair-40",
-    # "test-vega-altair-41",
+    # "vega-altair-01",
+    # "vega-altair-02",
+    # "vega-altair-03",
+    # "vega-altair-04",
+    # "vega-altair-05",
+    # "vega-altair-06",
+    # "vega-altair-07",
+    # "vega-altair-08",
+    # "vega-altair-09",
+    # "vega-altair-10",
+    # "vega-altair-11",
+    # "vega-altair-12",
+    # "vega-altair-13",
+    # "vega-altair-14",
+    # "vega-altair-15",
+    # "vega-altair-16",
+    # "vega-altair-17",
+    # "vega-altair-18",
+    # "vega-altair-19",
+    # "vega-altair-20",
+    # "vega-altair-21",
+    # "vega-altair-22",
+    # "vega-altair-23",
+    # "vega-altair-24",
+    # "vega-altair-25",
+    # "vega-altair-26",
+    # "vega-altair-27",
+    # "vega-altair-28",
+    # "vega-altair-29",
+    # "vega-altair-30",
+    # "vega-altair-31",
+    # "vega-altair-32",
+    # "vega-altair-33",
+    # "vega-altair-34",
+    # "vega-altair-35",
+    # "vega-altair-36",
+    # "vega-altair-37",
+    # "vega-altair-38",
+    # "vega-altair-39",
+    # "vega-altair-40",
+    # "vega-altair-41",
     # vega_lite
-    # "test-vega-lite-01",
-    # "test-vega-lite-02",
-    # "test-vega-lite-03",
-    # "test-vega-lite-04",
-    # "test-vega-lite-05",
-    # "test-vega-lite-06",
-    # "test-vega-lite-07",
-    # "test-vega-lite-08",
-    # "test-vega-lite-09",
-    # "test-vega-lite-10",
-    # "test-vega-lite-11",
-    # "test-vega-lite-12",
-    # "test-vega-lite-13",
-    # "test-vega-lite-14",
-    # "test-vega-lite-15",
-    # "test-vega-lite-16",
-    # "test-vega-lite-17",
-    # "test-vega-lite-18",
-    # "test-vega-lite-19",
-    # "test-vega-lite-20",
-    # "test-vega-lite-21",
-    # "test-vega-lite-22",
+    "vega-lite-01",
+    "vega-lite-02",
+    "vega-lite-03",
+    "vega-lite-04",
+    "vega-lite-05",
+    "vega-lite-06",
+    "vega-lite-07",
+    "vega-lite-08",
+    "vega-lite-09",
+    "vega-lite-10",
+    "vega-lite-11",
+    "vega-lite-12",
+    "vega-lite-13",
+    "vega-lite-14",
+    "vega-lite-15",
+    "vega-lite-16",
+    "vega-lite-17",
+    "vega-lite-18",
+    "vega-lite-19",
+    "vega-lite-20",
+    "vega-lite-21",
+    "vega-lite-22",
 ]
 
 # Number of concurrent projects to run
 CONCURRENCY = 2
 
 
-def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
+def run_project(
+    project_name: str, base_dir: Path, projects_dir: Path
+) -> tuple[str, bool, str]:
     """
     Run bun install and gemini for a single project.
     Returns (project_name, success, error_message)
     """
-    project_dir = base_dir / project_name
+    project_dir = projects_dir / project_name
     log_file = base_dir / f"{project_name}.log"
 
     if not project_dir.exists():
@@ -184,7 +189,7 @@ def run_project(project_name: str, base_dir: Path) -> tuple[str, bool, str]:
 
 
 async def run_projects_with_concurrency(
-    projects: list[str], base_dir: Path, concurrency: int
+    projects: list[str], base_dir: Path, projects_dir: Path, concurrency: int
 ):
     """Run projects with limited concurrency using a semaphore."""
     semaphore = asyncio.Semaphore(concurrency)
@@ -194,7 +199,9 @@ async def run_projects_with_concurrency(
         async with semaphore:
             print(f"Starting: {project}")
             # Run in thread pool to not block the event loop
-            result = await loop.run_in_executor(None, run_project, project, base_dir)
+            result = await loop.run_in_executor(
+                None, run_project, project, base_dir, projects_dir
+            )
             project_name, success, error = result
             if success:
                 print(f"✓ Completed: {project_name}")
@@ -209,10 +216,11 @@ async def run_projects_with_concurrency(
 
 def main():
     base_dir = Path(__file__).parent.resolve()
+    projects_dir = base_dir / PROJECTS_DIR
 
     # Filter to only existing projects
-    existing_projects = [p for p in PROJECTS if (base_dir / p).exists()]
-    missing_projects = [p for p in PROJECTS if not (base_dir / p).exists()]
+    existing_projects = [p for p in PROJECTS if (projects_dir / p).exists()]
+    missing_projects = [p for p in PROJECTS if not (projects_dir / p).exists()]
 
     if missing_projects:
         print(
@@ -233,7 +241,9 @@ def main():
     )
 
     results = asyncio.run(
-        run_projects_with_concurrency(existing_projects, base_dir, CONCURRENCY)
+        run_projects_with_concurrency(
+            existing_projects, base_dir, projects_dir, CONCURRENCY
+        )
     )
 
     # Summary
