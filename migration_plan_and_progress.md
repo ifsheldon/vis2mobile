@@ -17,7 +17,7 @@
 
 ## Project Queue (in order)
 - [x] vega-01
-- [ ] vega-02
+- [x] vega-02
 - [ ] vega-03
 - [ ] vega-04
 - [ ] vega-05
@@ -85,3 +85,4 @@
 ## Progress Log
 - 2026-01-13: Plan created.
 - 2026-01-13: Migrated vega-01 (Flight Explorer) into gallery.
+- 2026-01-13: Migrated vega-02 (Normal 2D) into gallery.
