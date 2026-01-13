@@ -22,76 +22,76 @@ PROJECTS_DIR = "vega-mobile-projects"
 # All projects to process
 PROJECTS = [
     # vega
-    # "vega-01",
-    # "vega-02",
-    # "vega-03",
-    # "vega-04",
-    # "vega-05",
+    "vega-01",
+    "vega-02",
+    "vega-03",
+    "vega-04",
+    "vega-05",
     # vega_altair
-    # "vega-altair-01",
-    # "vega-altair-02",
-    # "vega-altair-03",
-    # "vega-altair-04",
-    # "vega-altair-05",
-    # "vega-altair-06",
-    # "vega-altair-07",
-    # "vega-altair-08",
-    # "vega-altair-09",
-    # "vega-altair-10",
-    # "vega-altair-11",
-    # "vega-altair-12",
-    # "vega-altair-13",
-    # "vega-altair-14",
-    # "vega-altair-15",
-    # "vega-altair-16",
-    # "vega-altair-17",
-    # "vega-altair-18",
-    # "vega-altair-19",
-    # "vega-altair-20",
-    # "vega-altair-21",
-    # "vega-altair-22",
-    # "vega-altair-23",
-    # "vega-altair-24",
-    # "vega-altair-25",
-    # "vega-altair-26",
-    # "vega-altair-27",
-    # "vega-altair-28",
-    # "vega-altair-29",
-    # "vega-altair-30",
-    # "vega-altair-31",
-    # "vega-altair-32",
-    # "vega-altair-33",
-    # "vega-altair-34",
-    # "vega-altair-35",
-    # "vega-altair-36",
-    # "vega-altair-37",
-    # "vega-altair-38",
-    # "vega-altair-39",
-    # "vega-altair-40",
-    # "vega-altair-41",
-    # vega_lite
-    "vega-lite-01",  # was invalid
-    "vega-lite-02",  # was invalid
-    # "vega-lite-03",  # valid
-    "vega-lite-04",  # was invalid
-    # "vega-lite-05",  # valid
-    "vega-lite-06",  # was invalid
-    "vega-lite-07",  # was invalid
-    "vega-lite-08",  # was invalid
-    # "vega-lite-09",  # valid
-    # "vega-lite-10",  # valid
-    # "vega-lite-11",  # valid
-    "vega-lite-12",  # was invalid
-    # "vega-lite-13",  # valid
-    "vega-lite-14",  # was invalid
-    "vega-lite-15",  # was invalid
-    "vega-lite-16",  # was invalid
-    # "vega-lite-17",  # valid
-    # "vega-lite-18",  # valid
-    "vega-lite-19",  # was invalid
-    "vega-lite-20",  # was invalid
-    "vega-lite-21",  # was invalid
-    "vega-lite-22",  # was invalid
+    "vega-altair-01",
+    "vega-altair-02",
+    "vega-altair-03",
+    "vega-altair-04",
+    "vega-altair-05",
+    # "vega-altair-06", # finished by Sizhe
+    # "vega-altair-07", # finished by Sizhe
+    # "vega-altair-08", # finished by Sizhe
+    # "vega-altair-09", # finished by Sizhe
+    "vega-altair-10",
+    "vega-altair-11",
+    # "vega-altair-12", # finished by Sizhe
+    "vega-altair-13",
+    "vega-altair-14",
+    # "vega-altair-15", # finished by Sizhe
+    # "vega-altair-16", # finished by Sizhe
+    # "vega-altair-17", # finished by Sizhe
+    "vega-altair-18",
+    "vega-altair-19",
+    "vega-altair-20",
+    # "vega-altair-21", # finished by Sizhe
+    # "vega-altair-22", # finished by Sizhe
+    # "vega-altair-23", # finished by Sizhe
+    # "vega-altair-24", # finished by Sizhe
+    # "vega-altair-25", # finished by Sizhe
+    # "vega-altair-26", # finished by Sizhe
+    "vega-altair-27",
+    "vega-altair-28",
+    "vega-altair-29",
+    "vega-altair-30",
+    "vega-altair-31",
+    "vega-altair-32",
+    "vega-altair-33",
+    "vega-altair-34",
+    "vega-altair-35",
+    "vega-altair-36",
+    "vega-altair-37",
+    "vega-altair-38",
+    "vega-altair-39",
+    "vega-altair-40",
+    "vega-altair-41",
+    # vega_lite, finished by FL
+    # "vega-lite-01",
+    # "vega-lite-02",
+    # "vega-lite-03",
+    # "vega-lite-04",
+    # "vega-lite-05",
+    # "vega-lite-06",
+    # "vega-lite-07",
+    # "vega-lite-08",
+    # "vega-lite-09",
+    # "vega-lite-10",
+    # "vega-lite-11",
+    # "vega-lite-12",
+    # "vega-lite-13",
+    # "vega-lite-14",
+    # "vega-lite-15",
+    # "vega-lite-16",
+    # "vega-lite-17",
+    # "vega-lite-18",
+    # "vega-lite-19",
+    # "vega-lite-20",
+    # "vega-lite-21",
+    # "vega-lite-22",
 ]
 
 # Number of concurrent projects to run
