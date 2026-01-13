@@ -1,487 +1,170 @@
+"use client";
+
+import { type ClassValue, clsx } from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
+import { twMerge } from "tailwind-merge";
+import { processData } from "@/lib/data";
 
-type BarleyDatum = {
-  yield: number;
-  variety: string;
-  year: 1931 | 1932;
-  site: string;
-};
-
-type VarietyPoint = {
-  variety: string;
-  yield1931: number;
-  yield1932: number;
-  total: number;
-};
-
-const rawData: BarleyDatum[] = [
-  { yield: 27, variety: "Manchuria", year: 1931, site: "University Farm" },
-  { yield: 48.86667, variety: "Manchuria", year: 1931, site: "Waseca" },
-  { yield: 27.43334, variety: "Manchuria", year: 1931, site: "Morris" },
-  { yield: 39.93333, variety: "Manchuria", year: 1931, site: "Crookston" },
-  { yield: 32.96667, variety: "Manchuria", year: 1931, site: "Grand Rapids" },
-  { yield: 28.96667, variety: "Manchuria", year: 1931, site: "Duluth" },
-  { yield: 43.06666, variety: "Glabron", year: 1931, site: "University Farm" },
-  { yield: 55.2, variety: "Glabron", year: 1931, site: "Waseca" },
-  { yield: 28.76667, variety: "Glabron", year: 1931, site: "Morris" },
-  { yield: 38.13333, variety: "Glabron", year: 1931, site: "Crookston" },
-  { yield: 29.13333, variety: "Glabron", year: 1931, site: "Grand Rapids" },
-  { yield: 29.66667, variety: "Glabron", year: 1931, site: "Duluth" },
-  { yield: 35.13333, variety: "Svansota", year: 1931, site: "University Farm" },
-  { yield: 47.33333, variety: "Svansota", year: 1931, site: "Waseca" },
-  { yield: 25.76667, variety: "Svansota", year: 1931, site: "Morris" },
-  { yield: 40.46667, variety: "Svansota", year: 1931, site: "Crookston" },
-  { yield: 29.66667, variety: "Svansota", year: 1931, site: "Grand Rapids" },
-  { yield: 25.7, variety: "Svansota", year: 1931, site: "Duluth" },
-  { yield: 39.9, variety: "Velvet", year: 1931, site: "University Farm" },
-  { yield: 50.23333, variety: "Velvet", year: 1931, site: "Waseca" },
-  { yield: 26.13333, variety: "Velvet", year: 1931, site: "Morris" },
-  { yield: 41.33333, variety: "Velvet", year: 1931, site: "Crookston" },
-  { yield: 23.03333, variety: "Velvet", year: 1931, site: "Grand Rapids" },
-  { yield: 26.3, variety: "Velvet", year: 1931, site: "Duluth" },
-  { yield: 36.56666, variety: "Trebi", year: 1931, site: "University Farm" },
-  { yield: 63.8333, variety: "Trebi", year: 1931, site: "Waseca" },
-  { yield: 43.76667, variety: "Trebi", year: 1931, site: "Morris" },
-  { yield: 46.93333, variety: "Trebi", year: 1931, site: "Crookston" },
-  { yield: 29.76667, variety: "Trebi", year: 1931, site: "Grand Rapids" },
-  { yield: 33.93333, variety: "Trebi", year: 1931, site: "Duluth" },
-  { yield: 43.26667, variety: "No. 457", year: 1931, site: "University Farm" },
-  { yield: 58.1, variety: "No. 457", year: 1931, site: "Waseca" },
-  { yield: 28.7, variety: "No. 457", year: 1931, site: "Morris" },
-  { yield: 45.66667, variety: "No. 457", year: 1931, site: "Crookston" },
-  { yield: 32.16667, variety: "No. 457", year: 1931, site: "Grand Rapids" },
-  { yield: 33.6, variety: "No. 457", year: 1931, site: "Duluth" },
-  { yield: 36.6, variety: "No. 462", year: 1931, site: "University Farm" },
-  { yield: 65.7667, variety: "No. 462", year: 1931, site: "Waseca" },
-  { yield: 30.36667, variety: "No. 462", year: 1931, site: "Morris" },
-  { yield: 48.56666, variety: "No. 462", year: 1931, site: "Crookston" },
-  { yield: 24.93334, variety: "No. 462", year: 1931, site: "Grand Rapids" },
-  { yield: 28.1, variety: "No. 462", year: 1931, site: "Duluth" },
-  { yield: 32.76667, variety: "Peatland", year: 1931, site: "University Farm" },
-  { yield: 48.56666, variety: "Peatland", year: 1931, site: "Waseca" },
-  { yield: 29.86667, variety: "Peatland", year: 1931, site: "Morris" },
-  { yield: 41.6, variety: "Peatland", year: 1931, site: "Crookston" },
-  { yield: 34.7, variety: "Peatland", year: 1931, site: "Grand Rapids" },
-  { yield: 32, variety: "Peatland", year: 1931, site: "Duluth" },
-  { yield: 24.66667, variety: "No. 475", year: 1931, site: "University Farm" },
-  { yield: 46.76667, variety: "No. 475", year: 1931, site: "Waseca" },
-  { yield: 22.6, variety: "No. 475", year: 1931, site: "Morris" },
-  { yield: 44.1, variety: "No. 475", year: 1931, site: "Crookston" },
-  { yield: 19.7, variety: "No. 475", year: 1931, site: "Grand Rapids" },
-  { yield: 33.06666, variety: "No. 475", year: 1931, site: "Duluth" },
-  {
-    yield: 39.3,
-    variety: "Wisconsin No. 38",
-    year: 1931,
-    site: "University Farm",
-  },
-  { yield: 58.8, variety: "Wisconsin No. 38", year: 1931, site: "Waseca" },
-  { yield: 29.46667, variety: "Wisconsin No. 38", year: 1931, site: "Morris" },
-  {
-    yield: 49.86667,
-    variety: "Wisconsin No. 38",
-    year: 1931,
-    site: "Crookston",
-  },
-  {
-    yield: 34.46667,
-    variety: "Wisconsin No. 38",
-    year: 1931,
-    site: "Grand Rapids",
-  },
-  { yield: 31.6, variety: "Wisconsin No. 38", year: 1931, site: "Duluth" },
-  { yield: 26.9, variety: "Manchuria", year: 1932, site: "University Farm" },
-  { yield: 33.46667, variety: "Manchuria", year: 1932, site: "Waseca" },
-  { yield: 34.36666, variety: "Manchuria", year: 1932, site: "Morris" },
-  { yield: 32.96667, variety: "Manchuria", year: 1932, site: "Crookston" },
-  { yield: 22.13333, variety: "Manchuria", year: 1932, site: "Grand Rapids" },
-  { yield: 22.56667, variety: "Manchuria", year: 1932, site: "Duluth" },
-  { yield: 36.8, variety: "Glabron", year: 1932, site: "University Farm" },
-  { yield: 37.73333, variety: "Glabron", year: 1932, site: "Waseca" },
-  { yield: 35.13333, variety: "Glabron", year: 1932, site: "Morris" },
-  { yield: 26.16667, variety: "Glabron", year: 1932, site: "Crookston" },
-  { yield: 14.43333, variety: "Glabron", year: 1932, site: "Grand Rapids" },
-  { yield: 25.86667, variety: "Glabron", year: 1932, site: "Duluth" },
-  { yield: 27.43334, variety: "Svansota", year: 1932, site: "University Farm" },
-  { yield: 38.5, variety: "Svansota", year: 1932, site: "Waseca" },
-  { yield: 35.03333, variety: "Svansota", year: 1932, site: "Morris" },
-  { yield: 20.63333, variety: "Svansota", year: 1932, site: "Crookston" },
-  { yield: 16.63333, variety: "Svansota", year: 1932, site: "Grand Rapids" },
-  { yield: 22.23333, variety: "Svansota", year: 1932, site: "Duluth" },
-  { yield: 26.8, variety: "Velvet", year: 1932, site: "University Farm" },
-  { yield: 37.4, variety: "Velvet", year: 1932, site: "Waseca" },
-  { yield: 38.83333, variety: "Velvet", year: 1932, site: "Morris" },
-  { yield: 32.06666, variety: "Velvet", year: 1932, site: "Crookston" },
-  { yield: 32.23333, variety: "Velvet", year: 1932, site: "Grand Rapids" },
-  { yield: 22.46667, variety: "Velvet", year: 1932, site: "Duluth" },
-  { yield: 29.06667, variety: "Trebi", year: 1932, site: "University Farm" },
-  { yield: 49.2333, variety: "Trebi", year: 1932, site: "Waseca" },
-  { yield: 46.63333, variety: "Trebi", year: 1932, site: "Morris" },
-  { yield: 41.83333, variety: "Trebi", year: 1932, site: "Crookston" },
-  { yield: 20.63333, variety: "Trebi", year: 1932, site: "Grand Rapids" },
-  { yield: 30.6, variety: "Trebi", year: 1932, site: "Duluth" },
-  { yield: 26.43334, variety: "No. 457", year: 1932, site: "University Farm" },
-  { yield: 42.2, variety: "No. 457", year: 1932, site: "Waseca" },
-  { yield: 43.53334, variety: "No. 457", year: 1932, site: "Morris" },
-  { yield: 34.33333, variety: "No. 457", year: 1932, site: "Crookston" },
-  { yield: 19.46667, variety: "No. 457", year: 1932, site: "Grand Rapids" },
-  { yield: 22.7, variety: "No. 457", year: 1932, site: "Duluth" },
-  { yield: 25.56667, variety: "No. 462", year: 1932, site: "University Farm" },
-  { yield: 44.7, variety: "No. 462", year: 1932, site: "Waseca" },
-  { yield: 47, variety: "No. 462", year: 1932, site: "Morris" },
-  { yield: 30.53333, variety: "No. 462", year: 1932, site: "Crookston" },
-  { yield: 19.9, variety: "No. 462", year: 1932, site: "Grand Rapids" },
-  { yield: 22.5, variety: "No. 462", year: 1932, site: "Duluth" },
-  { yield: 28.06667, variety: "Peatland", year: 1932, site: "University Farm" },
-  { yield: 36.03333, variety: "Peatland", year: 1932, site: "Waseca" },
-  { yield: 43.2, variety: "Peatland", year: 1932, site: "Morris" },
-  { yield: 25.23333, variety: "Peatland", year: 1932, site: "Crookston" },
-  { yield: 26.76667, variety: "Peatland", year: 1932, site: "Grand Rapids" },
-  { yield: 31.36667, variety: "Peatland", year: 1932, site: "Duluth" },
-  { yield: 30, variety: "No. 475", year: 1932, site: "University Farm" },
-  { yield: 41.26667, variety: "No. 475", year: 1932, site: "Waseca" },
-  { yield: 44.23333, variety: "No. 475", year: 1932, site: "Morris" },
-  { yield: 32.13333, variety: "No. 475", year: 1932, site: "Crookston" },
-  { yield: 15.23333, variety: "No. 475", year: 1932, site: "Grand Rapids" },
-  { yield: 27.36667, variety: "No. 475", year: 1932, site: "Duluth" },
-  {
-    yield: 38,
-    variety: "Wisconsin No. 38",
-    year: 1932,
-    site: "University Farm",
-  },
-  { yield: 58.16667, variety: "Wisconsin No. 38", year: 1932, site: "Waseca" },
-  { yield: 47.16667, variety: "Wisconsin No. 38", year: 1932, site: "Morris" },
-  { yield: 35.9, variety: "Wisconsin No. 38", year: 1932, site: "Crookston" },
-  {
-    yield: 20.66667,
-    variety: "Wisconsin No. 38",
-    year: 1932,
-    site: "Grand Rapids",
-  },
-  { yield: 29.33333, variety: "Wisconsin No. 38", year: 1932, site: "Duluth" },
-];
-
-const sitesOrder = [
-  "Grand Rapids",
-  "Duluth",
-  "University Farm",
-  "Morris",
-  "Crookston",
-  "Waseca",
-] as const;
-
-const formatYield = (value: number) => value.toFixed(1);
-
-const createTicks = (min: number, max: number) => {
-  const padding = 2;
-  const start = Math.floor((min - padding) / 5) * 5;
-  const end = Math.ceil((max + padding) / 5) * 5;
-  const range = Math.max(end - start, 5);
-  const step = Math.ceil(range / 4 / 5) * 5;
-  const ticks: number[] = [];
-  for (let t = start; t <= end; t += step) {
-    ticks.push(t);
-  }
-  return ticks;
-};
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function Visualization() {
-  const grouped = useMemo(() => {
-    const bySite: Record<string, Record<string, VarietyPoint>> = {};
-    for (const datum of rawData) {
-      if (!bySite[datum.site]) {
-        bySite[datum.site] = {};
-      }
-      if (!bySite[datum.site][datum.variety]) {
-        bySite[datum.site][datum.variety] = {
-          variety: datum.variety,
-          yield1931: 0,
-          yield1932: 0,
-          total: 0,
-        };
-      }
-      if (datum.year === 1931) {
-        bySite[datum.site][datum.variety].yield1931 = datum.yield;
-      } else {
-        bySite[datum.site][datum.variety].yield1932 = datum.yield;
-      }
-    }
-
-    const result: Record<string, VarietyPoint[]> = {};
-    for (const site of Object.keys(bySite)) {
-      const values = Object.values(bySite[site]).map((point) => ({
-        ...point,
-        total: point.yield1931 + point.yield1932,
-      }));
-      values.sort((a, b) => b.total - a.total);
-      result[site] = values;
-    }
-    return result;
-  }, []);
-
-  const [activeSite, setActiveSite] = useState<(typeof sitesOrder)[number]>(
-    sitesOrder[0],
-  );
-  const activeData = grouped[activeSite] ?? [];
-  const [activeVariety, setActiveVariety] = useState<VarietyPoint | null>(
-    activeData[0] ?? null,
+  const { sites, globalMin, globalMax, processedData } = useMemo(
+    () => processData(),
+    [],
   );
 
-  const data = activeData;
-  const minYield = Math.min(...data.flatMap((d) => [d.yield1931, d.yield1932]));
-  const maxYield = Math.max(...data.flatMap((d) => [d.yield1931, d.yield1932]));
-  const ticks = createTicks(minYield, maxYield);
+  const [activeSiteIndex, setActiveSiteIndex] = useState(0);
+  // Find the active site object from processedData based on the sorted sites array
+  const activeSiteName = sites[activeSiteIndex];
+  const activeSite = processedData.find((s) => s.site === activeSiteName);
 
-  const baseWidth = 360;
-  const margin = { top: 18, right: 18, bottom: 34, left: 122 };
-  const rowHeight = 34;
-  const chartHeight = margin.top + margin.bottom + data.length * rowHeight;
-  const chartWidth = baseWidth;
-  const plotWidth = chartWidth - margin.left - margin.right;
-  const plotHeight = chartHeight - margin.top - margin.bottom;
+  if (!activeSite) {
+    return <div>Loading...</div>;
+  }
 
-  const xScale = (value: number) => {
-    const padding = 1;
-    const domainMin = minYield - padding;
-    const domainMax = maxYield + padding;
-    return (
-      margin.left + ((value - domainMin) / (domainMax - domainMin)) * plotWidth
-    );
+  // Helper for linear scale
+  const getX = (val: number) => {
+    const range = globalMax - globalMin;
+    const percent = (val - globalMin) / range;
+    return percent * 100; // Return percentage
   };
 
-  const yForIndex = (index: number) =>
-    margin.top + index * rowHeight + rowHeight / 2;
-
-  const details = activeVariety ?? data[0];
-  const delta =
-    details !== undefined ? details.yield1932 - details.yield1931 : 0;
-
   return (
-    <div className="w-full h-full overflow-y-auto bg-slate-950 text-slate-100">
-      <div className="mx-auto flex w-full max-w-md flex-col gap-5 px-4 pb-10 pt-6">
-        <header className="flex flex-col gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
-              Barley Yield Analysis
-            </p>
-            <h1 className="text-2xl font-semibold text-slate-50">
-              The Morris Mistake
-            </h1>
-            <p className="mt-2 text-sm text-slate-300">
-              Compare yield shifts between 1931 and 1932 for each variety. Tap a
-              row to inspect the exact change.
-            </p>
-          </div>
-          <div className="flex items-center gap-4 rounded-2xl border border-slate-700/60 bg-slate-900/60 px-4 py-3 text-sm shadow-[0_20px_45px_-30px_rgba(59,130,246,0.6)] backdrop-blur">
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-indigo-400 shadow-[0_0_12px_rgba(99,102,241,0.9)]" />
-              <span className="text-slate-200">1931</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
-              <span className="text-slate-200">1932</span>
-            </div>
-          </div>
-        </header>
+    <div className="flex flex-col h-full bg-zinc-950 text-zinc-100 font-sans overflow-hidden">
+      {/* Header & Tabs */}
+      <div className="flex-none pt-4 pb-2 px-4 bg-zinc-950/95 backdrop-blur-sm z-10 border-b border-zinc-800">
+        <h1 className="text-lg font-bold mb-4 text-zinc-50 tracking-tight">
+          Barley Yields{" "}
+          <span className="text-zinc-500 font-normal text-sm ml-2">
+            1931 vs 1932
+          </span>
+        </h1>
 
-        <section className="flex flex-col gap-3">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
-            Site
-          </p>
-          <div className="flex gap-2 overflow-x-auto pb-1">
-            {sitesOrder.map((site) => {
-              const isActive = site === activeSite;
-              return (
-                <button
-                  key={site}
-                  type="button"
-                  onClick={() => {
-                    setActiveSite(site);
-                    const first = grouped[site]?.[0] ?? null;
-                    setActiveVariety(first);
-                  }}
-                  className={`shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition ${
-                    isActive
-                      ? "bg-slate-50 text-slate-950 shadow-[0_10px_30px_-15px_rgba(148,163,184,0.8)]"
-                      : "border border-slate-700/80 text-slate-300"
-                  }`}
-                >
-                  {site}
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-4 shadow-[0_40px_90px_-60px_rgba(14,116,144,0.7)]">
-          <div className="mb-3 flex items-center justify-between text-xs text-slate-400">
-            <span className="uppercase tracking-[0.25em]">Yield</span>
-            <span>bushels / acre</span>
-          </div>
-          <div className="w-full overflow-hidden">
-            <svg
-              width="100%"
-              height={chartHeight}
-              viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-              className="block"
-              role="img"
-              aria-labelledby="barley-chart-title"
+        {/* Site Tabs */}
+        <div className="flex space-x-2 overflow-x-auto no-scrollbar pb-2 mask-linear-fade">
+          {sites.map((site, idx) => (
+            <button
+              type="button"
+              key={site}
+              onClick={() => setActiveSiteIndex(idx)}
+              className={cn(
+                "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 flex-shrink-0 border",
+                activeSiteIndex === idx
+                  ? "bg-zinc-100 text-zinc-950 border-zinc-100 shadow-sm"
+                  : "bg-zinc-900/50 text-zinc-400 border-zinc-800 hover:bg-zinc-800 hover:text-zinc-200",
+              )}
             >
-              <title id="barley-chart-title">
-                Dumbbell plot comparing barley yields for 1931 and 1932
-              </title>
-              <defs>
-                <linearGradient id="dumbbell" x1="0" x2="1" y1="0" y2="0">
-                  <stop offset="0%" stopColor="#818cf8" />
-                  <stop offset="100%" stopColor="#22d3ee" />
-                </linearGradient>
-              </defs>
+              {site}
+            </button>
+          ))}
+        </div>
+      </div>
 
-              {ticks.map((tick) => {
-                const x = xScale(tick);
-                return (
-                  <g key={`grid-${tick}`}>
-                    <line
-                      x1={x}
-                      x2={x}
-                      y1={margin.top}
-                      y2={margin.top + plotHeight}
-                      stroke="rgba(148,163,184,0.25)"
-                      strokeDasharray="3 5"
-                    />
-                    <text
-                      x={x}
-                      y={chartHeight - 10}
-                      textAnchor="middle"
-                      fill="rgba(226,232,240,0.65)"
-                      fontSize="10"
-                    >
-                      {tick}
-                    </text>
-                  </g>
-                );
-              })}
+      {/* Main Chart Area */}
+      <div className="flex-1 overflow-y-auto px-4 py-6 relative">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSite.site}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="space-y-7"
+          >
+            {activeSite.varieties.map((variety) => (
+              <div key={variety.variety} className="relative group">
+                {/* Label Row */}
+                <div className="flex justify-between items-baseline mb-3">
+                  <span className="font-semibold text-zinc-200 text-sm tracking-wide">
+                    {variety.variety}
+                  </span>
+                  <div className="text-xs space-x-3 font-mono">
+                    <span className="text-amber-500 font-medium">
+                      {variety.yield1931.toFixed(1)}
+                    </span>
+                    <span className="text-zinc-600">|</span>
+                    <span className="text-indigo-400 font-medium">
+                      {variety.yield1932.toFixed(1)}
+                    </span>
+                  </div>
+                </div>
 
-              {data.map((row, index) => {
-                const y = yForIndex(index);
-                const x1931 = xScale(row.yield1931);
-                const x1932 = xScale(row.yield1932);
-                const isActive = activeVariety?.variety === row.variety;
-                return (
-                  <g
-                    key={row.variety}
+                {/* Dumbbell Chart Row */}
+                <div className="h-6 relative w-full">
+                  {/* Grid Lines / Axis (Background) */}
+                  <div className="absolute inset-0 top-1/2 -translate-y-1/2 h-[1px] bg-zinc-800 w-full" />
+
+                  {/* Connector Line */}
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 h-[3px] bg-zinc-700/60 rounded-full transition-all duration-500"
                     style={{
-                      opacity: activeVariety ? (isActive ? 1 : 0.35) : 1,
+                      left: `${Math.min(getX(variety.yield1931), getX(variety.yield1932))}%`,
+                      width: `${Math.abs(getX(variety.yield1931) - getX(variety.yield1932))}%`,
                     }}
-                  >
-                    <line
-                      x1={x1931}
-                      x2={x1932}
-                      y1={y}
-                      y2={y}
-                      stroke="url(#dumbbell)"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                    />
-                    <circle
-                      cx={x1931}
-                      cy={y}
-                      r="5.4"
-                      fill="#818cf8"
-                      stroke="#1e1b4b"
-                      strokeWidth="1"
-                    />
-                    <circle
-                      cx={x1932}
-                      cy={y}
-                      r="5.4"
-                      fill="#22d3ee"
-                      stroke="#0e7490"
-                      strokeWidth="1"
-                    />
-                    <text
-                      x={margin.left - 10}
-                      y={y + 4}
-                      textAnchor="end"
-                      fill="rgba(226,232,240,0.9)"
-                      fontSize="12"
-                    >
-                      {row.variety}
-                    </text>
-                    <rect
-                      x={0}
-                      y={y - rowHeight / 2}
-                      width={chartWidth}
-                      height={rowHeight}
-                      fill="transparent"
-                      onClick={() => setActiveVariety(row)}
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`Select ${row.variety}`}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter" || event.key === " ") {
-                          event.preventDefault();
-                          setActiveVariety(row);
-                        }
-                      }}
-                    />
-                  </g>
-                );
-              })}
+                  />
 
-              <text
-                x={margin.left}
-                y={14}
-                textAnchor="start"
-                fill="rgba(226,232,240,0.9)"
-                fontSize="12"
-              >
-                Variety
-              </text>
-            </svg>
-          </div>
-        </section>
+                  {/* 1931 Dot (Amber) */}
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-amber-500 ring-2 ring-zinc-950 shadow-sm z-10 transition-all duration-500"
+                    style={{
+                      left: `calc(${getX(variety.yield1931)}% - 7px)`,
+                    }}
+                  />
 
-        <section className="rounded-2xl border border-slate-800/70 bg-slate-900/60 p-4 text-sm text-slate-200">
-          <div className="flex items-center justify-between">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
-              Selected variety
-            </p>
-            <span className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-300">
-              {activeSite}
-            </span>
-          </div>
-          <h2 className="mt-2 text-lg font-semibold text-slate-50">
-            {details?.variety ?? "Select a variety"}
-          </h2>
-          <div className="mt-3 grid grid-cols-3 gap-3 text-center text-xs">
-            <div className="rounded-xl bg-slate-950/70 p-2">
-              <p className="text-slate-400">1931</p>
-              <p className="mt-1 text-base font-semibold text-indigo-300">
-                {details ? formatYield(details.yield1931) : "--"}
-              </p>
-            </div>
-            <div className="rounded-xl bg-slate-950/70 p-2">
-              <p className="text-slate-400">1932</p>
-              <p className="mt-1 text-base font-semibold text-cyan-200">
-                {details ? formatYield(details.yield1932) : "--"}
-              </p>
-            </div>
-            <div className="rounded-xl bg-slate-950/70 p-2">
-              <p className="text-slate-400">Delta</p>
-              <p
-                className={`mt-1 text-base font-semibold ${
-                  delta >= 0 ? "text-emerald-300" : "text-rose-300"
-                }`}
+                  {/* 1932 Dot (Indigo) */}
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-indigo-500 ring-2 ring-zinc-950 shadow-sm z-10 transition-all duration-500"
+                    style={{
+                      left: `calc(${getX(variety.yield1932)}% - 7px)`,
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Footer / Legend / Axis */}
+      <div className="flex-none bg-zinc-950 border-t border-zinc-800 p-4 pb-8 shadow-[0_-4px_12px_rgba(0,0,0,0.5)] z-20">
+        {/* X-Axis Scale */}
+        <div className="relative h-8 mb-3">
+          {/* Ticks */}
+          {[20, 30, 40, 50, 60, 70].map((val) => {
+            const pos = getX(val);
+            if (pos < 0 || pos > 100) return null;
+            return (
+              <div
+                key={val}
+                className="absolute top-0 flex flex-col items-center transition-all duration-500"
+                style={{ left: `${pos}%`, transform: "translateX(-50%)" }}
               >
-                {details
-                  ? `${delta >= 0 ? "+" : ""}${formatYield(delta)}`
-                  : "--"}
-              </p>
-            </div>
+                <div className="h-2 w-px bg-zinc-700 mb-1" />
+                <span className="text-[11px] text-zinc-500 font-medium">
+                  {val}
+                </span>
+              </div>
+            );
+          })}
+          <div className="absolute bottom-0 w-full text-center text-[10px] text-zinc-600 font-semibold uppercase tracking-widest">
+            Yield (Bushels/Acre)
           </div>
-        </section>
+        </div>
+
+        {/* Legend */}
+        <div className="flex items-center justify-center space-x-8 pt-2">
+          <div className="flex items-center space-x-2.5 bg-zinc-900/50 px-3 py-1.5 rounded-lg border border-zinc-800/50">
+            <div className="w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]" />
+            <span className="text-xs text-zinc-300 font-medium">1931</span>
+          </div>
+          <div className="flex items-center space-x-2.5 bg-zinc-900/50 px-3 py-1.5 rounded-lg border border-zinc-800/50">
+            <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.4)]" />
+            <span className="text-xs text-zinc-300 font-medium">1932</span>
+          </div>
+        </div>
       </div>
     </div>
   );
