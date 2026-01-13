@@ -28,25 +28,25 @@ PROJECTS = [
     "vega-04",
     "vega-05",
     # vega_altair
-    "vega-altair-01",
+    # "vega-altair-01", # finished by FL
     "vega-altair-02",
-    "vega-altair-03",
-    "vega-altair-04",
-    "vega-altair-05",
+    # "vega-altair-03", # finished by FL
+    # "vega-altair-04", # finished by FL
+    # "vega-altair-05", # finished by FL
     # "vega-altair-06", # finished by Sizhe
     # "vega-altair-07", # finished by Sizhe
     # "vega-altair-08", # finished by Sizhe
     # "vega-altair-09", # finished by Sizhe
     "vega-altair-10",
-    "vega-altair-11",
+    # "vega-altair-11", # finished by FL
     # "vega-altair-12", # finished by Sizhe
-    "vega-altair-13",
-    "vega-altair-14",
+    # "vega-altair-13", # finished by FL
+    # "vega-altair-14", # finished by FL
     # "vega-altair-15", # finished by Sizhe
     # "vega-altair-16", # finished by Sizhe
     # "vega-altair-17", # finished by Sizhe
-    "vega-altair-18",
-    "vega-altair-19",
+    # "vega-altair-18", # finished by FL
+    # "vega-altair-19", # finished by FL
     "vega-altair-20",
     # "vega-altair-21", # finished by Sizhe
     # "vega-altair-22", # finished by Sizhe
@@ -54,7 +54,7 @@ PROJECTS = [
     # "vega-altair-24", # finished by Sizhe
     # "vega-altair-25", # finished by Sizhe
     # "vega-altair-26", # finished by Sizhe
-    "vega-altair-27",
+    # "vega-altair-27", # finished by FL
     "vega-altair-28",
     "vega-altair-29",
     "vega-altair-30",
