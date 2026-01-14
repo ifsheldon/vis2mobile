@@ -47,7 +47,7 @@
 - [x] vega-altair-24
 - [x] vega-altair-25
 - [x] vega-altair-26
-- [ ] vega-altair-27
+- [x] vega-altair-27
 - [ ] vega-altair-28
 - [ ] vega-altair-29
 - [ ] vega-altair-30
@@ -144,3 +144,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-25.
 - 2026-01-13: Migrated vega-altair-26 (S&P 500 Focus) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-26.
+- 2026-01-14: Migrated vega-altair-27 (Metric Analysis) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-altair-27.
