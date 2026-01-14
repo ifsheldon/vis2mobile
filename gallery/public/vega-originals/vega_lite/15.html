@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>15.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"$schema": "https://vega.github.io/schema/vega-lite/v6.json", "description": "Multi-series Line Chart with Halo. Use pivot and repeat-layer as a workaround to facet groups of lines and their halo strokes. See https://github.com/vega/vega-lite/issues/6192 for more discussion. Source:https://vega.github.io/vega-lite/examples/line_color_halo.html ", "data": {"url": "https://vega.github.io/editor/data/stocks.csv"}, "transform": [{"pivot": "symbol", "value": "price", "groupby": ["date"]}], "repeat": {"layer": ["AAPL", "AMZN", "GOOG", "IBM", "MSFT"]}, "spec": {"layer": [{"mark": {"type": "line", "stroke": "white", "strokeWidth": 4}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": {"repeat": "layer"}, "type": "quantitative", "title": "price"}}}, {"mark": {"type": "line"}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": {"repeat": "layer"}, "type": "quantitative", "title": "price"}, "stroke": {"datum": {"repeat": "layer"}, "type": "nominal"}}}]}};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>

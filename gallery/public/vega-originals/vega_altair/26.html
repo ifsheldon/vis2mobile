@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>26.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "vconcat": [{"mark": {"type": "area"}, "encoding": {"x": {"field": "date", "scale": {"domain": {"param": "param_12f45cd93e3d6df3"}}, "type": "temporal"}, "y": {"field": "price", "type": "quantitative"}}, "height": 200, "width": 600}, {"mark": {"type": "area"}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "price", "type": "quantitative"}}, "height": 60, "name": "view_cb5e8b586ddef584_1", "width": 600}], "data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/sp500.csv"}, "params": [{"name": "param_12f45cd93e3d6df3", "select": {"type": "interval", "encodings": ["x"]}, "value": {"x": [{"year": 2007, "month": 6, "date": 30}, {"year": 2009, "month": 6, "date": 30}]}, "views": ["view_cb5e8b586ddef584_1"]}], "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json"};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 "use client";
 
-import { ExternalLink, Smartphone } from "lucide-react";
-import { useState } from "react";
-import { LazyIframe } from "./components/LazyIframe";
+import { Smartphone } from "lucide-react";
+import { useEffect, useState } from "react";
+import { PhonePreview } from "./components/PhonePreview";
 import { SideMenu } from "./components/SideMenu";
 
 const MOBILE_RATIOS = [
@@ -12,8 +12,368 @@ const MOBILE_RATIOS = [
 	{ name: "Galaxy S20 Ultra", width: 412, height: 915 },
 ];
 
+// Cicero Examples data
+const CICERO_EXAMPLES = [
+	{
+		title: "French Election (Mobile)",
+		previewSrc: "/preview/french-election",
+		originalSrc: "/more-examples/french-election-desktop.html",
+	},
+	{
+		title: "Justice Kennedy (Mobile)",
+		previewSrc: "/preview/kennedy",
+		originalSrc: "/more-examples/kennedy-desktop.html",
+	},
+	{
+		title: "Disaster Cost (Mobile)",
+		previewSrc: "/preview/cost",
+		originalSrc: "/more-examples/cost-desktop.html",
+	},
+	{
+		title: "Budgets (Grouped Bar Chart)",
+		previewSrc: "/preview/budgets",
+		originalSrc: "/more-examples/budgets-desktop.html",
+	},
+	{
+		title: "Daily Sales (Bar Chart)",
+		previewSrc: "/preview/bar",
+		originalSrc: "/apple-banana.svg",
+		originalLabel: "Original SVG",
+	},
+	{
+		title: "Fruit Trends (Line Chart)",
+		previewSrc: "/preview/line",
+		originalSrc: "/Fruit Sales Line Chart.svg",
+		originalLabel: "Original SVG",
+	},
+	{
+		title: "Fruit Distribution (Pie Chart)",
+		previewSrc: "/preview/pie",
+		originalSrc: "/Fruit Sales Pie Chart.svg",
+		originalLabel: "Original SVG",
+	},
+];
+
+// Vega Examples data
+const VEGA_EXAMPLES = [
+	// Vega 01
+	{
+		title: "Flight Explorer",
+		previewSrc: "/preview/vega/vega-01",
+		originalSrc: "/vega-originals/vega/01.html",
+	},
+	// Vega 02
+	{
+		title: "Normal 2D",
+		previewSrc: "/preview/vega/vega-02",
+		originalSrc: "/vega-originals/vega/02.html",
+	},
+	// Vega 03
+	{
+		title: "Stock Explorer",
+		previewSrc: "/preview/vega/vega-03",
+		originalSrc: "/vega-originals/vega/03.html",
+	},
+	// Vega 04
+	{
+		title: "Country Breakdown",
+		previewSrc: "/preview/vega/vega-04",
+		originalSrc: "/vega-originals/vega/04.html",
+	},
+	// Vega 05
+	{
+		title: "Barley Yield",
+		previewSrc: "/preview/vega/vega-05",
+		originalSrc: "/vega-originals/vega/05.html",
+	},
+	// Vega Altair 01
+	{
+		title: "Market Trends",
+		previewSrc: "/preview/vega/vega-altair-01",
+		originalSrc: "/vega-originals/vega_altair/01.html",
+	},
+	// Vega Altair 02
+	{
+		title: "Data Density",
+		previewSrc: "/preview/vega/vega-altair-02",
+		originalSrc: "/vega-originals/vega_altair/02.html",
+	},
+	// Vega Altair 03
+	{
+		title: "Energy Trends",
+		previewSrc: "/preview/vega/vega-altair-03",
+		originalSrc: "/vega-originals/vega_altair/03.html",
+	},
+	// Vega Altair 04
+	{
+		title: "Energy Source Share",
+		previewSrc: "/preview/vega/vega-altair-04",
+		originalSrc: "/vega-originals/vega_altair/04.html",
+	},
+	// Vega Altair 05
+	{
+		title: "Barley Yield Analysis",
+		previewSrc: "/preview/vega/vega-altair-05",
+		originalSrc: "/vega-originals/vega_altair/05.html",
+	},
+	// Vega Altair 06
+	{
+		title: "Seattle Weather",
+		previewSrc: "/preview/vega/vega-altair-06",
+		originalSrc: "/vega-originals/vega_altair/06.html",
+	},
+	// Vega Altair 07
+	{
+		title: "Employment Change",
+		previewSrc: "/preview/vega/vega-altair-07",
+		originalSrc: "/vega-originals/vega_altair/07.html",
+	},
+	// Vega Altair 09
+	{
+		title: "Barley Yields",
+		previewSrc: "/preview/vega/vega-altair-09",
+		originalSrc: "/vega-originals/vega_altair/09.html",
+	},
+	// Vega Altair 11
+	{
+		title: "Gantt Overview",
+		previewSrc: "/preview/vega/vega-altair-11",
+		originalSrc: "/vega-originals/vega_altair/11.html",
+	},
+	// Vega Altair 12
+	{
+		title: "Top Rated Movies",
+		previewSrc: "/preview/vega/vega-altair-12",
+		originalSrc: "/vega-originals/vega_altair/12.html",
+	},
+	// Vega Altair 13
+	{
+		title: "Population Pyramid",
+		previewSrc: "/preview/vega/vega-altair-13",
+		originalSrc: "/vega-originals/vega_altair/13.html",
+	},
+	// Vega Altair 14
+	{
+		title: "Population by Age & Sex",
+		previewSrc: "/preview/vega/vega-altair-14",
+		originalSrc: "/vega-originals/vega_altair/14.html",
+	},
+	// Vega Altair 15
+	{
+		title: "US State Capitals",
+		previewSrc: "/preview/vega/vega-altair-15",
+		originalSrc: "/vega-originals/vega_altair/15.html",
+	},
+	// Vega Altair 16
+	{
+		title: "London Tube Lines",
+		previewSrc: "/preview/vega/vega-altair-16",
+		originalSrc: "/vega-originals/vega_altair/16.html",
+	},
+	// Vega Altair 17
+	{
+		title: "Radial Chart",
+		previewSrc: "/preview/vega/vega-altair-17",
+		originalSrc: "/vega-originals/vega_altair/17.html",
+	},
+	// Vega Altair 18
+	{
+		title: "Car Horsepower",
+		previewSrc: "/preview/vega/vega-altair-18",
+		originalSrc: "/vega-originals/vega_altair/18.html",
+	},
+	// Vega Altair 19
+	{
+		title: "Stock Price Comparison",
+		previewSrc: "/preview/vega/vega-altair-19",
+		originalSrc: "/vega-originals/vega_altair/19.html",
+	},
+	// Vega Altair 20
+	{
+		title: "Grouped Bar Chart",
+		previewSrc: "/preview/vega/vega-altair-20",
+		originalSrc: "/vega-originals/vega_altair/20.html",
+	},
+	// Vega Altair 21
+	{
+		title: "Cars Scatter Matrix",
+		previewSrc: "/preview/vega/vega-altair-21",
+		originalSrc: "/vega-originals/vega_altair/21.html",
+	},
+	// Vega Altair 22
+	{
+		title: "Seattle Weather Heatmap",
+		previewSrc: "/preview/vega/vega-altair-22",
+		originalSrc: "/vega-originals/vega_altair/22.html",
+	},
+	// Vega Altair 23
+	{
+		title: "Simple Bar Chart",
+		previewSrc: "/preview/vega/vega-altair-23",
+		originalSrc: "/vega-originals/vega_altair/23.html",
+	},
+	// Vega Altair 24
+	{
+		title: "Stacked Bar Chart",
+		previewSrc: "/preview/vega/vega-altair-24",
+		originalSrc: "/vega-originals/vega_altair/24.html",
+	},
+	// Vega Altair 25
+	{
+		title: "Horizontal Stacked Bar",
+		previewSrc: "/preview/vega/vega-altair-25",
+		originalSrc: "/vega-originals/vega_altair/25.html",
+	},
+	// Vega Altair 26
+	{
+		title: "S&P 500 Focus",
+		previewSrc: "/preview/vega/vega-altair-26",
+		originalSrc: "/vega-originals/vega_altair/26.html",
+	},
+	// Vega Altair 27
+	{
+		title: "Layered Histogram",
+		previewSrc: "/preview/vega/vega-altair-27",
+		originalSrc: "/vega-originals/vega_altair/27.html",
+	},
+	// Vega Altair 28
+	{
+		title: "Interactive Average",
+		previewSrc: "/preview/vega/vega-altair-28",
+		originalSrc: "/vega-originals/vega_altair/28.html",
+	},
+	// Vega Altair 29
+	{
+		title: "US Population",
+		previewSrc: "/preview/vega/vega-altair-29",
+		originalSrc: "/vega-originals/vega_altair/29.html",
+	},
+	// Vega Altair 30
+	{
+		title: "Donut Chart",
+		previewSrc: "/preview/vega/vega-altair-30",
+		originalSrc: "/vega-originals/vega_altair/30.html",
+	},
+	// Vega Altair 31
+	{
+		title: "CO2 Emissions",
+		previewSrc: "/preview/vega/vega-altair-31",
+		originalSrc: "/vega-originals/vega_altair/31.html",
+	},
+	// Vega Altair 34
+	{
+		title: "Bar Chart Highlight",
+		previewSrc: "/preview/vega/vega-altair-34",
+		originalSrc: "/vega-originals/vega_altair/34.html",
+	},
+	// Vega Altair 35
+	{
+		title: "Stocks Quantile Plot",
+		previewSrc: "/preview/vega/vega-altair-35",
+		originalSrc: "/vega-originals/vega_altair/35.html",
+	},
+	// Vega Altair 36
+	{
+		title: "Unemployment",
+		previewSrc: "/preview/vega/vega-altair-36",
+		originalSrc: "/vega-originals/vega_altair/36.html",
+	},
+	// Vega Altair 37
+	{
+		title: "Faceted Scatter",
+		previewSrc: "/preview/vega/vega-altair-37",
+		originalSrc: "/vega-originals/vega_altair/37.html",
+	},
+	// Vega Altair 38
+	{
+		title: "Airport Connections",
+		previewSrc: "/preview/vega/vega-altair-38",
+		originalSrc: "/vega-originals/vega_altair/38.html",
+	},
+	// Vega Altair 39
+	{
+		title: "Ranged Dot Plot",
+		previewSrc: "/preview/vega/vega-altair-39",
+		originalSrc: "/vega-originals/vega_altair/39.html",
+	},
+	// Vega Altair 40
+	{
+		title: "County Unemployment",
+		previewSrc: "/preview/vega/vega-altair-40",
+		originalSrc: "/vega-originals/vega_altair/40.html",
+	},
+	// Vega Altair 41
+	{
+		title: "Iowa Electricity",
+		previewSrc: "/preview/vega/vega-altair-41",
+		originalSrc: "/vega-originals/vega_altair/41.html",
+	},
+];
+
+// Vega-Lite Examples data
+const VEGA_LITE_EXAMPLES = [
+	// Vega-Lite 01
+	{
+		title: "Simple Bar Chart",
+		previewSrc: "/preview/vega/vega-lite-01",
+		originalSrc: "/vega-originals/vega_lite/01.html",
+	},
+	// Vega-Lite 02
+	{
+		title: "Aggregated Bar Chart",
+		previewSrc: "/preview/vega/vega-lite-02",
+		originalSrc: "/vega-originals/vega_lite/02.html",
+	},
+	// Vega-Lite 03
+	{
+		title: "Grouped Bar Chart",
+		previewSrc: "/preview/vega/vega-lite-03",
+		originalSrc: "/vega-originals/vega_lite/03.html",
+	},
+	// Vega-Lite 04
+	{
+		title: "Stacked Bar Chart",
+		previewSrc: "/preview/vega/vega-lite-04",
+		originalSrc: "/vega-originals/vega_lite/04.html",
+	},
+	// Vega-Lite 05
+	{
+		title: "Population Pyramid",
+		previewSrc: "/preview/vega/vega-lite-05",
+		originalSrc: "/vega-originals/vega_lite/05.html",
+	},
+	// Vega-Lite 06
+	{
+		title: "Trellis Bar Chart",
+		previewSrc: "/preview/vega/vega-lite-06",
+		originalSrc: "/vega-originals/vega_lite/06.html",
+	},
+	// Vega-Lite 07
+	{
+		title: "Wilkinson Dot Plot",
+		previewSrc: "/preview/vega/vega-lite-07",
+		originalSrc: "/vega-originals/vega_lite/07.html",
+	},
+];
+
 export default function GalleryPage() {
 	const [selectedRatio, setSelectedRatio] = useState(MOBILE_RATIOS[0]);
+	const [phoneScale, setPhoneScale] = useState(1);
+
+	useEffect(() => {
+		const updateScale = () => {
+			// Scale down phones on wider screens (3 columns at 2xl = 1536px)
+			if (window.innerWidth >= 1536) {
+				setPhoneScale(0.85);
+			} else {
+				setPhoneScale(1);
+			}
+		};
+
+		updateScale();
+		window.addEventListener("resize", updateScale);
+		return () => window.removeEventListener("resize", updateScale);
+	}, []);
 
 	return (
 		<main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-8 font-sans">
@@ -59,251 +419,19 @@ export default function GalleryPage() {
 						</h2>
 					</div>
 
-					{/* Gallery Grid */}
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-						{/* French Election Chart Card */}
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									French Election (Mobile)
-								</h2>
-								<a
-									href="/more-examples/french-election-desktop.html"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
-								>
-									Original HTML
-									<ExternalLink className="w-3 h-3" />
-								</a>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/french-election"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="French Election Chart Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						{/* Kennedy Chart Card */}
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Justice Kennedy (Mobile)
-								</h2>
-								<a
-									href="/more-examples/kennedy-desktop.html"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
-								>
-									Original HTML
-									<ExternalLink className="w-3 h-3" />
-								</a>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/kennedy"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Kennedy Chart Preview"
-									/>
-								</div>
-							</div>
-						</div>
-						{/* Disaster Cost Chart Card */}
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Disaster Cost (Mobile)
-								</h2>
-								<a
-									href="/more-examples/cost-desktop.html"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
-								>
-									Original HTML
-									<ExternalLink className="w-3 h-3" />
-								</a>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/cost"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Disaster Cost Chart Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						{/* Budgets Chart Card */}
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Budgets (Grouped Bar Chart)
-								</h2>
-								<a
-									href="/more-examples/budgets-desktop.html"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
-								>
-									Original HTML
-									<ExternalLink className="w-3 h-3" />
-								</a>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-slate-50 shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/budgets"
-										className="w-full h-full border-none bg-slate-50"
-										title="Budgets Chart Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						{/* Bar Chart Card */}
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Daily Sales (Bar Chart)
-								</h2>
-								<a
-									href="/apple-banana.svg"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
-								>
-									Original SVG
-									<ExternalLink className="w-3 h-3" />
-								</a>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/bar"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Bar Chart Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						{/* Line Chart Card */}
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Fruit Trends (Line Chart)
-								</h2>
-								<a
-									href="/Fruit Sales Line Chart.svg"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
-								>
-									Original SVG
-									<ExternalLink className="w-3 h-3" />
-								</a>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/line"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Line Chart Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						{/* Pie Chart Card */}
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Fruit Distribution (Pie Chart)
-								</h2>
-								<a
-									href="/Fruit Sales Pie Chart.svg"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
-								>
-									Original SVG
-									<ExternalLink className="w-3 h-3" />
-								</a>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/pie"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Pie Chart Preview"
-									/>
-								</div>
-							</div>
-						</div>
+					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-12 items-start">
+						{CICERO_EXAMPLES.map((example) => (
+							<PhonePreview
+								key={example.previewSrc}
+								title={example.title}
+								previewSrc={example.previewSrc}
+								originalSrc={example.originalSrc}
+								originalLabel={example.originalLabel || "Original HTML"}
+								phoneWidth={selectedRatio.width}
+								phoneHeight={selectedRatio.height}
+								phoneScale={phoneScale}
+							/>
+						))}
 					</div>
 				</section>
 
@@ -315,1557 +443,43 @@ export default function GalleryPage() {
 						</h2>
 					</div>
 
-					{/* Gallery Grid */}
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Flight Explorer (Vega 01)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-01"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Flight Explorer Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Normal 2D (Vega 02)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-02"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Normal 2D Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Stock Explorer (Vega 03)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-03"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Stock Explorer Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Country Breakdown (Vega 04)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-04"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Country Breakdown Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Barley Yield (Vega 05)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-05"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Barley Yield Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Market Trends (Vega Altair 01)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-01"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Market Trends Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Data Density (Vega Altair 02)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-02"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Data Density Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Energy Trends (Vega Altair 03)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-03"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Energy Trends Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Energy Source Share (Vega Altair 04)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-04"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Energy Source Share Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Barley Yield Analysis (Vega Altair 05)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-05"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Barley Yield Analysis Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Seattle Weather (Vega Altair 06)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-06"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Seattle Weather Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Employment Change (Vega Altair 07)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-07"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Employment Change Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Barley Yields (Vega Altair 09)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-09"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Barley Yields Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Gantt Overview (Vega Altair 11)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-11"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Gantt Overview Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Top Rated Movies (Vega Altair 12)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-12"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Top Rated Movies Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Population Pyramid (Vega Altair 13)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-13"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Population Pyramid Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Population by Age & Sex (Vega Altair 14)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-14"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Population by Age & Sex Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									US State Capitals (Vega Altair 15)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-15"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="US State Capitals Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Disaster Timeline (Vega Altair 16)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-16"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Disaster Timeline Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Barley Yield Dumbbell (Vega Altair 17)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-17"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Barley Yield Dumbbell Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									CO2 Atmosphere Trends (Vega Altair 18)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-18"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="CO2 Atmosphere Trends Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Penguin Morphology (Vega Altair 19)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-19"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Penguin Morphology Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Pyramid View (Vega Altair 20)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-20"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Pyramid View Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Penguin Metrics (Vega Altair 21)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-21"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Penguin Metrics Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Experiment Results (Vega Altair 22)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-22"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Experiment Results Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									IMDB Ratings (Vega Altair 23)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-23"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="IMDB Ratings Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Unemployment Trends (Vega Altair 24)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-24"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Unemployment Trends Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Movie Ratings Analysis (Vega Altair 25)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-25"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Movie Ratings Analysis Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									S&P 500 Focus (Vega Altair 26)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-26"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="S&P 500 Focus Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Metric Analysis (Vega Altair 27)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-27"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Metric Analysis Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Life Expectancy (Vega Altair 28)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-28"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Life Expectancy Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Tech Stock Evolution (Vega Altair 29)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-29"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Tech Stock Evolution Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Sine Wave Trends (Vega Altair 30)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-30"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Sine Wave Trends Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Crop Yield Trends (Vega Altair 31)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-31"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Crop Yield Trends Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Data Insights (Vega Altair 34)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-34"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Data Insights Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Daily Cycle (Vega Altair 35)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-35"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Daily Cycle Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Vehicle Performance (Vega Altair 36)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-36"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Vehicle Performance Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Penguin Morphology (Vega Altair 37)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-37"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Penguin Morphology Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Seattle Climate (Vega Altair 38)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-38"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Seattle Climate Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									IMDB Ratings by Genre (Vega Altair 39)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-39"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="IMDB Ratings by Genre Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Seattle Weather 2012 (Vega Altair 40)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-40"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Seattle Weather 2012 Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Cylinder Distribution (Vega Altair 41)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-altair-41"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Cylinder Distribution Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Unemployment (Vega Lite 01)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-01"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Unemployment Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Penguin Body Mass (Vega Lite 02)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-02"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Penguin Body Mass Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Penguin Body Mass Distribution (Vega Lite 03)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-03"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Penguin Body Mass Distribution Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Exceptional Movies (Vega Lite 04)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-04"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Exceptional Movies Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Annual Financial Flow (Vega Lite 05)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-05"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Annual Financial Flow Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Penguin Mass Distribution (Vega Lite 06)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-06"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Penguin Mass Distribution Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									IMDB Rating Distribution (Vega Lite 07)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-07"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="IMDB Rating Distribution Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Movie Ratings Heatmap (Vega Lite 08)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-08"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Movie Ratings Heatmap Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Performance Frame Distribution (Vega Lite 09)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-09"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Performance Frame Distribution Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Falkensee Population (Vega Lite 10)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-10"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Falkensee Population Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Seattle Weather (Vega Lite 12)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-12"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Seattle Weather Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Performance Metrics (Vega Lite 13)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-13"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Performance Metrics Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Weather Observations (Vega Lite 14)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-14"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Weather Observations Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Tech Stock History (Vega Lite 15)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-15"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Tech Stock History Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Driving vs. Gas Prices (Vega Lite 16)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-16"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Driving vs. Gas Prices Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Data Distribution (Vega Lite 18)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-18"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Data Distribution Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Movie Ratings Distribution (Vega Lite 19)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-19"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Movie Ratings Distribution Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Genre Ratings (Vega Lite 20)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-20"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Genre Ratings Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Power Stats (Vega Lite 21)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-21"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Power Stats Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Cars by Origin & Cylinders (Vega Lite 22)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-
-									<LazyIframe
-										src="/preview/vega/vega-lite-22"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Cars by Origin & Cylinders Preview"
-									/>
-								</div>
-							</div>
-						</div>
+					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-12 items-start">
+						{VEGA_EXAMPLES.map((example) => (
+							<PhonePreview
+								key={example.previewSrc}
+								title={example.title}
+								previewSrc={example.previewSrc}
+								originalSrc={example.originalSrc}
+								originalLabel="Original HTML"
+								phoneWidth={selectedRatio.width}
+								phoneHeight={selectedRatio.height}
+								phoneScale={phoneScale}
+							/>
+						))}
+					</div>
+				</section>
+
+				{/* Vega-Lite Examples Section */}
+				<section className="space-y-6" id="vega-lite">
+					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
+						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+							Vega-Lite Examples
+						</h2>
+					</div>
+
+					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-12 items-start">
+						{VEGA_LITE_EXAMPLES.map((example) => (
+							<PhonePreview
+								key={example.previewSrc}
+								title={example.title}
+								previewSrc={example.previewSrc}
+								originalSrc={example.originalSrc}
+								originalLabel="Original HTML"
+								phoneWidth={selectedRatio.width}
+								phoneHeight={selectedRatio.height}
+								phoneScale={phoneScale}
+							/>
+						))}
 					</div>
 				</section>
 			</div>
