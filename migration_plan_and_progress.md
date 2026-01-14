@@ -84,7 +84,7 @@
 - [x] vega-lite-19
 - [x] vega-lite-20
 - [x] vega-lite-21
-- [ ] vega-lite-22
+- [x] vega-lite-22
 
 ## Progress Log
 
@@ -216,3 +216,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-20.
 - 2026-01-14: Migrated vega-lite-21 (Power Stats) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-21.
+- 2026-01-14: Migrated vega-lite-22 (Cars by Origin & Cylinders) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-22.
