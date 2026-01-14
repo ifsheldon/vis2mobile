@@ -75,7 +75,7 @@
 - [x] vega-lite-10
 - [x] vega-lite-11
 - [x] vega-lite-12
-- [ ] vega-lite-13
+- [x] vega-lite-13
 - [ ] vega-lite-14
 - [ ] vega-lite-15
 - [ ] vega-lite-16
@@ -198,3 +198,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-11.
 - 2026-01-14: Migrated vega-lite-12 (Seattle Weather) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-12.
+- 2026-01-14: Migrated vega-lite-13 (Performance Metrics) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-13.
