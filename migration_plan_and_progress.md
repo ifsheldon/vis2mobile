@@ -1,6 +1,7 @@
 # Vega Mobile Projects Migration Plan & Progress
 
 ## Scope
+
 - Source: `/Users/zhiqiu/offline_code/research_ntu/vis2mobile/vega-mobile-projects`
 - Target: `/Users/zhiqiu/offline_code/research_ntu/vis2mobile/gallery`
 - Exclusions: `vega-altair-10`, `vega-altair-32`, `vega-altair-33`
@@ -8,15 +9,17 @@
 - Process: Migrate one project at a time; run checks/lint/dev, verify via Playwright, fix issues, commit, update this file.
 
 ## Overall Approach
+
 1. For each project, copy the minimal visualization code, assets, and data into `gallery`.
 2. Add a preview route under `gallery/app/preview/vega/<project-id>`.
 3. Add a Vega card in the Vega section with iframe pointing to the preview route.
 4. Add/update dependencies in `gallery/package.json` as needed.
-5. Validate via `bun run check`, `bun run lint`, `bun run dev` + Playwright, fix issues.
+5. Validate via `bun run check`, `bun run lint`, `bun run dev` + Playwright, fix issues. Compare the screenshot with `mobile-version.png` in each project's directory if available.
 6. Commit and update progress.
 7. Save comparison screenshots in `gallery/screenshots/<project-id>/`.
 
 ## Project Queue (in order)
+
 - [x] vega-01
 - [x] vega-02
 - [x] vega-03
@@ -64,7 +67,7 @@
 - [x] vega-lite-02
 - [x] vega-lite-03
 - [x] vega-lite-04
-- [ ] vega-lite-05
+- [x] vega-lite-05
 - [ ] vega-lite-06
 - [ ] vega-lite-07
 - [ ] vega-lite-08
@@ -84,6 +87,7 @@
 - [ ] vega-lite-22
 
 ## Progress Log
+
 - 2026-01-13: Plan created.
 - 2026-01-13: Migrated vega-01 (Flight Explorer) into gallery.
 - 2026-01-13: Migrated vega-02 (Normal 2D) into gallery.
@@ -178,3 +182,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-lite-03.
 - 2026-01-14: Migrated vega-lite-04 (Exceptional Movies) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-lite-04.
+- 2026-01-14: Migrated vega-lite-05 (Annual Financial Flow) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-05.
