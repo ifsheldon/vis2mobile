@@ -2,6 +2,7 @@
 
 import { ExternalLink, Smartphone } from "lucide-react";
 import { useState } from "react";
+import { SideMenu } from "./components/SideMenu";
 
 const MOBILE_RATIOS = [
 	{ name: "iPhone X", width: 375, height: 812 },
@@ -15,6 +16,7 @@ export default function GalleryPage() {
 
 	return (
 		<main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-8 font-sans">
+			<SideMenu />
 			<div className="max-w-7xl mx-auto space-y-8">
 				{/* Header */}
 				<div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -49,7 +51,7 @@ export default function GalleryPage() {
 				</div>
 
 				{/* Cicero Examples Section */}
-				<section className="space-y-6">
+				<section className="space-y-6" id="cicero">
 					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
 						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
 							Cicero Examples
@@ -319,7 +321,7 @@ export default function GalleryPage() {
 				</section>
 
 				{/* Vega Examples Section */}
-				<section className="space-y-6">
+				<section className="space-y-6" id="vega">
 					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
 						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
 							Vega Examples
