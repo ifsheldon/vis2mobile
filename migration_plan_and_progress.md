@@ -70,7 +70,7 @@
 - [x] vega-lite-05
 - [x] vega-lite-06
 - [x] vega-lite-07
-- [ ] vega-lite-08
+- [x] vega-lite-08
 - [ ] vega-lite-09
 - [ ] vega-lite-10
 - [ ] vega-lite-11
@@ -188,3 +188,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-06.
 - 2026-01-14: Migrated vega-lite-07 (IMDB Rating Distribution) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-07.
+- 2026-01-14: Migrated vega-lite-08 (Movie Ratings Heatmap) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-08.
