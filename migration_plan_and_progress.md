@@ -73,7 +73,7 @@
 - [x] vega-lite-08
 - [x] vega-lite-09
 - [x] vega-lite-10
-- [ ] vega-lite-11
+- [x] vega-lite-11
 - [ ] vega-lite-12
 - [ ] vega-lite-13
 - [ ] vega-lite-14
@@ -194,3 +194,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-09.
 - 2026-01-14: Migrated vega-lite-10 (Falkensee Population) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-10.
+- 2026-01-14: Migrated vega-lite-11 (placeholder) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-11.
