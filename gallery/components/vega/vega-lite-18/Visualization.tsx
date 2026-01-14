@@ -9,6 +9,7 @@ interface DataItem {
 	name: string;
 	value: number;
 	color: string;
+	[key: string]: string | number;
 }
 
 // Data from original visualization: [12, 23, 47, 6, 52, 19]
@@ -23,34 +24,6 @@ const DATA: DataItem[] = [
 ].sort((a, b) => b.value - a.value);
 
 const TOTAL = DATA.reduce((acc, curr) => acc + curr.value, 0);
-
-const renderActiveShape = (props: {
-	cx: number;
-	cy: number;
-	innerRadius: number;
-	outerRadius: number;
-	startAngle: number;
-	endAngle: number;
-	fill: string;
-}) => {
-	const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
-		props;
-
-	return (
-		<g>
-			<Sector
-				cx={cx}
-				cy={cy}
-				innerRadius={innerRadius}
-				outerRadius={outerRadius + 8}
-				startAngle={startAngle}
-				endAngle={endAngle}
-				fill={fill}
-				cornerRadius={4}
-			/>
-		</g>
-	);
-};
 
 export function Visualization() {
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -82,14 +55,49 @@ export function Visualization() {
 				<ResponsiveContainer width="100%" height="100%">
 					<PieChart>
 						<Pie
-							activeIndex={activeIndex}
-							activeShape={renderActiveShape}
 							data={DATA}
 							cx="50%"
 							cy="50%"
 							innerRadius={75}
 							outerRadius={105}
 							dataKey="value"
+							shape={(props) => {
+								const {
+									cx,
+									cy,
+									innerRadius,
+									outerRadius,
+									startAngle,
+									endAngle,
+									fill,
+									index,
+								} = props as {
+									cx: number;
+									cy: number;
+									innerRadius: number;
+									outerRadius: number;
+									startAngle: number;
+									endAngle: number;
+									fill: string;
+									index?: number;
+								};
+								const isActive = index === activeIndex;
+
+								return (
+									<g>
+										<Sector
+											cx={cx}
+											cy={cy}
+											innerRadius={innerRadius}
+											outerRadius={outerRadius + (isActive ? 8 : 0)}
+											startAngle={startAngle}
+											endAngle={endAngle}
+											fill={fill}
+											cornerRadius={4}
+										/>
+									</g>
+								);
+							}}
 							onMouseEnter={onPieEnter}
 							onClick={(_, index) => setActiveIndex(index)}
 							animationBegin={0}

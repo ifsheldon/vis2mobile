@@ -162,13 +162,27 @@ export function Visualization() {
 						data={data}
 						margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
 						onMouseMove={(state) => {
-							if (state.activeTooltipIndex !== undefined) {
-								setActiveIndex(state.activeTooltipIndex);
+							const index = (state as { activeTooltipIndex?: number | string })
+								?.activeTooltipIndex;
+							if (typeof index === "number") {
+								setActiveIndex(index);
+							} else if (typeof index === "string") {
+								const parsed = Number.parseInt(index, 10);
+								if (!Number.isNaN(parsed)) {
+									setActiveIndex(parsed);
+								}
 							}
 						}}
 						onTouchMove={(state) => {
-							if (state.activeTooltipIndex !== undefined) {
-								setActiveIndex(state.activeTooltipIndex);
+							const index = (state as { activeTooltipIndex?: number | string })
+								?.activeTooltipIndex;
+							if (typeof index === "number") {
+								setActiveIndex(index);
+							} else if (typeof index === "string") {
+								const parsed = Number.parseInt(index, 10);
+								if (!Number.isNaN(parsed)) {
+									setActiveIndex(parsed);
+								}
 							}
 						}}
 					>

@@ -230,16 +230,19 @@ export function Visualization() {
 							dataKey="mean"
 							fill="#4f46e5"
 							line={false}
-							shape={(props: { cx: number; cy: number }) => (
-								<circle
-									cx={props.cx}
-									cy={props.cy}
-									r={5}
-									fill="#4f46e5"
-									stroke="white"
-									strokeWidth={2}
-								/>
-							)}
+							shape={(props: unknown) => {
+								const { cx, cy } = props as { cx: number; cy: number };
+								return (
+									<circle
+										cx={cx}
+										cy={cy}
+										r={5}
+										fill="#4f46e5"
+										stroke="white"
+										strokeWidth={2}
+									/>
+								);
+							}}
 						>
 							<ErrorBar
 								dataKey="error"

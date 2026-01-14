@@ -21,10 +21,6 @@ import {
 
 const chartData = processBarleyData();
 
-interface BarClickData {
-	payload: ProcessedDataPoint;
-}
-
 export function Visualization() {
 	const [activeYear, setActiveYear] = useState<"1931" | "1932">("1931");
 	const [selectedVariety, setSelectedVariety] =
@@ -32,8 +28,10 @@ export function Visualization() {
 
 	const data = chartData[activeYear];
 
-	const handleBarClick = (barData: BarClickData) => {
-		setSelectedVariety(barData.payload);
+	const handleBarClick = (barData?: { payload?: ProcessedDataPoint }) => {
+		if (barData?.payload) {
+			setSelectedVariety(barData.payload);
+		}
 	};
 
 	return (
@@ -102,6 +100,7 @@ export function Visualization() {
 								stackId="a"
 								fill={siteColors[site]}
 								onClick={handleBarClick}
+								radius={index === sites.length - 1 ? [0, 4, 4, 0] : 0}
 								isAnimationActive={true}
 							>
 								{data.map((entry, entryIndex) => (
@@ -112,9 +111,6 @@ export function Visualization() {
 											selectedVariety.variety === entry.variety
 												? 1
 												: 0.3
-										}
-										radius={
-											index === sites.length - 1 ? [0, 4, 4, 0] : [0, 0, 0, 0]
 										}
 										className="transition-opacity duration-300"
 									/>

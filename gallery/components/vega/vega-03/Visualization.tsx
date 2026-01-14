@@ -151,7 +151,12 @@ export function Visualization() {
 								/>
 								<Tooltip
 									content={({ active, payload, label }) => {
-										if (active && payload && payload.length) {
+										if (
+											active &&
+											payload &&
+											payload.length &&
+											label !== undefined
+										) {
 											return (
 												<div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm p-3 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl">
 													<p className="text-[10px] font-bold text-zinc-400 mb-2 uppercase tracking-tighter">

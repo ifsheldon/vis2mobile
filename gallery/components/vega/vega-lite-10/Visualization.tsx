@@ -8,7 +8,6 @@ import {
 	ReferenceArea,
 	ResponsiveContainer,
 	Tooltip,
-	type TooltipProps,
 	XAxis,
 	YAxis,
 } from "recharts";
@@ -68,11 +67,13 @@ const data = rawData.map((d) => ({
 
 // --- Components ---
 
-const CustomTooltip = ({
-	active,
-	payload,
-	label,
-}: TooltipProps<number, string>) => {
+type CustomTooltipProps = {
+	active?: boolean;
+	payload?: Array<{ value?: number }>;
+	label?: number | string;
+};
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
 	if (active && payload && payload.length) {
 		const year = Number(label);
 		const pop = payload[0].value;

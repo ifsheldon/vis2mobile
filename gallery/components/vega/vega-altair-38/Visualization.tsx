@@ -186,11 +186,12 @@ export function Visualization() {
 					<ComposedChart
 						data={filteredData}
 						margin={{ top: 10, right: 10, bottom: 0, left: -20 }}
-						onMouseMove={(
-							e: { activePayload?: { payload: DataPoint }[] } | null,
-						) => {
-							if (e?.activePayload && e.activePayload.length > 0) {
-								setActiveDataPoint(e.activePayload[0].payload);
+						onMouseMove={(e) => {
+							const payload = (
+								e as { activePayload?: Array<{ payload: DataPoint }> }
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setActiveDataPoint(payload[0].payload);
 							}
 						}}
 						onMouseLeave={() => setActiveDataPoint(null)}

@@ -101,13 +101,19 @@ export function Visualization() {
 						stackOffset="expand"
 						margin={{ top: 5, right: 0, left: -25, bottom: 0 }}
 						onMouseMove={(event) => {
-							if (event?.activePayload && event.activePayload.length > 0) {
-								setActiveYear(event.activePayload[0].payload);
+							const payload = (
+								event as { activePayload?: Array<{ payload: ChartDataPoint }> }
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setActiveYear(payload[0].payload);
 							}
 						}}
 						onTouchMove={(event) => {
-							if (event?.activePayload && event.activePayload.length > 0) {
-								setActiveYear(event.activePayload[0].payload);
+							const payload = (
+								event as { activePayload?: Array<{ payload: ChartDataPoint }> }
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setActiveYear(payload[0].payload);
 							}
 						}}
 					>

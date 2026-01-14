@@ -58,7 +58,12 @@ export function Visualization() {
 									boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.5)",
 								}}
 								itemStyle={{ color: "#fbbf24" }}
-								formatter={(value: number) => [`${value}`, "Rating"]}
+								formatter={(value) => [
+									typeof value === "number"
+										? value.toString()
+										: `${value ?? ""}`,
+									"Rating",
+								]}
 							/>
 							<Bar
 								dataKey="rating"
@@ -72,7 +77,8 @@ export function Visualization() {
 									fill: "#f8fafc",
 									fontSize: 12,
 									fontWeight: "bold",
-									formatter: (val: number) => val.toFixed(1),
+									formatter: (val) =>
+										typeof val === "number" ? val.toFixed(1) : (val ?? ""),
 								}}
 							/>
 						</BarChart>

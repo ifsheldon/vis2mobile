@@ -1,11 +1,3 @@
-interface VarietyData {
-	variety: string;
-	totalYield: number;
-	[key: string]: number | string;
-}
-
-// @/lib/data.ts
-
 export const rawData = [
 	{ yield: 27, variety: "Manchuria", year: 1931, site: "University Farm" },
 	{ yield: 48.86667, variety: "Manchuria", year: 1931, site: "Waseca" },
@@ -165,6 +157,10 @@ export interface ProcessedDataPoint {
 	Duluth: number;
 }
 
+interface VarietyData extends ProcessedDataPoint {
+	[key: string]: number | string;
+}
+
 export interface ChartData {
 	1931: ProcessedDataPoint[];
 	1932: ProcessedDataPoint[];
@@ -177,7 +173,9 @@ export const sites = [
 	"Crookston",
 	"Grand Rapids",
 	"Duluth",
-];
+] as const;
+
+type Site = (typeof sites)[number];
 
 export const processBarleyData = (): ChartData => {
 	const processed: ChartData = {
@@ -194,7 +192,7 @@ export const processBarleyData = (): ChartData => {
 		const { year, variety, site, yield: yieldValue } = item;
 
 		if (!varieties[year][variety]) {
-			const initialSiteData: { [key: string]: number } = {};
+			const initialSiteData = {} as Record<Site, number>;
 			sites.forEach((s) => {
 				initialSiteData[s] = 0;
 			});

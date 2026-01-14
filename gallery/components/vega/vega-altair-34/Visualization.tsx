@@ -8,6 +8,7 @@ interface DataPoint {
 	category: string;
 	value: number;
 	color: string;
+	[key: string]: string | number;
 }
 
 const data: DataPoint[] = [
@@ -28,39 +29,6 @@ interface ActiveShapeProps {
 	endAngle: number;
 	fill: string;
 }
-
-const renderActiveShape = (props: ActiveShapeProps) => {
-	const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
-		props;
-
-	return (
-		<g>
-			<defs>
-				<filter id="activeShadow" x="-20%" y="-20%" width="140%" height="140%">
-					<feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-					<feOffset dx="0" dy="4" result="offsetblur" />
-					<feComponentTransfer>
-						<feFuncA type="linear" slope="0.3" />
-					</feComponentTransfer>
-					<feMerge>
-						<feMergeNode />
-						<feMergeNode in="SourceGraphic" />
-					</feMerge>
-				</filter>
-			</defs>
-			<Sector
-				cx={cx}
-				cy={cy}
-				innerRadius={innerRadius}
-				outerRadius={outerRadius + 10}
-				startAngle={startAngle}
-				endAngle={endAngle}
-				fill={fill}
-				filter="url(#activeShadow)"
-			/>
-		</g>
-	);
-};
 
 export function Visualization() {
 	const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
@@ -136,8 +104,6 @@ export function Visualization() {
 							<ResponsiveContainer width="100%" height="100%">
 								<PieChart>
 									<Pie
-										activeIndex={activeIndex}
-										activeShape={renderActiveShape}
 										data={data}
 										cx="50%"
 										cy="50%"
@@ -145,6 +111,67 @@ export function Visualization() {
 										outerRadius="88%"
 										paddingAngle={4}
 										dataKey="value"
+										shape={(props) => {
+											const {
+												cx,
+												cy,
+												innerRadius,
+												outerRadius,
+												startAngle,
+												endAngle,
+												fill,
+												index,
+											} = props as ActiveShapeProps & { index?: number };
+											const isActive = index === activeIndex;
+
+											return (
+												<g>
+													<defs>
+														<filter
+															id="activeShadow"
+															x="-20%"
+															y="-20%"
+															width="140%"
+															height="140%"
+														>
+															<feGaussianBlur
+																in="SourceAlpha"
+																stdDeviation="3"
+															/>
+															<feOffset dx="0" dy="4" result="offsetblur" />
+															<feComponentTransfer>
+																<feFuncA type="linear" slope="0.3" />
+															</feComponentTransfer>
+															<feMerge>
+																<feMergeNode />
+																<feMergeNode in="SourceGraphic" />
+															</feMerge>
+														</filter>
+													</defs>
+													<Sector
+														cx={cx}
+														cy={cy}
+														innerRadius={innerRadius}
+														outerRadius={outerRadius}
+														startAngle={startAngle}
+														endAngle={endAngle}
+														fill={fill}
+													/>
+													{isActive && (
+														<Sector
+															cx={cx}
+															cy={cy}
+															innerRadius={innerRadius}
+															outerRadius={outerRadius + 10}
+															startAngle={startAngle}
+															endAngle={endAngle}
+															fill={fill}
+															filter="url(#activeShadow)"
+														/>
+													)}
+												</g>
+											);
+										}}
 										onClick={onPieClick}
 										stroke="none"
 										animationBegin={0}

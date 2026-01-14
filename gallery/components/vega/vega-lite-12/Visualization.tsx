@@ -19,11 +19,12 @@ import {
 export function Visualization() {
 	const [activeData, setActiveData] = useState<WeatherData | null>(null);
 
-	const handleMouseMove = (state: {
-		activePayload?: { payload: WeatherData }[];
-	}) => {
-		if (state?.activePayload && state.activePayload.length > 0) {
-			setActiveData(state.activePayload[0].payload);
+	const handleMouseMove = (state: unknown) => {
+		const payload = (
+			state as { activePayload?: Array<{ payload: WeatherData }> }
+		)?.activePayload;
+		if (payload && payload.length > 0) {
+			setActiveData(payload[0].payload);
 		}
 	};
 

@@ -77,8 +77,15 @@ export function Visualization() {
 						layout="vertical"
 						margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
 						onClick={(state) => {
-							if (state && state.activeTooltipIndex !== undefined) {
-								setActiveIndex(state.activeTooltipIndex);
+							const index = (state as { activeTooltipIndex?: number | string })
+								?.activeTooltipIndex;
+							if (typeof index === "number") {
+								setActiveIndex(index);
+							} else if (typeof index === "string") {
+								const parsed = Number.parseInt(index, 10);
+								if (!Number.isNaN(parsed)) {
+									setActiveIndex(parsed);
+								}
 							}
 						}}
 					>

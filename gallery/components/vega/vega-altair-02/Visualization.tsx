@@ -93,15 +93,25 @@ export function Visualization() {
 					<AreaChart
 						data={dataset}
 						margin={{ top: 10, right: 10, left: -20, bottom: 20 }}
-						onMouseMove={(state) => {
-							if (state.activePayload?.[0]) {
-								setActiveData(state.activePayload[0].payload);
+						onMouseMove={(state: unknown) => {
+							const payload = (
+								state as {
+									activePayload?: Array<{ payload: typeof activeData }>;
+								}
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setActiveData(payload[0].payload);
 							}
 						}}
 						onMouseLeave={() => setActiveData(null)}
-						onTouchMove={(state) => {
-							if (state.activePayload?.[0]) {
-								setActiveData(state.activePayload[0].payload);
+						onTouchMove={(state: unknown) => {
+							const payload = (
+								state as {
+									activePayload?: Array<{ payload: typeof activeData }>;
+								}
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setActiveData(payload[0].payload);
 							}
 						}}
 						onTouchEnd={() => setActiveData(null)}

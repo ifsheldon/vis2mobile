@@ -87,7 +87,11 @@ export function Visualization() {
 					<ScatterChart
 						margin={{ top: 10, right: 10, bottom: 40, left: 0 }}
 						onClick={(data) => {
-							if (!data?.activePayload) setSelectedCar(null);
+							const payload = (data as { activePayload?: Array<unknown> })
+								?.activePayload;
+							if (!payload || payload.length === 0) {
+								setSelectedCar(null);
+							}
 						}}
 					>
 						{/* Horizontal Lane Backgrounds */}

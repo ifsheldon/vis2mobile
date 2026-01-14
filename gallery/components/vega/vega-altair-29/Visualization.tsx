@@ -161,14 +161,20 @@ export function Visualization() {
 					<ComposedChart
 						data={data.chartData}
 						onMouseMove={(e) => {
-							if (e.activePayload) {
-								setHoverData(e.activePayload[0].payload);
+							const payload = (
+								e as { activePayload?: Array<{ payload: typeof hoverData }> }
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setHoverData(payload[0].payload);
 							}
 						}}
 						onMouseLeave={() => setHoverData(null)}
 						onTouchMove={(e) => {
-							if (e.activePayload) {
-								setHoverData(e.activePayload[0].payload);
+							const payload = (
+								e as { activePayload?: Array<{ payload: typeof hoverData }> }
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setHoverData(payload[0].payload);
 							}
 						}}
 						onTouchEnd={() => setHoverData(null)}

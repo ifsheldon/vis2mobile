@@ -160,7 +160,6 @@ export function BulletCard({ data }: BulletCardProps) {
 							x={chartData[0].target}
 							stroke="black"
 							strokeWidth={3}
-							isFront={true}
 							strokeDasharray="none"
 						/>
 					</ComposedChart>

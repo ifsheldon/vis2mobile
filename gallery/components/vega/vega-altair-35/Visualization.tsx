@@ -92,11 +92,12 @@ export function Visualization() {
 						cy="50%"
 						outerRadius="80%"
 						data={observationsData}
-						onMouseMove={(
-							data: { activePayload?: { payload: ObservationData }[] } | null,
-						) => {
-							if (data?.activePayload && data.activePayload.length > 0) {
-								setActiveData(data.activePayload[0].payload);
+						onMouseMove={(data) => {
+							const payload = (
+								data as { activePayload?: Array<{ payload: ObservationData }> }
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setActiveData(payload[0].payload);
 							}
 						}}
 						onMouseLeave={() => setActiveData(null)}

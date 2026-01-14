@@ -260,7 +260,7 @@ export function Visualization() {
 										strokeDasharray: "4 4",
 									}}
 									lineType="joint"
-									shape={() => null}
+									shape={<g />}
 									isAnimationActive={false}
 								/>
 							)}

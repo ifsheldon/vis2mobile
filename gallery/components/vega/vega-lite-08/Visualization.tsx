@@ -50,11 +50,12 @@ export function Visualization() {
 		);
 	}
 
-	const handleMouseMove = (state: {
-		activePayload?: { payload: BinnedData }[];
-	}) => {
-		if (state?.activePayload && state.activePayload.length > 0) {
-			setActivePoint(state.activePayload[0].payload);
+	const handleMouseMove = (state: unknown) => {
+		const payload = (
+			state as { activePayload?: Array<{ payload: BinnedData }> }
+		)?.activePayload;
+		if (payload && payload.length > 0) {
+			setActivePoint(payload[0].payload);
 		}
 	};
 
@@ -161,12 +162,12 @@ export function Visualization() {
 							<Scatter
 								data={data}
 								isAnimationActive={false}
-								shape={(props: {
-									cx: number;
-									cy: number;
-									payload: BinnedData;
-								}) => {
-									const { cx, cy, payload } = props;
+								shape={(props: unknown) => {
+									const { cx, cy, payload } = props as {
+										cx: number;
+										cy: number;
+										payload: BinnedData;
+									};
 									const isActive = activePoint === payload;
 									// Adjusted sizes for better fit: width ~8.5 (for 30 bins in ~260px), height ~13 (for 20 bins in ~300px)
 									return (

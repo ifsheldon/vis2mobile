@@ -94,9 +94,10 @@ export function Visualization() {
 	const chartData = useMemo(() => PROCESS_DATA(), []);
 
 	// Handle chart interaction
-	const handleMouseMove = (state: ChartMouseState) => {
-		if (state.activePayload && state.activePayload.length > 0) {
-			setActiveBin(state.activePayload[0].payload);
+	const handleMouseMove = (state: unknown) => {
+		const payload = (state as ChartMouseState | undefined)?.activePayload;
+		if (payload && payload.length > 0) {
+			setActiveBin(payload[0].payload);
 		} else {
 			setActiveBin(null);
 		}

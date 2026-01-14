@@ -223,8 +223,15 @@ export function Visualization() {
 						layout="vertical"
 						margin={{ top: 0, right: 55, left: 15, bottom: 0 }}
 						onMouseMove={(state) => {
-							if (state.activeTooltipIndex !== undefined) {
-								setActiveIndex(state.activeTooltipIndex);
+							const index = (state as { activeTooltipIndex?: number | string })
+								?.activeTooltipIndex;
+							if (typeof index === "number") {
+								setActiveIndex(index);
+							} else if (typeof index === "string") {
+								const parsed = Number.parseInt(index, 10);
+								if (!Number.isNaN(parsed)) {
+									setActiveIndex(parsed);
+								}
 							}
 						}}
 						onMouseLeave={() => setActiveIndex(null)}
@@ -257,8 +264,10 @@ export function Visualization() {
 								fill: "#18181B",
 								fontSize: 12,
 								fontWeight: 800,
-								formatter: (val: number) =>
-									val > 0 ? `${val.toFixed(1)}%` : "",
+								formatter: (val) =>
+									typeof val === "number" && val > 0
+										? `${val.toFixed(1)}%`
+										: "",
 								offset: 10,
 							}}
 						>

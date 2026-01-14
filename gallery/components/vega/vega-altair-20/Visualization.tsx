@@ -21,35 +21,6 @@ interface ActiveShapeProps {
 	fill: string;
 }
 
-const renderActiveShape = (props: unknown) => {
-	const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
-		props as ActiveShapeProps;
-
-	return (
-		<g>
-			<Sector
-				cx={cx}
-				cy={cy}
-				innerRadius={innerRadius}
-				outerRadius={outerRadius + 8}
-				startAngle={startAngle}
-				endAngle={endAngle}
-				fill={fill}
-			/>
-			<Sector
-				cx={cx}
-				cy={cy}
-				innerRadius={outerRadius + 12}
-				outerRadius={outerRadius + 15}
-				startAngle={startAngle}
-				endAngle={endAngle}
-				fill={fill}
-				opacity={0.3}
-			/>
-		</g>
-	);
-};
-
 export function Visualization() {
 	const [activeIndex, setActiveIndex] = useState(2); // Default to Sky
 	const total = useMemo(
@@ -90,14 +61,51 @@ export function Visualization() {
 						<ResponsiveContainer width="100%" height="100%">
 							<PieChart>
 								<Pie
-									activeIndex={activeIndex}
-									activeShape={renderActiveShape}
 									data={data}
 									cx="50%"
 									cy="50%"
 									innerRadius={75}
 									outerRadius={105}
 									dataKey="value"
+									shape={(props) => {
+										const {
+											cx,
+											cy,
+											innerRadius,
+											outerRadius,
+											startAngle,
+											endAngle,
+											fill,
+											index,
+										} = props as ActiveShapeProps & { index?: number };
+										const isActive = index === activeIndex;
+
+										return (
+											<g>
+												<Sector
+													cx={cx}
+													cy={cy}
+													innerRadius={innerRadius}
+													outerRadius={outerRadius + (isActive ? 8 : 0)}
+													startAngle={startAngle}
+													endAngle={endAngle}
+													fill={fill}
+												/>
+												{isActive && (
+													<Sector
+														cx={cx}
+														cy={cy}
+														innerRadius={outerRadius + 12}
+														outerRadius={outerRadius + 15}
+														startAngle={startAngle}
+														endAngle={endAngle}
+														fill={fill}
+														opacity={0.3}
+													/>
+												)}
+											</g>
+										);
+									}}
 									onClick={(_, index) => setActiveIndex(index)}
 									onMouseEnter={(_, index) => setActiveIndex(index)}
 									startAngle={-45} // Corresponds to Vega-Lite 135 deg (bottom-right)

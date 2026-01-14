@@ -108,8 +108,15 @@ export function Visualization() {
 						data={processedData}
 						margin={{ top: 10, right: 10, left: -20, bottom: 20 }}
 						onClick={(state) => {
-							if (state?.activePayload) {
-								handleBarClick(state.activePayload[0].payload);
+							const payload = (
+								state as {
+									activePayload?: Array<{
+										payload: (typeof processedData)[number];
+									}>;
+								}
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								handleBarClick(payload[0].payload);
 							}
 						}}
 					>

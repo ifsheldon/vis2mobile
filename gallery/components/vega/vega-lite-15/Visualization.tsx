@@ -118,14 +118,20 @@ export function Visualization() {
 						data={formattedData}
 						margin={{ top: 10, right: 20, left: -10, bottom: 0 }}
 						onMouseMove={(e) => {
-							if (e?.activePayload) {
-								setCurrData(e.activePayload[0].payload as StockPoint);
+							const payload = (
+								e as { activePayload?: Array<{ payload: StockPoint }> }
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setCurrData(payload[0].payload);
 							}
 						}}
 						onMouseLeave={() => setCurrData(null)}
 						onTouchMove={(e) => {
-							if (e?.activePayload) {
-								setCurrData(e.activePayload[0].payload as StockPoint);
+							const payload = (
+								e as { activePayload?: Array<{ payload: StockPoint }> }
+							)?.activePayload;
+							if (payload && payload.length > 0) {
+								setCurrData(payload[0].payload);
 							}
 						}}
 					>

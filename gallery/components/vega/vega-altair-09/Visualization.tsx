@@ -109,7 +109,9 @@ function SiteCard({ site }: { site: SiteData }) {
 							<LabelList
 								dataKey="meanYield"
 								position="right"
-								formatter={(val: number) => val.toFixed(1)}
+								formatter={(val) =>
+									typeof val === "number" ? val.toFixed(1) : (val ?? "")
+								}
 								className="fill-zinc-600 dark:fill-zinc-400 text-xs font-medium"
 								offset={8}
 							/>

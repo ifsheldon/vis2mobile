@@ -71,11 +71,12 @@ export function Visualization() {
 		}));
 	}, []);
 
-	const handleBarClick = (data: {
-		activePayload?: { payload: { id: number } }[];
-	}) => {
-		if (data?.activePayload) {
-			setSelectedId(data.activePayload[0].payload.id);
+	const handleBarClick = (data: unknown) => {
+		const payload = (
+			data as { activePayload?: Array<{ payload: { id: number } }> }
+		)?.activePayload;
+		if (payload && payload.length > 0) {
+			setSelectedId(payload[0].payload.id);
 		}
 	};
 
@@ -146,23 +147,23 @@ export function Visualization() {
 								<Bar
 									dataKey="recordRange"
 									barSize={32}
-									shape={(props: {
-										x?: number;
-										y?: number;
-										width?: number;
-										height?: number;
-										payload?: {
-											id: number;
-											record: { low: number; high: number };
-											normal: { low: number; high: number };
-											actual?: { low: number; high: number };
-											forecast?: {
-												high: { low: number; high: number };
-												low: { low: number; high: number };
+									shape={(props: unknown) => {
+										const { x, y, width, height, payload } = props as {
+											x?: number;
+											y?: number;
+											width?: number;
+											height?: number;
+											payload?: {
+												id: number;
+												record: { low: number; high: number };
+												normal: { low: number; high: number };
+												actual?: { low: number; high: number };
+												forecast?: {
+													high: { low: number; high: number };
+													low: { low: number; high: number };
+												};
 											};
 										};
-									}) => {
-										const { x, y, width, height, payload } = props;
 										if (
 											x === undefined ||
 											y === undefined ||
@@ -170,7 +171,7 @@ export function Visualization() {
 											height === undefined ||
 											!payload
 										) {
-											return null;
+											return <g />;
 										}
 										const isSelected = payload.id === selectedId;
 
@@ -178,7 +179,7 @@ export function Visualization() {
 										// y = scale(high), y + height = scale(low)
 										const low = payload.record.low;
 										const high = payload.record.high;
-										if (high === low) return null;
+										if (high === low) return <g />;
 
 										const A = -height / (high - low);
 										const B = y - A * high;

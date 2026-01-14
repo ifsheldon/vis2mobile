@@ -28,11 +28,11 @@ interface DataPoint {
 export function Visualization() {
 	const [activeData, setActiveData] = useState<DataPoint | null>(null);
 
-	const handleMouseMove = (state: {
-		activePayload?: { payload: DataPoint }[];
-	}) => {
-		if (state?.activePayload && state.activePayload.length > 0) {
-			setActiveData(state.activePayload[0].payload as DataPoint);
+	const handleMouseMove = (state: unknown) => {
+		const payload = (state as { activePayload?: Array<{ payload: DataPoint }> })
+			?.activePayload;
+		if (payload && payload.length > 0) {
+			setActiveData(payload[0].payload);
 		}
 	};
 
