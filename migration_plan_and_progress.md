@@ -38,7 +38,7 @@
 - [x] vega-altair-15
 - [x] vega-altair-16
 - [x] vega-altair-17
-- [ ] vega-altair-18
+- [x] vega-altair-18
 - [ ] vega-altair-19
 - [ ] vega-altair-20
 - [ ] vega-altair-21
@@ -126,3 +126,5 @@
 - 2026-01-13: Saved comparison screenshot for vega-altair-16.
 - 2026-01-13: Migrated vega-altair-17 (Barley Yield Dumbbell) into gallery.
 - 2026-01-13: Saved comparison screenshot for vega-altair-17.
+- 2026-01-13: Migrated vega-altair-18 (CO2 Atmosphere Trends) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-18.
