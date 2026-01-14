@@ -2,6 +2,7 @@
 
 import { ExternalLink, Smartphone } from "lucide-react";
 import { useState } from "react";
+import { LazyIframe } from "./components/LazyIframe";
 import { SideMenu } from "./components/SideMenu";
 
 const MOBILE_RATIOS = [
@@ -86,7 +87,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/french-election"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="French Election Chart Preview"
@@ -121,7 +122,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/kennedy"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Kennedy Chart Preview"
@@ -155,7 +156,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/cost"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Disaster Cost Chart Preview"
@@ -190,7 +191,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/budgets"
 										className="w-full h-full border-none bg-slate-50"
 										title="Budgets Chart Preview"
@@ -225,7 +226,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/bar"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Bar Chart Preview"
@@ -260,7 +261,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/line"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Line Chart Preview"
@@ -295,7 +296,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/pie"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Pie Chart Preview"
@@ -332,7 +333,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-01"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Flight Explorer Preview"
@@ -357,7 +358,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-02"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Normal 2D Preview"
@@ -382,7 +383,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-03"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Stock Explorer Preview"
@@ -407,7 +408,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-04"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Country Breakdown Preview"
@@ -432,7 +433,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-05"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Barley Yield Preview"
@@ -457,7 +458,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-01"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Market Trends Preview"
@@ -482,7 +483,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-02"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Data Density Preview"
@@ -507,7 +508,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-03"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Energy Trends Preview"
@@ -532,7 +533,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-04"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Energy Source Share Preview"
@@ -557,7 +558,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-05"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Barley Yield Analysis Preview"
@@ -582,7 +583,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-06"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Seattle Weather Preview"
@@ -607,7 +608,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-07"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Employment Change Preview"
@@ -632,7 +633,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-09"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Barley Yields Preview"
@@ -657,7 +658,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-11"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Gantt Overview Preview"
@@ -682,7 +683,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-12"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Top Rated Movies Preview"
@@ -707,7 +708,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-13"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Population Pyramid Preview"
@@ -732,7 +733,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-14"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Population by Age & Sex Preview"
@@ -757,7 +758,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-15"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="US State Capitals Preview"
@@ -782,7 +783,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-16"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Disaster Timeline Preview"
@@ -807,7 +808,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-17"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Barley Yield Dumbbell Preview"
@@ -832,7 +833,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-18"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="CO2 Atmosphere Trends Preview"
@@ -857,7 +858,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-19"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Penguin Morphology Preview"
@@ -882,7 +883,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-20"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Pyramid View Preview"
@@ -907,7 +908,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-21"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Penguin Metrics Preview"
@@ -932,7 +933,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-22"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Experiment Results Preview"
@@ -957,7 +958,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-23"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="IMDB Ratings Preview"
@@ -982,7 +983,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-24"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Unemployment Trends Preview"
@@ -1007,7 +1008,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-25"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Movie Ratings Analysis Preview"
@@ -1032,7 +1033,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-26"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="S&P 500 Focus Preview"
@@ -1057,7 +1058,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-27"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Metric Analysis Preview"
@@ -1082,7 +1083,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-28"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Life Expectancy Preview"
@@ -1107,7 +1108,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-29"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Tech Stock Evolution Preview"
@@ -1132,7 +1133,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-30"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Sine Wave Trends Preview"
@@ -1157,7 +1158,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-31"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Crop Yield Trends Preview"
@@ -1182,7 +1183,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-34"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Data Insights Preview"
@@ -1207,7 +1208,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-35"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Daily Cycle Preview"
@@ -1232,7 +1233,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-36"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Vehicle Performance Preview"
@@ -1257,7 +1258,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-37"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Penguin Morphology Preview"
@@ -1282,7 +1283,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-38"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Seattle Climate Preview"
@@ -1307,7 +1308,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-39"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="IMDB Ratings by Genre Preview"
@@ -1332,7 +1333,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-40"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Seattle Weather 2012 Preview"
@@ -1357,7 +1358,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-altair-41"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Cylinder Distribution Preview"
@@ -1382,7 +1383,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-01"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Unemployment Preview"
@@ -1407,7 +1408,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-02"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Penguin Body Mass Preview"
@@ -1432,7 +1433,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-03"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Penguin Body Mass Distribution Preview"
@@ -1457,7 +1458,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-04"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Exceptional Movies Preview"
@@ -1482,7 +1483,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-05"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Annual Financial Flow Preview"
@@ -1507,7 +1508,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-06"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Penguin Mass Distribution Preview"
@@ -1532,7 +1533,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-07"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="IMDB Rating Distribution Preview"
@@ -1557,7 +1558,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-08"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Movie Ratings Heatmap Preview"
@@ -1582,7 +1583,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-09"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Performance Frame Distribution Preview"
@@ -1607,7 +1608,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-10"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Falkensee Population Preview"
@@ -1632,7 +1633,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-12"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Seattle Weather Preview"
@@ -1657,7 +1658,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-13"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Performance Metrics Preview"
@@ -1682,7 +1683,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-14"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Weather Observations Preview"
@@ -1707,7 +1708,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-15"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Tech Stock History Preview"
@@ -1732,7 +1733,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-16"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Driving vs. Gas Prices Preview"
@@ -1757,7 +1758,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-18"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Data Distribution Preview"
@@ -1782,7 +1783,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-19"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Movie Ratings Distribution Preview"
@@ -1807,7 +1808,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-20"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Genre Ratings Preview"
@@ -1832,7 +1833,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-21"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Power Stats Preview"
@@ -1857,7 +1858,7 @@ export default function GalleryPage() {
 									}}
 								>
 
-									<iframe
+									<LazyIframe
 										src="/preview/vega/vega-lite-22"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Cars by Origin & Cylinders Preview"
