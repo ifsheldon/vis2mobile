@@ -40,7 +40,7 @@
 - [x] vega-altair-17
 - [x] vega-altair-18
 - [x] vega-altair-19
-- [ ] vega-altair-20
+- [x] vega-altair-20
 - [ ] vega-altair-21
 - [ ] vega-altair-22
 - [ ] vega-altair-23
@@ -130,3 +130,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-18.
 - 2026-01-13: Migrated vega-altair-19 (Penguin Morphology) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-19.
+- 2026-01-13: Migrated vega-altair-20 (Pyramid View) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-20.
