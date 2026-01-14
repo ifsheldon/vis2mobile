@@ -48,7 +48,7 @@
 - [x] vega-altair-25
 - [x] vega-altair-26
 - [x] vega-altair-27
-- [ ] vega-altair-28
+- [x] vega-altair-28
 - [ ] vega-altair-29
 - [ ] vega-altair-30
 - [ ] vega-altair-31
@@ -146,3 +146,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-26.
 - 2026-01-14: Migrated vega-altair-27 (Metric Analysis) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-altair-27.
+- 2026-01-14: Migrated vega-altair-28 (Life Expectancy) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-altair-28.
