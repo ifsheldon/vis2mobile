@@ -85,8 +85,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									{/* Notch */}
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/french-election"
@@ -122,8 +120,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									{/* Notch */}
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/kennedy"
@@ -158,8 +154,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									{/* Notch */}
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/cost"
@@ -195,8 +189,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									{/* Notch */}
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/budgets"
@@ -232,8 +224,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									{/* Notch */}
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/bar"
@@ -269,8 +259,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									{/* Notch */}
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/line"
@@ -306,8 +294,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									{/* Notch */}
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/pie"
@@ -345,7 +331,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-01"
@@ -371,7 +356,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-02"
@@ -397,7 +381,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-03"
@@ -423,7 +406,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-04"
@@ -449,7 +431,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-05"
@@ -475,7 +456,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-01"
@@ -501,7 +481,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-02"
@@ -527,7 +506,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-03"
@@ -553,7 +531,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-04"
@@ -579,7 +556,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-05"
@@ -605,7 +581,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-06"
@@ -631,7 +606,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-07"
@@ -657,7 +631,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-09"
@@ -683,7 +656,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-11"
@@ -709,7 +681,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-12"
@@ -735,7 +706,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-13"
@@ -761,7 +731,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-14"
@@ -787,7 +756,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-15"
@@ -813,7 +781,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-16"
@@ -839,7 +806,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-17"
@@ -865,7 +831,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-18"
@@ -891,7 +856,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-19"
@@ -917,7 +881,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-20"
@@ -943,7 +906,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-21"
@@ -969,7 +931,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-22"
@@ -995,7 +956,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-23"
@@ -1021,7 +981,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-24"
@@ -1047,7 +1006,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-25"
@@ -1073,7 +1031,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-26"
@@ -1099,7 +1056,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-27"
@@ -1125,7 +1081,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-28"
@@ -1151,7 +1106,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-29"
@@ -1177,7 +1131,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-30"
@@ -1203,7 +1156,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-31"
@@ -1229,7 +1181,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-34"
@@ -1255,7 +1206,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-35"
@@ -1281,7 +1231,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-36"
@@ -1307,7 +1256,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-37"
@@ -1333,7 +1281,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-38"
@@ -1359,7 +1306,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-39"
@@ -1385,7 +1331,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-40"
@@ -1411,7 +1356,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-altair-41"
@@ -1437,7 +1381,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-01"
@@ -1463,7 +1406,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-02"
@@ -1489,7 +1431,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-03"
@@ -1515,7 +1456,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-04"
@@ -1541,7 +1481,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-05"
@@ -1567,7 +1506,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-06"
@@ -1593,7 +1531,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-07"
@@ -1619,7 +1556,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-08"
@@ -1645,7 +1581,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-09"
@@ -1671,7 +1606,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-10"
@@ -1697,7 +1631,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-12"
@@ -1723,7 +1656,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-13"
@@ -1749,7 +1681,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-14"
@@ -1775,7 +1706,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-15"
@@ -1801,7 +1731,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-16"
@@ -1827,7 +1756,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-18"
@@ -1853,7 +1781,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-19"
@@ -1879,7 +1806,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-20"
@@ -1905,7 +1831,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-21"
@@ -1931,7 +1856,6 @@ export default function GalleryPage() {
 										height: selectedRatio.height,
 									}}
 								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
 
 									<iframe
 										src="/preview/vega/vega-lite-22"
