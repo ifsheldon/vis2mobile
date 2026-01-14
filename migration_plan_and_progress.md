@@ -78,7 +78,7 @@
 - [x] vega-lite-13
 - [x] vega-lite-14
 - [x] vega-lite-15
-- [ ] vega-lite-16
+- [x] vega-lite-16
 - [ ] vega-lite-17
 - [ ] vega-lite-18
 - [ ] vega-lite-19
@@ -204,3 +204,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-14.
 - 2026-01-14: Migrated vega-lite-15 (Tech Stock History) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-15.
+- 2026-01-14: Migrated vega-lite-16 (Driving vs. Gas Prices) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-16.
