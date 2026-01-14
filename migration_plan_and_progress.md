@@ -63,7 +63,7 @@
 - [x] vega-lite-01
 - [x] vega-lite-02
 - [x] vega-lite-03
-- [ ] vega-lite-04
+- [x] vega-lite-04
 - [ ] vega-lite-05
 - [ ] vega-lite-06
 - [ ] vega-lite-07
@@ -176,3 +176,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-lite-02.
 - 2026-01-14: Migrated vega-lite-03 (Penguin Body Mass Distribution) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-lite-03.
+- 2026-01-14: Migrated vega-lite-04 (Exceptional Movies) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-lite-04.

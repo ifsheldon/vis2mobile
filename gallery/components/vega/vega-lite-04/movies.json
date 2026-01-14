@@ -1,0 +1,95 @@
+{
+	"average_rating": 6.283467202141901,
+	"movies": [
+		{
+			"title": "12 Angry Men",
+			"rating": 8.9,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "C'era una volta il West",
+			"rating": 8.8,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "Casablanca",
+			"rating": 8.8,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "Cidade de Deus",
+			"rating": 8.8,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "Fight Club",
+			"rating": 8.8,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "Goodfellas",
+			"rating": 8.8,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "Inception",
+			"rating": 9.1,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "One Flew Over the Cuckoo's Nest",
+			"rating": 8.9,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "Pulp Fiction",
+			"rating": 8.9,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "Schindler's List",
+			"rating": 8.9,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "Shichinin no samurai",
+			"rating": 8.8,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "The Dark Knight",
+			"rating": 8.9,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "The Godfather",
+			"rating": 9.2,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "The Godfather: Part II",
+			"rating": 9,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "The Lord of the Rings: The Fellowship of the Ring",
+			"rating": 8.8,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "The Lord of the Rings: The Return of the King",
+			"rating": 8.8,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "The Shawshank Redemption",
+			"rating": 9.2,
+			"average_rating": 6.283467202141901
+		},
+		{
+			"title": "Toy Story 3",
+			"rating": 8.9,
+			"average_rating": 6.283467202141901
+		}
+	]
+}
