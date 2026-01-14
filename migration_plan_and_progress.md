@@ -33,7 +33,7 @@
 - [x] vega-altair-09
 - [x] vega-altair-11
 - [x] vega-altair-12
-- [ ] vega-altair-13
+- [x] vega-altair-13
 - [ ] vega-altair-14
 - [ ] vega-altair-15
 - [ ] vega-altair-16
@@ -116,3 +116,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-11.
 - 2026-01-13: Migrated vega-altair-12 (Top Rated Movies) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-12.
+- 2026-01-13: Migrated vega-altair-13 (Population Pyramid) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-13.
