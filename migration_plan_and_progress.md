@@ -79,7 +79,7 @@
 - [x] vega-lite-14
 - [x] vega-lite-15
 - [x] vega-lite-16
-- [ ] vega-lite-17
+- [x] vega-lite-17
 - [ ] vega-lite-18
 - [ ] vega-lite-19
 - [ ] vega-lite-20
@@ -206,3 +206,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-15.
 - 2026-01-14: Migrated vega-lite-16 (Driving vs. Gas Prices) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-16.
+- 2026-01-14: Migrated vega-lite-17 (Placeholder) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-17.
