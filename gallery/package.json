@@ -16,6 +16,7 @@
 		"@radix-ui/react-toggle-group": "^1.1.11",
 		"clsx": "^2.1.1",
 		"d3-array": "^3.2.4",
+		"d3-geo": "^3.1.1",
 		"date-fns": "^4.1.0",
 		"framer-motion": "^12.26.2",
 		"lucide-react": "^0.556.0",
@@ -23,12 +24,14 @@
 		"react": "19.2.1",
 		"react-dom": "19.2.1",
 		"recharts": "^3.5.1",
-		"tailwind-merge": "^3.4.0"
+		"tailwind-merge": "^3.4.0",
+		"topojson-client": "^3.1.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.8",
 		"@tailwindcss/postcss": "^4.1.17",
 		"@types/d3-array": "^3.2.2",
+		"@types/geojson": "^7946.0.16",
 		"@types/node": "^24.10.2",
 		"@types/react": "^19.2.7",
 		"@types/react-dom": "^19.2.3",
