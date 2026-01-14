@@ -52,7 +52,7 @@
 - [x] vega-altair-29
 - [x] vega-altair-30
 - [x] vega-altair-31
-- [ ] vega-altair-34
+- [x] vega-altair-34
 - [ ] vega-altair-35
 - [ ] vega-altair-36
 - [ ] vega-altair-37
@@ -154,3 +154,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-altair-30.
 - 2026-01-14: Migrated vega-altair-31 (Crop Yield Trends) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-altair-31.
+- 2026-01-14: Migrated vega-altair-34 (Data Insights) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-altair-34.
