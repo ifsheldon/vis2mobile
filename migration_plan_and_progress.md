@@ -56,7 +56,7 @@
 - [x] vega-altair-35
 - [x] vega-altair-36
 - [x] vega-altair-37
-- [ ] vega-altair-38
+- [x] vega-altair-38
 - [ ] vega-altair-39
 - [ ] vega-altair-40
 - [ ] vega-altair-41
@@ -162,3 +162,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-altair-36.
 - 2026-01-14: Migrated vega-altair-37 (Penguin Morphology) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-altair-37.
+- 2026-01-14: Migrated vega-altair-38 (Seattle Climate) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-altair-38.

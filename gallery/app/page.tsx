@@ -1344,6 +1344,32 @@ export default function GalleryPage() {
 								</div>
 							</div>
 						</div>
+
+						<div className="space-y-4">
+							<div className="flex items-center justify-between">
+								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+									Seattle Climate (Vega Altair 38)
+								</h2>
+							</div>
+
+							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
+								<div
+									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
+									style={{
+										width: selectedRatio.width,
+										height: selectedRatio.height,
+									}}
+								>
+									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
+
+									<iframe
+										src="/preview/vega/vega-altair-38"
+										className="w-full h-full border-none bg-white dark:bg-black"
+										title="Seattle Climate Preview"
+									/>
+								</div>
+							</div>
+						</div>
 					</div>
 				</section>
 			</div>
