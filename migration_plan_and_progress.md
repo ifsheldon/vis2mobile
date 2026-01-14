@@ -61,7 +61,7 @@
 - [x] vega-altair-40
 - [x] vega-altair-41
 - [x] vega-lite-01
-- [ ] vega-lite-02
+- [x] vega-lite-02
 - [ ] vega-lite-03
 - [ ] vega-lite-04
 - [ ] vega-lite-05
@@ -172,3 +172,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-altair-41.
 - 2026-01-14: Migrated vega-lite-01 (Unemployment) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-lite-01.
+- 2026-01-14: Migrated vega-lite-02 (Penguin Body Mass) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-lite-02.
