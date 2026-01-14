@@ -1,0 +1,47 @@
+[
+	{
+		"bin": 1,
+		"count": 5,
+		"cumulative": 5
+	},
+	{
+		"bin": 2,
+		"count": 43,
+		"cumulative": 48
+	},
+	{
+		"bin": 3,
+		"count": 100,
+		"cumulative": 148
+	},
+	{
+		"bin": 4,
+		"count": 273,
+		"cumulative": 421
+	},
+	{
+		"bin": 5,
+		"count": 633,
+		"cumulative": 1054
+	},
+	{
+		"bin": 6,
+		"count": 985,
+		"cumulative": 2039
+	},
+	{
+		"bin": 7,
+		"count": 741,
+		"cumulative": 2780
+	},
+	{
+		"bin": 8,
+		"count": 204,
+		"cumulative": 2984
+	},
+	{
+		"bin": 9,
+		"count": 4,
+		"cumulative": 2988
+	}
+]
