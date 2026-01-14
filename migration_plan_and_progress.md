@@ -34,7 +34,7 @@
 - [x] vega-altair-11
 - [x] vega-altair-12
 - [x] vega-altair-13
-- [ ] vega-altair-14
+- [x] vega-altair-14
 - [ ] vega-altair-15
 - [ ] vega-altair-16
 - [ ] vega-altair-17
@@ -118,3 +118,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-12.
 - 2026-01-13: Migrated vega-altair-13 (Population Pyramid) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-13.
+- 2026-01-13: Migrated vega-altair-14 (Population by Age & Sex) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-14.
