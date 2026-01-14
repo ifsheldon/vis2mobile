@@ -45,7 +45,7 @@
 - [x] vega-altair-22
 - [x] vega-altair-23
 - [x] vega-altair-24
-- [ ] vega-altair-25
+- [x] vega-altair-25
 - [ ] vega-altair-26
 - [ ] vega-altair-27
 - [ ] vega-altair-28
@@ -140,3 +140,5 @@
 - 2026-01-13: Saved comparison screenshot for vega-altair-23.
 - 2026-01-13: Migrated vega-altair-24 (Unemployment Trends) into gallery.
 - 2026-01-13: Saved comparison screenshot for vega-altair-24.
+- 2026-01-13: Migrated vega-altair-25 (Movie Ratings Analysis) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-25.
