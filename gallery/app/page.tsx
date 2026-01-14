@@ -326,9 +326,6 @@ export default function GalleryPage() {
 						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
 							Vega Examples
 						</h2>
-						<p className="text-zinc-500 dark:text-zinc-400 mt-1 text-sm">
-							Mobile-optimized visualizations from Vega.
-						</p>
 					</div>
 
 					{/* Gallery Grid */}
