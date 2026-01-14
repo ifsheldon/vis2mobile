@@ -43,7 +43,7 @@
 - [x] vega-altair-20
 - [x] vega-altair-21
 - [x] vega-altair-22
-- [ ] vega-altair-23
+- [x] vega-altair-23
 - [ ] vega-altair-24
 - [ ] vega-altair-25
 - [ ] vega-altair-26
@@ -136,3 +136,5 @@
 - 2026-01-13: Saved comparison screenshot for vega-altair-21.
 - 2026-01-13: Migrated vega-altair-22 (Experiment Results) into gallery.
 - 2026-01-13: Saved comparison screenshot for vega-altair-22.
+- 2026-01-13: Migrated vega-altair-23 (IMDB Ratings) into gallery.
+- 2026-01-13: Saved comparison screenshot for vega-altair-23.
