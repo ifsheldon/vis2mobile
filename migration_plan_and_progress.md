@@ -76,7 +76,7 @@
 - [x] vega-lite-11
 - [x] vega-lite-12
 - [x] vega-lite-13
-- [ ] vega-lite-14
+- [x] vega-lite-14
 - [ ] vega-lite-15
 - [ ] vega-lite-16
 - [ ] vega-lite-17
@@ -200,3 +200,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-12.
 - 2026-01-14: Migrated vega-lite-13 (Performance Metrics) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-13.
+- 2026-01-14: Migrated vega-lite-14 (Weather Observations) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-14.
