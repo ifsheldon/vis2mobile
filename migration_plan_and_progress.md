@@ -39,7 +39,7 @@
 - [x] vega-altair-16
 - [x] vega-altair-17
 - [x] vega-altair-18
-- [ ] vega-altair-19
+- [x] vega-altair-19
 - [ ] vega-altair-20
 - [ ] vega-altair-21
 - [ ] vega-altair-22
@@ -128,3 +128,5 @@
 - 2026-01-13: Saved comparison screenshot for vega-altair-17.
 - 2026-01-13: Migrated vega-altair-18 (CO2 Atmosphere Trends) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-18.
+- 2026-01-13: Migrated vega-altair-19 (Penguin Morphology) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-19.
