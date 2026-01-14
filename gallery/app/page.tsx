@@ -312,47 +312,125 @@ const VEGA_EXAMPLES = [
 
 // Vega-Lite Examples data
 const VEGA_LITE_EXAMPLES = [
-	// Vega-Lite 01
+	// Vega-Lite 01: Unemployment
 	{
-		title: "Simple Bar Chart",
+		title: "Unemployment",
 		previewSrc: "/preview/vega/vega-lite-01",
 		originalSrc: "/vega-originals/vega_lite/01.html",
 	},
-	// Vega-Lite 02
+	// Vega-Lite 02: Penguin Body Mass
 	{
-		title: "Aggregated Bar Chart",
+		title: "Penguin Body Mass",
 		previewSrc: "/preview/vega/vega-lite-02",
 		originalSrc: "/vega-originals/vega_lite/02.html",
 	},
-	// Vega-Lite 03
+	// Vega-Lite 03: Penguin Body Mass Distribution
 	{
-		title: "Grouped Bar Chart",
+		title: "Penguin Body Mass Distribution",
 		previewSrc: "/preview/vega/vega-lite-03",
 		originalSrc: "/vega-originals/vega_lite/03.html",
 	},
-	// Vega-Lite 04
+	// Vega-Lite 04: Exceptional Movies
 	{
-		title: "Stacked Bar Chart",
+		title: "Exceptional Movies",
 		previewSrc: "/preview/vega/vega-lite-04",
 		originalSrc: "/vega-originals/vega_lite/04.html",
 	},
-	// Vega-Lite 05
+	// Vega-Lite 05: Annual Financial Flow
 	{
-		title: "Population Pyramid",
+		title: "Annual Financial Flow",
 		previewSrc: "/preview/vega/vega-lite-05",
 		originalSrc: "/vega-originals/vega_lite/05.html",
 	},
-	// Vega-Lite 06
+	// Vega-Lite 06: Penguin Mass Distribution
 	{
-		title: "Trellis Bar Chart",
+		title: "Penguin Mass Distribution",
 		previewSrc: "/preview/vega/vega-lite-06",
 		originalSrc: "/vega-originals/vega_lite/06.html",
 	},
-	// Vega-Lite 07
+	// Vega-Lite 07: IMDB Rating Distribution
 	{
-		title: "Wilkinson Dot Plot",
+		title: "IMDB Rating Distribution",
 		previewSrc: "/preview/vega/vega-lite-07",
 		originalSrc: "/vega-originals/vega_lite/07.html",
+	},
+	// Vega-Lite 08: Movie Ratings Heatmap
+	{
+		title: "Movie Ratings Heatmap",
+		previewSrc: "/preview/vega/vega-lite-08",
+		originalSrc: "/vega-originals/vega_lite/08.html",
+	},
+	// Vega-Lite 09: Performance Frame Distribution
+	{
+		title: "Performance Frame Distribution",
+		previewSrc: "/preview/vega/vega-lite-09",
+		originalSrc: "/vega-originals/vega_lite/09.html",
+	},
+	// Vega-Lite 10: Falkensee Population
+	{
+		title: "Falkensee Population",
+		previewSrc: "/preview/vega/vega-lite-10",
+		originalSrc: "/vega-originals/vega_lite/10.html",
+	},
+	// Vega-Lite 12: Seattle Weather
+	{
+		title: "Seattle Weather",
+		previewSrc: "/preview/vega/vega-lite-12",
+		originalSrc: "/vega-originals/vega_lite/12.html",
+	},
+	// Vega-Lite 13: Performance Metrics
+	{
+		title: "Performance Metrics",
+		previewSrc: "/preview/vega/vega-lite-13",
+		originalSrc: "/vega-originals/vega_lite/13.html",
+	},
+	// Vega-Lite 14: Weather Observations
+	{
+		title: "Weather Observations",
+		previewSrc: "/preview/vega/vega-lite-14",
+		originalSrc: "/vega-originals/vega_lite/14.html",
+	},
+	// Vega-Lite 15: Tech Stock History
+	{
+		title: "Tech Stock History",
+		previewSrc: "/preview/vega/vega-lite-15",
+		originalSrc: "/vega-originals/vega_lite/15.html",
+	},
+	// Vega-Lite 16: Driving vs. Gas Prices
+	{
+		title: "Driving vs. Gas Prices",
+		previewSrc: "/preview/vega/vega-lite-16",
+		originalSrc: "/vega-originals/vega_lite/16.html",
+	},
+	// Vega-Lite 18: Data Distribution
+	{
+		title: "Data Distribution",
+		previewSrc: "/preview/vega/vega-lite-18",
+		originalSrc: "/vega-originals/vega_lite/18.html",
+	},
+	// Vega-Lite 19: Movie Ratings Distribution
+	{
+		title: "Movie Ratings Distribution",
+		previewSrc: "/preview/vega/vega-lite-19",
+		originalSrc: "/vega-originals/vega_lite/19.html",
+	},
+	// Vega-Lite 20: Genre Ratings
+	{
+		title: "Genre Ratings",
+		previewSrc: "/preview/vega/vega-lite-20",
+		originalSrc: "/vega-originals/vega_lite/20.html",
+	},
+	// Vega-Lite 21: Power Stats
+	{
+		title: "Power Stats",
+		previewSrc: "/preview/vega/vega-lite-21",
+		originalSrc: "/vega-originals/vega_lite/21.html",
+	},
+	// Vega-Lite 22: Cars by Origin & Cylinders
+	{
+		title: "Cars by Origin & Cylinders",
+		previewSrc: "/preview/vega/vega-lite-22",
+		originalSrc: "/vega-originals/vega_lite/22.html",
 	},
 ];
 
