@@ -54,7 +54,7 @@
 - [x] vega-altair-31
 - [x] vega-altair-34
 - [x] vega-altair-35
-- [ ] vega-altair-36
+- [x] vega-altair-36
 - [ ] vega-altair-37
 - [ ] vega-altair-38
 - [ ] vega-altair-39
@@ -158,3 +158,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-altair-34.
 - 2026-01-14: Migrated vega-altair-35 (Daily Cycle) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-altair-35.
+- 2026-01-14: Migrated vega-altair-36 (Vehicle Performance) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-altair-36.
