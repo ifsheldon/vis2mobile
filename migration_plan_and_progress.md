@@ -49,7 +49,7 @@
 - [x] vega-altair-26
 - [x] vega-altair-27
 - [x] vega-altair-28
-- [ ] vega-altair-29
+- [x] vega-altair-29
 - [ ] vega-altair-30
 - [ ] vega-altair-31
 - [ ] vega-altair-34
@@ -148,3 +148,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-altair-27.
 - 2026-01-14: Migrated vega-altair-28 (Life Expectancy) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-altair-28.
+- 2026-01-14: Migrated vega-altair-29 (Tech Stock Evolution) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-altair-29.
