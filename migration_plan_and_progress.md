@@ -68,7 +68,7 @@
 - [x] vega-lite-03
 - [x] vega-lite-04
 - [x] vega-lite-05
-- [ ] vega-lite-06
+- [x] vega-lite-06
 - [ ] vega-lite-07
 - [ ] vega-lite-08
 - [ ] vega-lite-09
@@ -184,3 +184,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-lite-04.
 - 2026-01-14: Migrated vega-lite-05 (Annual Financial Flow) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-05.
+- 2026-01-14: Migrated vega-lite-06 (Penguin Mass Distribution) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-06.
