@@ -93,13 +93,13 @@ export function Visualization() {
 						<ScatterChart
 							margin={{ top: 20, right: 30, bottom: 50, left: 30 }}
 							onMouseMove={(e) => {
-								if (e && e.activeTooltipIndex !== undefined) {
+								if (e && typeof e.activeTooltipIndex === "number") {
 									setActiveIndex(e.activeTooltipIndex);
 								}
 							}}
 							onMouseLeave={() => setActiveIndex(null)}
 							onTouchMove={(e) => {
-								if (e && e.activeTooltipIndex !== undefined) {
+								if (e && typeof e.activeTooltipIndex === "number") {
 									setActiveIndex(e.activeTooltipIndex);
 								}
 							}}
@@ -151,7 +151,7 @@ export function Visualization() {
 							<ZAxis type="number" range={[70, 70]} />
 							<Tooltip
 								cursor={{ strokeDasharray: "3 3", stroke: "#3b82f6" }}
-								content={<div className="hidden" />}
+								content={() => null}
 							/>
 							<Scatter
 								name="Points"
@@ -178,11 +178,10 @@ export function Visualization() {
 				<div
 					className={`
           w-full p-4 rounded-3xl border transition-all duration-500
-          ${
-						activePoint
+          ${activePoint
 							? "bg-blue-600/10 border-blue-500/50 shadow-[0_0_30px_rgba(59,130,246,0.15)]"
 							: "bg-zinc-900 border-zinc-800"
-					}
+						}
         `}
 				>
 					{activePoint ? (
