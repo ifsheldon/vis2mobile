@@ -42,7 +42,7 @@
 - [x] vega-altair-19
 - [x] vega-altair-20
 - [x] vega-altair-21
-- [ ] vega-altair-22
+- [x] vega-altair-22
 - [ ] vega-altair-23
 - [ ] vega-altair-24
 - [ ] vega-altair-25
@@ -134,3 +134,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-20.
 - 2026-01-13: Migrated vega-altair-21 (Penguin Metrics) into gallery.
 - 2026-01-13: Saved comparison screenshot for vega-altair-21.
+- 2026-01-13: Migrated vega-altair-22 (Experiment Results) into gallery.
+- 2026-01-13: Saved comparison screenshot for vega-altair-22.
