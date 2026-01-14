@@ -52,10 +52,16 @@ export function Visualization() {
 		endIndex?: number;
 	}) => {
 		if (newRange.startIndex !== undefined && newRange.endIndex !== undefined) {
-			setRange({
-				startIndex: newRange.startIndex,
-				endIndex: newRange.endIndex,
-			});
+			// Only update if values actually changed to prevent infinite loop
+			if (
+				newRange.startIndex !== range.startIndex ||
+				newRange.endIndex !== range.endIndex
+			) {
+				setRange({
+					startIndex: newRange.startIndex,
+					endIndex: newRange.endIndex,
+				});
+			}
 		}
 	};
 
