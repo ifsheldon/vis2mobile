@@ -645,32 +645,6 @@ export default function GalleryPage() {
 						<div className="space-y-4">
 							<div className="flex items-center justify-between">
 								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									TODO Placeholder (Vega Altair 08)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
-
-									<iframe
-										src="/preview/vega/vega-altair-08"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Vega Altair 08 Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
 									Barley Yields (Vega Altair 09)
 								</h2>
 							</div>
@@ -1711,32 +1685,6 @@ export default function GalleryPage() {
 						<div className="space-y-4">
 							<div className="flex items-center justify-between">
 								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Vega Lite 11 (Placeholder)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
-
-									<iframe
-										src="/preview/vega/vega-lite-11"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Vega Lite 11 Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
 									Seattle Weather (Vega Lite 12)
 								</h2>
 							</div>
@@ -1859,32 +1807,6 @@ export default function GalleryPage() {
 										src="/preview/vega/vega-lite-16"
 										className="w-full h-full border-none bg-white dark:bg-black"
 										title="Driving vs. Gas Prices Preview"
-									/>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-									Vega Lite 17 (Placeholder)
-								</h2>
-							</div>
-
-							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
-								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
-									style={{
-										width: selectedRatio.width,
-										height: selectedRatio.height,
-									}}
-								>
-									<div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-50" />
-
-									<iframe
-										src="/preview/vega/vega-lite-17"
-										className="w-full h-full border-none bg-white dark:bg-black"
-										title="Vega Lite 17 Preview"
 									/>
 								</div>
 							</div>
