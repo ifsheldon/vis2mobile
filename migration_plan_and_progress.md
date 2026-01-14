@@ -35,7 +35,7 @@
 - [x] vega-altair-12
 - [x] vega-altair-13
 - [x] vega-altair-14
-- [ ] vega-altair-15
+- [x] vega-altair-15
 - [ ] vega-altair-16
 - [ ] vega-altair-17
 - [ ] vega-altair-18
@@ -120,3 +120,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-13.
 - 2026-01-13: Migrated vega-altair-14 (Population by Age & Sex) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-14.
+- 2026-01-13: Migrated vega-altair-15 (US State Capitals) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-15.
