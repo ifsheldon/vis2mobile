@@ -58,7 +58,7 @@
 - [x] vega-altair-37
 - [x] vega-altair-38
 - [x] vega-altair-39
-- [ ] vega-altair-40
+- [x] vega-altair-40
 - [ ] vega-altair-41
 - [ ] vega-lite-01
 - [ ] vega-lite-02
@@ -166,3 +166,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-altair-38.
 - 2026-01-14: Migrated vega-altair-39 (IMDB Ratings by Genre) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-altair-39.
+- 2026-01-14: Migrated vega-altair-40 (Seattle Weather 2012) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-altair-40.
