@@ -82,7 +82,7 @@
 - [x] vega-lite-17
 - [x] vega-lite-18
 - [x] vega-lite-19
-- [ ] vega-lite-20
+- [x] vega-lite-20
 - [ ] vega-lite-21
 - [ ] vega-lite-22
 
@@ -212,3 +212,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-18.
 - 2026-01-14: Migrated vega-lite-19 (Movie Ratings Distribution) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-19.
+- 2026-01-14: Migrated vega-lite-20 (Genre Ratings) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-20.

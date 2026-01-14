@@ -1,0 +1,55 @@
+export interface GenreRating {
+	genre: string;
+	rating: number;
+}
+
+export const genreRatings: GenreRating[] = [
+	{
+		genre: "Horror",
+		rating: 5.676076555023923,
+	},
+	{
+		genre: "Comedy",
+		rating: 5.853858267716535,
+	},
+	{
+		genre: "Romantic Comedy",
+		rating: 5.873076923076923,
+	},
+	{
+		genre: "Action",
+		rating: 6.114795918367347,
+	},
+	{
+		genre: "Concert/Performance",
+		rating: 6.325,
+	},
+	{
+		genre: "Adventure",
+		rating: 6.345019920318725,
+	},
+	{
+		genre: "Thriller/Suspense",
+		rating: 6.3609442060085835,
+	},
+	{
+		genre: "Musical",
+		rating: 6.4479999999999995,
+	},
+	{
+		genre: "Drama",
+		rating: 6.773441734417345,
+	},
+	{
+		genre: "Black Comedy",
+		rating: 6.81875,
+	},
+	{
+		genre: "Western",
+		rating: 6.8428571428571425,
+	},
+	{
+		genre: "Documentary",
+		rating: 6.997297297297297,
+	},
+];
