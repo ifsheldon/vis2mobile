@@ -83,7 +83,7 @@
 - [x] vega-lite-18
 - [x] vega-lite-19
 - [x] vega-lite-20
-- [ ] vega-lite-21
+- [x] vega-lite-21
 - [ ] vega-lite-22
 
 ## Progress Log
@@ -214,3 +214,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-19.
 - 2026-01-14: Migrated vega-lite-20 (Genre Ratings) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-20.
+- 2026-01-14: Migrated vega-lite-21 (Power Stats) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-21.
