@@ -80,7 +80,7 @@
 - [x] vega-lite-15
 - [x] vega-lite-16
 - [x] vega-lite-17
-- [ ] vega-lite-18
+- [x] vega-lite-18
 - [ ] vega-lite-19
 - [ ] vega-lite-20
 - [ ] vega-lite-21
@@ -208,3 +208,5 @@
 - 2026-01-14: Saved comparison screenshot for vega-lite-16.
 - 2026-01-14: Migrated vega-lite-17 (Placeholder) into gallery.
 - 2026-01-14: Saved comparison screenshot for vega-lite-17.
+- 2026-01-14: Migrated vega-lite-18 (Data Distribution) into gallery.
+- 2026-01-14: Saved comparison screenshot for vega-lite-18.
