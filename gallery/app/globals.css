@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
+/* Disable dark mode by making the dark: selector never match */
+@custom-variant dark (&:where(.no-dark-mode-ever));
+
 html {
 	scroll-behavior: smooth;
+	color-scheme: light only;
 }
 
 :root {
@@ -16,12 +20,7 @@ html {
 	--font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
-	}
-}
+
 
 body {
 	background: var(--background);
