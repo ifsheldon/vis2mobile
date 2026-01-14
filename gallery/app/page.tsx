@@ -189,7 +189,7 @@ export default function GalleryPage() {
 
 							<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
 								<div
-									className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
+									className="bg-slate-50 shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
 									style={{
 										width: selectedRatio.width,
 										height: selectedRatio.height,
@@ -200,7 +200,7 @@ export default function GalleryPage() {
 
 									<iframe
 										src="/preview/budgets"
-										className="w-full h-full border-none bg-white dark:bg-black"
+										className="w-full h-full border-none bg-slate-50"
 										title="Budgets Chart Preview"
 									/>
 								</div>
