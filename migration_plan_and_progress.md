@@ -37,7 +37,7 @@
 - [x] vega-altair-14
 - [x] vega-altair-15
 - [x] vega-altair-16
-- [ ] vega-altair-17
+- [x] vega-altair-17
 - [ ] vega-altair-18
 - [ ] vega-altair-19
 - [ ] vega-altair-20
@@ -124,3 +124,5 @@
 - 2026-01-13: Saved comparison screenshots for vega-altair-15.
 - 2026-01-13: Migrated vega-altair-16 (Disaster Timeline) into gallery.
 - 2026-01-13: Saved comparison screenshot for vega-altair-16.
+- 2026-01-13: Migrated vega-altair-17 (Barley Yield Dumbbell) into gallery.
+- 2026-01-13: Saved comparison screenshot for vega-altair-17.
