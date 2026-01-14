@@ -50,7 +50,7 @@
 - [x] vega-altair-27
 - [x] vega-altair-28
 - [x] vega-altair-29
-- [ ] vega-altair-30
+- [x] vega-altair-30
 - [ ] vega-altair-31
 - [ ] vega-altair-34
 - [ ] vega-altair-35
@@ -150,3 +150,5 @@
 - 2026-01-14: Saved comparison screenshots for vega-altair-28.
 - 2026-01-14: Migrated vega-altair-29 (Tech Stock Evolution) into gallery.
 - 2026-01-14: Saved comparison screenshots for vega-altair-29.
+- 2026-01-14: Migrated vega-altair-30 (Sine Wave Trends) into gallery.
+- 2026-01-14: Saved comparison screenshots for vega-altair-30.
