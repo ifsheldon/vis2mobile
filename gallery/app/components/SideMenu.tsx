@@ -16,6 +16,18 @@ const NAV_ITEMS = [
 		initial: "V",
 		href: "#vega",
 	},
+	{
+		id: "vega-altair",
+		label: "Vega Altair Examples",
+		initial: "VA",
+		href: "#vega-altair",
+	},
+	{
+		id: "vega-lite",
+		label: "Vega Lite Examples",
+		initial: "VL",
+		href: "#vega-lite",
+	},
 ];
 
 export function SideMenu() {

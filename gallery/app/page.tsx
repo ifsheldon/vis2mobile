@@ -86,6 +86,10 @@ const VEGA_EXAMPLES = [
 		previewSrc: "/preview/vega/vega-05",
 		originalSrc: "/vega-originals/vega/05.html",
 	},
+];
+
+// Vega Altair Examples data
+const VEGA_ALTAIR_EXAMPLES = [
 	// Vega Altair 01
 	{
 		title: "Market Trends",
@@ -523,6 +527,30 @@ export default function GalleryPage() {
 
 					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-12 items-start">
 						{VEGA_EXAMPLES.map((example) => (
+							<PhonePreview
+								key={example.previewSrc}
+								title={example.title}
+								previewSrc={example.previewSrc}
+								originalSrc={example.originalSrc}
+								originalLabel="Original HTML"
+								phoneWidth={selectedRatio.width}
+								phoneHeight={selectedRatio.height}
+								phoneScale={phoneScale}
+							/>
+						))}
+					</div>
+				</section>
+
+				{/* Vega Altair Examples Section */}
+				<section className="space-y-6" id="vega-altair">
+					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
+						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+							Vega Altair Examples
+						</h2>
+					</div>
+
+					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-12 items-start">
+						{VEGA_ALTAIR_EXAMPLES.map((example) => (
 							<PhonePreview
 								key={example.previewSrc}
 								title={example.title}
