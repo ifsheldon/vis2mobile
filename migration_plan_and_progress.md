@@ -46,7 +46,7 @@
 - [x] vega-altair-23
 - [x] vega-altair-24
 - [x] vega-altair-25
-- [ ] vega-altair-26
+- [x] vega-altair-26
 - [ ] vega-altair-27
 - [ ] vega-altair-28
 - [ ] vega-altair-29
@@ -142,3 +142,5 @@
 - 2026-01-13: Saved comparison screenshot for vega-altair-24.
 - 2026-01-13: Migrated vega-altair-25 (Movie Ratings Analysis) into gallery.
 - 2026-01-13: Saved comparison screenshots for vega-altair-25.
+- 2026-01-13: Migrated vega-altair-26 (S&P 500 Focus) into gallery.
+- 2026-01-13: Saved comparison screenshots for vega-altair-26.
