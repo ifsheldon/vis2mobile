@@ -22,76 +22,76 @@ PROJECTS_DIR = "vega-baseline-projects"
 # All projects to process
 PROJECTS = [
     # vega
-    "vega-01",
-    "vega-02",
-    # "vega-03",
-    # "vega-04",
-    # "vega-05",
+    # "vega-01",  # finished
+    # "vega-02",  # finished
+    # "vega-03",  # finished
+    # "vega-04",  # finished
+    # "vega-05",  # finished
     # vega_altair
-    # "vega-altair-01",
-    # "vega-altair-02",
-    "vega-altair-03",
-    "vega-altair-04",
-    "vega-altair-05",
-    "vega-altair-06",
-    "vega-altair-07",
-    "vega-altair-08",
-    "vega-altair-09",
-    "vega-altair-10",
-    "vega-altair-11",
-    "vega-altair-12",
-    "vega-altair-13",
-    "vega-altair-14",
-    "vega-altair-15",
-    "vega-altair-16",
-    "vega-altair-17",
-    "vega-altair-18",
-    "vega-altair-19",
-    "vega-altair-20",
-    "vega-altair-21",
-    "vega-altair-22",
-    "vega-altair-23",
-    "vega-altair-24",
-    "vega-altair-25",
-    "vega-altair-26",
-    "vega-altair-27",
-    "vega-altair-28",
-    "vega-altair-29",
-    "vega-altair-30",
-    "vega-altair-31",
-    "vega-altair-32",
-    "vega-altair-33",
-    "vega-altair-34",
-    "vega-altair-35",
-    "vega-altair-36",
-    "vega-altair-37",
-    "vega-altair-38",
-    "vega-altair-39",
-    "vega-altair-40",
-    "vega-altair-41",
+    # "vega-altair-01",  # finished
+    # "vega-altair-02",  # finished
+    # "vega-altair-03",  # finished
+    # "vega-altair-04",  # finished
+    # "vega-altair-05",  # finished
+    # "vega-altair-06",  # finished
+    # "vega-altair-07",  # finished
+    # "vega-altair-08",  # finished
+    # "vega-altair-09",  # finished
+    "vega-altair-10",  # failed: bun install failed
+    # "vega-altair-11",  # finished
+    # "vega-altair-12",  # finished
+    # "vega-altair-13",  # finished
+    # "vega-altair-14",  # finished
+    # "vega-altair-15",  # finished
+    # "vega-altair-16",  # finished
+    # "vega-altair-17",  # finished
+    # "vega-altair-18",  # finished
+    # "vega-altair-19",  # finished
+    # "vega-altair-20",  # finished
+    # "vega-altair-21",  # finished
+    # "vega-altair-22",  # finished
+    # "vega-altair-23",  # finished
+    "vega-altair-24",  # failed: gemini failed
+    # "vega-altair-25",  # finished
+    # "vega-altair-26",  # finished
+    "vega-altair-27",  # failed: gemini failed
+    "vega-altair-28",  # failed: gemini failed
+    "vega-altair-29",  # failed: gemini failed
+    "vega-altair-30",  # failed: gemini failed
+    # "vega-altair-31",  # finished
+    "vega-altair-32",  # failed: bun install failed
+    "vega-altair-33",  # failed: bun install failed
+    # "vega-altair-34",  # finished
+    # "vega-altair-35",  # finished
+    # "vega-altair-36",  # finished
+    "vega-altair-37",  # failed: gemini failed
+    "vega-altair-38",  # failed: gemini failed
+    "vega-altair-39",  # failed: gemini failed
+    "vega-altair-40",  # failed: gemini failed
+    "vega-altair-41",  # failed: gemini failed
     # vega_lite
-    "vega-lite-01",
-    "vega-lite-02",
-    "vega-lite-03",
-    "vega-lite-04",
-    "vega-lite-05",
-    "vega-lite-06",
-    "vega-lite-07",
-    "vega-lite-08",
-    "vega-lite-09",
-    "vega-lite-10",
-    "vega-lite-11",
-    "vega-lite-12",
-    "vega-lite-13",
-    "vega-lite-14",
-    "vega-lite-15",
-    "vega-lite-16",
-    "vega-lite-17",
-    "vega-lite-18",
-    "vega-lite-19",
-    "vega-lite-20",
-    "vega-lite-21",
-    "vega-lite-22",
+    "vega-lite-01",  # failed: gemini failed
+    "vega-lite-02",  # failed: gemini failed
+    "vega-lite-03",  # failed: gemini failed
+    "vega-lite-04",  # failed: gemini failed
+    "vega-lite-05",  # failed: gemini failed
+    "vega-lite-06",  # failed: gemini failed
+    "vega-lite-07",  # failed: gemini failed
+    # "vega-lite-08",  # finished
+    "vega-lite-09",  # failed: gemini failed
+    "vega-lite-10",  # failed: gemini failed
+    "vega-lite-11",  # failed: gemini failed
+    "vega-lite-12",  # failed: gemini failed
+    "vega-lite-13",  # failed: gemini failed
+    "vega-lite-14",  # failed: gemini failed
+    "vega-lite-15",  # failed: gemini failed
+    "vega-lite-16",  # failed: gemini failed
+    "vega-lite-17",  # failed: gemini failed
+    "vega-lite-18",  # failed: gemini failed
+    "vega-lite-19",  # failed: gemini failed
+    "vega-lite-20",  # failed: gemini failed
+    "vega-lite-21",  # failed: gemini failed
+    "vega-lite-22",  # failed: gemini failed
 ]
 
 # Number of concurrent projects to run
