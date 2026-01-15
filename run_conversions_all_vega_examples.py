@@ -17,81 +17,81 @@ USE_CODEX = False
 USE_FLASH = True
 
 # Base directory for vega mobile projects
-PROJECTS_DIR = "vega-mobile-projects"
+PROJECTS_DIR = "vega-baseline-projects"
 
 # All projects to process
 PROJECTS = [
     # vega
-    # "vega-01", # finished by FL
-    # "vega-02", # finished by FL
-    # "vega-03", # finished by FL
-    # "vega-04", # finished by FL
-    # "vega-05", # finished by FL
+    "vega-01",
+    "vega-02",
+    # "vega-03",
+    # "vega-04",
+    # "vega-05",
     # vega_altair
-    # "vega-altair-01", # finished by FL
-    # "vega-altair-02", # finished by FL
-    # "vega-altair-03", # finished by FL
-    # "vega-altair-04", # finished by FL
-    # "vega-altair-05", # finished by FL
-    # "vega-altair-06", # finished by Sizhe
-    # "vega-altair-07", # finished by Sizhe
-    # "vega-altair-08", # finished by Sizhe
-    # "vega-altair-09", # finished by Sizhe
-    "vega-altair-10",  # not good
-    # "vega-altair-11", # finished by FL
-    # "vega-altair-12", # finished by Sizhe
-    # "vega-altair-13", # finished by FL
-    # "vega-altair-14", # finished by FL
-    # "vega-altair-15", # finished by Sizhe
-    # "vega-altair-16", # finished by Sizhe
-    # "vega-altair-17", # finished by Sizhe
-    # "vega-altair-18", # finished by FL
-    # "vega-altair-19", # finished by FL
-    # "vega-altair-20", # finished by FL
-    # "vega-altair-21", # finished by Sizhe
-    # "vega-altair-22", # finished by Sizhe
-    # "vega-altair-23", # finished by Sizhe
-    # "vega-altair-24", # finished by Sizhe
-    # "vega-altair-25", # finished by Sizhe
-    # "vega-altair-26", # finished by Sizhe
-    # "vega-altair-27", # finished by FL
-    # "vega-altair-28", # finished by FL
-    # "vega-altair-29", # finished by FL
-    # "vega-altair-30", # finished by FL
-    # "vega-altair-31", # finished by FL
+    # "vega-altair-01",
+    # "vega-altair-02",
+    "vega-altair-03",
+    "vega-altair-04",
+    "vega-altair-05",
+    "vega-altair-06",
+    "vega-altair-07",
+    "vega-altair-08",
+    "vega-altair-09",
+    "vega-altair-10",
+    "vega-altair-11",
+    "vega-altair-12",
+    "vega-altair-13",
+    "vega-altair-14",
+    "vega-altair-15",
+    "vega-altair-16",
+    "vega-altair-17",
+    "vega-altair-18",
+    "vega-altair-19",
+    "vega-altair-20",
+    "vega-altair-21",
+    "vega-altair-22",
+    "vega-altair-23",
+    "vega-altair-24",
+    "vega-altair-25",
+    "vega-altair-26",
+    "vega-altair-27",
+    "vega-altair-28",
+    "vega-altair-29",
+    "vega-altair-30",
+    "vega-altair-31",
     "vega-altair-32",
     "vega-altair-33",
-    # "vega-altair-34", # finished by FL
-    # "vega-altair-35", # finished by FL
-    # "vega-altair-36", # finished by FL
-    # "vega-altair-37", # finished by FL
-    # "vega-altair-38", # finished by FL
-    # "vega-altair-39", # finished by FL
-    # "vega-altair-40", # finished by FL
-    # "vega-altair-41", # finished by FL
-    # vega_lite, finished by FL
-    # "vega-lite-01",
-    # "vega-lite-02",
-    # "vega-lite-03",
-    # "vega-lite-04",
-    # "vega-lite-05",
-    # "vega-lite-06",
-    # "vega-lite-07",
-    # "vega-lite-08",
-    # "vega-lite-09",
-    # "vega-lite-10",
-    # "vega-lite-11",
-    # "vega-lite-12",
-    # "vega-lite-13",
-    # "vega-lite-14",
-    # "vega-lite-15",
-    # "vega-lite-16",
-    # "vega-lite-17",
-    # "vega-lite-18",
-    # "vega-lite-19",
-    # "vega-lite-20",
-    # "vega-lite-21",
-    # "vega-lite-22",
+    "vega-altair-34",
+    "vega-altair-35",
+    "vega-altair-36",
+    "vega-altair-37",
+    "vega-altair-38",
+    "vega-altair-39",
+    "vega-altair-40",
+    "vega-altair-41",
+    # vega_lite
+    "vega-lite-01",
+    "vega-lite-02",
+    "vega-lite-03",
+    "vega-lite-04",
+    "vega-lite-05",
+    "vega-lite-06",
+    "vega-lite-07",
+    "vega-lite-08",
+    "vega-lite-09",
+    "vega-lite-10",
+    "vega-lite-11",
+    "vega-lite-12",
+    "vega-lite-13",
+    "vega-lite-14",
+    "vega-lite-15",
+    "vega-lite-16",
+    "vega-lite-17",
+    "vega-lite-18",
+    "vega-lite-19",
+    "vega-lite-20",
+    "vega-lite-21",
+    "vega-lite-22",
 ]
 
 # Number of concurrent projects to run
@@ -106,7 +106,7 @@ def run_project(
     Returns (project_name, success, error_message)
     """
     project_dir = projects_dir / project_name
-    log_file = base_dir / f"{project_name}.log"
+    log_file = base_dir / "vega_baseline_logs" / f"{project_name}.log"
 
     if not project_dir.exists():
         return (project_name, False, f"Project directory {project_dir} does not exist")
@@ -137,7 +137,7 @@ def run_project(
                 )
 
             # Run gemini or codex based on USE_CODEX flag
-            prompt = "read README.md and finish transforming desktop visualization into a mobile version. find available port for bun dev in envar `PORT`"
+            prompt = "read README.md and finish transforming desktop visualization in `./original_visualization` into a mobile version. find available port for `bun dev --port <PORT>` in envar `PORT`"
 
             if USE_CODEX:
                 log.write("\n--- Running: codex ---\n")
