@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>25.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "vconcat": [{"layer": [{"mark": {"type": "rect"}, "encoding": {"color": {"aggregate": "count", "legend": {"title": "Total Records"}, "scale": {"scheme": "greenblue"}, "type": "quantitative"}, "x": {"bin": true, "field": "IMDB Rating", "type": "quantitative"}, "y": {"bin": true, "field": "Rotten Tomatoes Rating", "type": "quantitative"}}}, {"mark": {"type": "point"}, "encoding": {"color": {"value": "grey"}, "size": {"aggregate": "count", "legend": {"title": "Records in Selection"}, "type": "quantitative"}, "x": {"bin": true, "field": "IMDB Rating", "type": "quantitative"}, "y": {"bin": true, "field": "Rotten Tomatoes Rating", "type": "quantitative"}}, "transform": [{"filter": {"param": "param_f467f8148203a6ce"}}]}], "data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/movies.json"}}, {"data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v3.2.1/data/movies.json"}, "mark": {"type": "bar"}, "encoding": {"color": {"condition": [{"param": "param_f467f8148203a6ce", "value": "steelblue"}], "value": "grey"}, "x": {"field": "Major Genre", "type": "nominal"}, "y": {"aggregate": "count", "type": "quantitative"}}, "height": 200, "name": "view_e5110a0784194ca0_1", "width": 550}], "params": [{"name": "param_f467f8148203a6ce", "select": {"type": "point", "encodings": ["x"]}, "views": ["view_e5110a0784194ca0_1"]}], "resolve": {"legend": {"color": "independent", "size": "independent"}}, "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json"};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>

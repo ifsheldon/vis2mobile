@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "bunx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  },
+  "tools": {
+    "exclude": ["run_shell_command(npm)", "run_shell_command(npx)"]
+  }
+}

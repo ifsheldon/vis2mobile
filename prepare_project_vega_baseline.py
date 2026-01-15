@@ -59,7 +59,7 @@ async def main(
     original_visualization: Path,
     mobile_project_name: str,
     project_template: Path,
-    use_flash: bool,
+    vega_asset_path: Path,
 ):
     assert original_visualization.exists(), (
         f"Original visualization {original_visualization} does not exist"
@@ -91,6 +91,11 @@ async def main(
     print(
         f"Saved {original_visualization} and its rendered images to {original_folder}"
     )
+    # Copy vega assets
+    if vega_asset_path and vega_asset_path.exists():
+        assets_dest = project / "assets"
+        shutil.copytree(vega_asset_path, assets_dest, dirs_exist_ok=True)
+        print(f"Copied vega assets from {vega_asset_path} to {assets_dest}")
     print("Done")
 
 
@@ -121,6 +126,12 @@ It will do the following:
         default=Path("./mobile-vis-template"),
         help="Path to the project template directory",
     )
+    parser.add_argument(
+        "--vega-asset-path",
+        type=Path,
+        default=None,
+        help="Path to the vega assets directory",
+    )
     args = parser.parse_args()
 
     asyncio.run(
@@ -128,5 +139,6 @@ It will do the following:
             args.original_visualization,
             args.mobile_project_name,
             args.project_template,
+            args.vega_asset_path,
         )
     )

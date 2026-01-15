@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>18.html</title>
+  <meta charset="utf-8" />
+  <script src="../assets/vega.min.js"></script>
+  <script src="../assets/vega-lite.min.js"></script>
+  <script src="../assets/vega-embed.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #vis { width: 95%; max-width: 800px; }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var spec = {"$schema": "https://vega.github.io/schema/vega-lite/v6.json", "description": "A simple radial chart with embedded data. Source: https://vega.github.io/vega-lite/examples/arc_radial.html ", "data": {"values": [12, 23, 47, 6, 52, 19]}, "layer": [{"mark": {"type": "arc", "innerRadius": 20, "stroke": "#fff"}}, {"mark": {"type": "text", "radiusOffset": 10}, "encoding": {"text": {"field": "data", "type": "quantitative"}}}], "encoding": {"theta": {"field": "data", "type": "quantitative", "stack": true}, "radius": {"field": "data", "scale": {"type": "sqrt", "zero": true, "rangeMin": 20}}, "color": {"field": "data", "type": "nominal", "legend": null}}};
+    // vegaEmbed 会自动处理 spec 是 vega 还是 vega-lite
+    vegaEmbed('#vis', spec, { "actions": false }).catch(console.error);
+  </script>
+</body>
+</html>
