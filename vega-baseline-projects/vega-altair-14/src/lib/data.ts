@@ -1,57 +1,37 @@
-export interface PlanData {
-  sector: string;
-  republican: number;
-  passed: number;
-  democratic: number;
+import populationRaw from "./population.json";
+
+export interface PopulationData {
+  year: number;
+  age: number;
+  sex: number;
+  people: number;
 }
 
-export const data: PlanData[] = [
-  {
-    "sector": "Small-business aid",
-    "republican": 200,
-    "passed": 1010,
-    "democratic": 0
-  },
-  {
-    "sector": "Other measures",
-    "republican": 81,
-    "passed": 627,
-    "democratic": 302
-  },
-  {
-    "sector": "Business tax breaks",
-    "republican": 203,
-    "passed": 346,
-    "democratic": 36
-  },
-  {
-    "sector": "Stimulus checks",
-    "republican": 300,
-    "passed": 293,
-    "democratic": 436
-  },
-  {
-    "sector": "Health care",
-    "republican": 111,
-    "passed": 277,
-    "democratic": 382
-  },
-  {
-    "sector": "Unemployment benefits",
-    "republican": 110,
-    "passed": 274,
-    "democratic": 437
-  },
-  {
-    "sector": "State and local aid",
-    "republican": 105,
-    "passed": 256,
-    "democratic": 1118
-  },
-  {
-    "sector": "Safety net and other tax cuts",
-    "republican": 18,
-    "passed": 83,
-    "democratic": 736
-  }
-];
+export const populationData = populationRaw as PopulationData[];
+
+export const years = Array.from(
+  new Set(populationData.map((d) => d.year)),
+).sort((a, b) => a - b);
+export const ages = Array.from(new Set(populationData.map((d) => d.age))).sort(
+  (a, b) => a - b,
+);
+
+export function getYearlyData(year: number) {
+  const filtered = populationData.filter((d) => d.year === year);
+
+  // Format for Recharts: { age: 0, male: 123, female: 456, maleNegative: -123 }
+  const formatted = ages.map((age) => {
+    const male =
+      filtered.find((d) => d.age === age && d.sex === 1)?.people || 0;
+    const female =
+      filtered.find((d) => d.age === age && d.sex === 2)?.people || 0;
+    return {
+      age: age.toString(),
+      male,
+      female,
+      maleNegative: -male,
+    };
+  });
+
+  return formatted;
+}

@@ -1,0 +1,13 @@
+assets/**
+original_visualization/**
+node_modules/**
+.next/**
+dist/**
+build/**
+src/lib/data.ts
+src/app/globals.css
+src/components/PhoneFrame.tsx
+src/app/page.tsx
+mobile-version.png
+dev_server.log
+dev_server_2.log

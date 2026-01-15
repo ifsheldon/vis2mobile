@@ -1,0 +1,146 @@
+{
+  "mean_rating": 6.283467202141901,
+  "bins": [
+    {
+      "bin_start": 0.0,
+      "bin_end": 0.5,
+      "bin_label": "0.0-0.5",
+      "count": 0,
+      "cumulative": 0
+    },
+    {
+      "bin_start": 0.5,
+      "bin_end": 1.0,
+      "bin_label": "0.5-1.0",
+      "count": 0,
+      "cumulative": 0
+    },
+    {
+      "bin_start": 1.0,
+      "bin_end": 1.5,
+      "bin_label": "1.0-1.5",
+      "count": 1,
+      "cumulative": 1
+    },
+    {
+      "bin_start": 1.5,
+      "bin_end": 2.0,
+      "bin_label": "1.5-2.0",
+      "count": 4,
+      "cumulative": 5
+    },
+    {
+      "bin_start": 2.0,
+      "bin_end": 2.5,
+      "bin_label": "2.0-2.5",
+      "count": 17,
+      "cumulative": 22
+    },
+    {
+      "bin_start": 2.5,
+      "bin_end": 3.0,
+      "bin_label": "2.5-3.0",
+      "count": 26,
+      "cumulative": 48
+    },
+    {
+      "bin_start": 3.0,
+      "bin_end": 3.5,
+      "bin_label": "3.0-3.5",
+      "count": 46,
+      "cumulative": 94
+    },
+    {
+      "bin_start": 3.5,
+      "bin_end": 4.0,
+      "bin_label": "3.5-4.0",
+      "count": 54,
+      "cumulative": 148
+    },
+    {
+      "bin_start": 4.0,
+      "bin_end": 4.5,
+      "bin_label": "4.0-4.5",
+      "count": 85,
+      "cumulative": 233
+    },
+    {
+      "bin_start": 4.5,
+      "bin_end": 5.0,
+      "bin_label": "4.5-5.0",
+      "count": 188,
+      "cumulative": 421
+    },
+    {
+      "bin_start": 5.0,
+      "bin_end": 5.5,
+      "bin_label": "5.0-5.5",
+      "count": 255,
+      "cumulative": 676
+    },
+    {
+      "bin_start": 5.5,
+      "bin_end": 6.0,
+      "bin_label": "5.5-6.0",
+      "count": 378,
+      "cumulative": 1054
+    },
+    {
+      "bin_start": 6.0,
+      "bin_end": 6.5,
+      "bin_label": "6.0-6.5",
+      "count": 480,
+      "cumulative": 1534
+    },
+    {
+      "bin_start": 6.5,
+      "bin_end": 7.0,
+      "bin_label": "6.5-7.0",
+      "count": 505,
+      "cumulative": 2039
+    },
+    {
+      "bin_start": 7.0,
+      "bin_end": 7.5,
+      "bin_label": "7.0-7.5",
+      "count": 433,
+      "cumulative": 2472
+    },
+    {
+      "bin_start": 7.5,
+      "bin_end": 8.0,
+      "bin_label": "7.5-8.0",
+      "count": 308,
+      "cumulative": 2780
+    },
+    {
+      "bin_start": 8.0,
+      "bin_end": 8.5,
+      "bin_label": "8.0-8.5",
+      "count": 160,
+      "cumulative": 2940
+    },
+    {
+      "bin_start": 8.5,
+      "bin_end": 9.0,
+      "bin_label": "8.5-9.0",
+      "count": 44,
+      "cumulative": 2984
+    },
+    {
+      "bin_start": 9.0,
+      "bin_end": 9.5,
+      "bin_label": "9.0-9.5",
+      "count": 4,
+      "cumulative": 2988
+    },
+    {
+      "bin_start": 9.5,
+      "bin_end": 10.0,
+      "bin_label": "9.5-10.0",
+      "count": 0,
+      "cumulative": 2988
+    }
+  ],
+  "total_count": 2988
+}

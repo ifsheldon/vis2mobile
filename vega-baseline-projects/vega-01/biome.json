@@ -7,7 +7,19 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]
+    "includes": [
+      "**",
+      "!node_modules",
+      "!.next",
+      "!dist",
+      "!build",
+      "!assets",
+      "!original_visualization",
+      "!mobile-version.png",
+      "!*.py",
+      "!*.json",
+      "!bun.lock"
+    ]
   },
   "formatter": {
     "enabled": true,
