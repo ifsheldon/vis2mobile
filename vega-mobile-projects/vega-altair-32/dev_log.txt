@@ -1,0 +1,2 @@
+$ next dev --port "12605"
+error: script "dev" was terminated by signal SIGHUP (Terminal hung up)
