@@ -2,12 +2,10 @@
 
 This is a template for transforming a visualization tailored for desktop to a mobile version.
 
-You should implement the mobile version of the visualization in the `src/components/Visualization.tsx` file.
+You should implement the mobile-friendly version of the visualization in the `src/components/Visualization.tsx` file.
 
 Carefully read the following files for instructions and more information:
 
-- `transform-plan.md`: the detailed plan for transforming the visualization to a mobile version. YOU SHOULD FOLLOW THIS PLAN.
-- `mobile-vis-design-action-space.md`: high-level description of the space for the actions that an agent can take to transform the visualization to a mobile version
 - `original_visualization`:
   - `desktop.{html|svg}`: the original source code of the visualization that is tailored for desktop.
   - `desktop.png`: the rendered original visualization that is tailored for desktop.
