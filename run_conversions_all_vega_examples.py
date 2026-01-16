@@ -37,7 +37,7 @@ PROJECTS = [
     # "vega-altair-07",  # finished
     # "vega-altair-08",  # finished
     # "vega-altair-09",  # finished
-    "vega-altair-10",  # failed: bun install failed
+    # "vega-altair-10",  # finished
     # "vega-altair-11",  # finished
     # "vega-altair-12",  # finished
     # "vega-altair-13",  # finished
@@ -51,47 +51,47 @@ PROJECTS = [
     # "vega-altair-21",  # finished
     # "vega-altair-22",  # finished
     # "vega-altair-23",  # finished
-    "vega-altair-24",  # failed: gemini failed
+    # "vega-altair-24",  # finished
     # "vega-altair-25",  # finished
     # "vega-altair-26",  # finished
-    "vega-altair-27",  # failed: gemini failed
-    "vega-altair-28",  # failed: gemini failed
-    "vega-altair-29",  # failed: gemini failed
-    "vega-altair-30",  # failed: gemini failed
+    # "vega-altair-27",  # finished
+    "vega-altair-28",  # failed: gemini failed with code -15
+    # "vega-altair-29",  # finished
+    "vega-altair-30",  # failed: gemini failed with code -15
     # "vega-altair-31",  # finished
-    "vega-altair-32",  # failed: bun install failed
-    "vega-altair-33",  # failed: bun install failed
+    "vega-altair-32",  # failed: bun install failed with code 1
+    "vega-altair-33",  # failed: bun install failed with code 1
     # "vega-altair-34",  # finished
     # "vega-altair-35",  # finished
     # "vega-altair-36",  # finished
-    "vega-altair-37",  # failed: gemini failed
-    "vega-altair-38",  # failed: gemini failed
-    "vega-altair-39",  # failed: gemini failed
-    "vega-altair-40",  # failed: gemini failed
-    "vega-altair-41",  # failed: gemini failed
+    # "vega-altair-37",  # finished
+    "vega-altair-38",  # failed: gemini failed with code -15
+    "vega-altair-39",  # failed: gemini failed with code -15
+    # "vega-altair-40",  # finished
+    # "vega-altair-41",  # finished
     # vega_lite
-    "vega-lite-01",  # failed: gemini failed
-    "vega-lite-02",  # failed: gemini failed
-    "vega-lite-03",  # failed: gemini failed
-    "vega-lite-04",  # failed: gemini failed
-    "vega-lite-05",  # failed: gemini failed
-    "vega-lite-06",  # failed: gemini failed
-    "vega-lite-07",  # failed: gemini failed
+    # "vega-lite-01",  # finished
+    # "vega-lite-02",  # finished
+    "vega-lite-03",  # failed: gemini failed with code 1
+    "vega-lite-04",  # failed: gemini failed with code -15
+    # "vega-lite-05",  # finished
+    "vega-lite-06",  # failed: gemini failed with code -15
+    "vega-lite-07",  # failed: gemini failed with code -15
     # "vega-lite-08",  # finished
-    "vega-lite-09",  # failed: gemini failed
-    "vega-lite-10",  # failed: gemini failed
-    "vega-lite-11",  # failed: gemini failed
-    "vega-lite-12",  # failed: gemini failed
-    "vega-lite-13",  # failed: gemini failed
-    "vega-lite-14",  # failed: gemini failed
-    "vega-lite-15",  # failed: gemini failed
-    "vega-lite-16",  # failed: gemini failed
-    "vega-lite-17",  # failed: gemini failed
-    "vega-lite-18",  # failed: gemini failed
-    "vega-lite-19",  # failed: gemini failed
-    "vega-lite-20",  # failed: gemini failed
-    "vega-lite-21",  # failed: gemini failed
-    "vega-lite-22",  # failed: gemini failed
+    "vega-lite-09",  # failed: gemini failed with code -15
+    # "vega-lite-10",  # finished
+    "vega-lite-11",  # failed: gemini failed with code -15
+    "vega-lite-12",  # failed: gemini failed with code -15
+    "vega-lite-13",  # failed: gemini failed with code -15
+    "vega-lite-14",  # failed: gemini failed with code -15
+    "vega-lite-15",  # failed: gemini failed with code -15
+    # "vega-lite-16",  # finished
+    # "vega-lite-17",  # finished
+    # "vega-lite-18",  # finished
+    "vega-lite-19",  # failed: gemini failed with code 1
+    # "vega-lite-20",  # finished
+    # "vega-lite-21",  # finished
+    # "vega-lite-22",  # finished
 ]
 
 # Number of concurrent projects to run
