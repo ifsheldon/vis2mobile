@@ -28,4 +28,8 @@ dev = [
 extend-exclude = [".venv", ".vscode", ".next", "public", "node_modules"]
 
 [tool.uv.workspace]
-members = ["mobile-vis-template"]
+members = [
+    "mobile-vis-template",
+    "vega-mobile-projects/*",
+    "vega-baseline-projects/*",
+]
