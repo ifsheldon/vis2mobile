@@ -3,6 +3,7 @@ export interface DisasterData {
   cost: number;
   labeled: boolean;
   label?: string;
+  _index_: number;
 }
 
 export const disasterData: DisasterData[] = [
