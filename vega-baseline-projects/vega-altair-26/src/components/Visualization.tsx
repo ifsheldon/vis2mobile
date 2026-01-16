@@ -96,7 +96,13 @@ export function Visualization() {
             y: {
               field: "price",
               type: "quantitative",
-              axis: { visible: false, minExtent: 60 },
+              axis: {
+                title: null,
+                labels: false,
+                ticks: false,
+                domain: false,
+                minExtent: 60,
+              },
             },
           },
         },
@@ -113,7 +119,6 @@ export function Visualization() {
 
     vegaEmbed(containerRef.current, spec, {
       actions: false,
-      responsive: true,
       renderer: "svg",
     }).catch(console.error);
   }, []);

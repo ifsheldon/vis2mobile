@@ -2,7 +2,8 @@
 
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import vegaEmbed, { type View } from "vega-embed";
+import vegaEmbed from "vega-embed";
+import type { View } from "vega";
 
 export function Visualization() {
 	const containerRef = useRef<HTMLDivElement>(null);

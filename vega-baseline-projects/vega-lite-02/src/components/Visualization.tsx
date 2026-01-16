@@ -76,7 +76,6 @@ export function Visualization() {
 
     vegaEmbed(containerRef.current, spec, {
       actions: false,
-      responsive: true,
     }).catch(console.error);
   }, []);
 

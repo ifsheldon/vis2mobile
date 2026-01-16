@@ -1,19 +1,24 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
 import { getYearlyData, years } from "@/lib/data";
 
 export function Visualization() {
+  const [mounted, setMounted] = useState(false);
   const [year, setYear] = useState(2000);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const data = useMemo(() => {
     return getYearlyData(year).map((item) => ({
@@ -72,87 +77,89 @@ export function Visualization() {
       </div>
 
       <div className="flex-1 min-h-0 p-2 pt-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={data}
-            layout="vertical"
-            stackOffset="sign"
-            margin={{ top: 0, right: 10, left: -20, bottom: 0 }}
-          >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              horizontal={false}
-              stroke="#e2e8f0"
-            />
-            <XAxis
-              type="number"
-              domain={[-12000000, 12000000]}
-              tickFormatter={(val) => `${Math.abs(val / 1000000)}M`}
-              tick={{ fontSize: 9, fill: "#94a3b8" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              dataKey="age"
-              type="category"
-              tick={{ fontSize: 10, fill: "#64748b", fontWeight: 500 }}
-              axisLine={false}
-              tickLine={false}
-              width={40}
-            />
-            <Tooltip
-              cursor={{ fill: "rgba(0,0,0,0.05)" }}
-              content={({ active, payload, label }) => {
-                if (active && payload && payload.length) {
-                  const male = payload.find((p) => p.dataKey === "maleNegative")
-                    ?.payload.maleDisplay;
-                  const female = payload.find((p) => p.dataKey === "female")
-                    ?.payload.femaleDisplay;
-                  return (
-                    <div className="bg-white p-2 border border-slate-100 shadow-lg rounded-md text-xs">
-                      <p className="font-bold text-slate-700 mb-1">
-                        Age Group: {label}
-                      </p>
-                      <div className="space-y-0.5">
-                        <p className="flex justify-between gap-4">
-                          <span className="text-[steelblue]">Male:</span>
-                          <span className="font-mono">
-                            {male?.toLocaleString()}
-                          </span>
+        {mounted && (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={data}
+              layout="vertical"
+              stackOffset="sign"
+              margin={{ top: 0, right: 10, left: -20, bottom: 0 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal={false}
+                stroke="#e2e8f0"
+              />
+              <XAxis
+                type="number"
+                domain={[-12000000, 12000000]}
+                tickFormatter={(val) => `${Math.abs(val / 1000000)}M`}
+                tick={{ fontSize: 9, fill: "#94a3b8" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                dataKey="age"
+                type="category"
+                tick={{ fontSize: 10, fill: "#64748b", fontWeight: 500 }}
+                axisLine={false}
+                tickLine={false}
+                width={40}
+              />
+              <Tooltip
+                cursor={{ fill: "rgba(0,0,0,0.05)" }}
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    const male = payload.find((p) => p.dataKey === "maleNegative")
+                      ?.payload.maleDisplay;
+                    const female = payload.find((p) => p.dataKey === "female")
+                      ?.payload.femaleDisplay;
+                    return (
+                      <div className="bg-white p-2 border border-slate-100 shadow-lg rounded-md text-xs">
+                        <p className="font-bold text-slate-700 mb-1">
+                          Age Group: {label}
                         </p>
-                        <p className="flex justify-between gap-4">
-                          <span className="text-[salmon]">Female:</span>
-                          <span className="font-mono">
-                            {female?.toLocaleString()}
-                          </span>
-                        </p>
-                        <p className="pt-1 border-top mt-1 flex justify-between gap-4 font-bold border-t border-slate-100">
-                          <span className="text-slate-500">Total:</span>
-                          <span className="font-mono text-slate-700">
-                            {((male || 0) + (female || 0)).toLocaleString()}
-                          </span>
-                        </p>
+                        <div className="space-y-0.5">
+                          <p className="flex justify-between gap-4">
+                            <span className="text-[steelblue]">Male:</span>
+                            <span className="font-mono">
+                              {male?.toLocaleString()}
+                            </span>
+                          </p>
+                          <p className="flex justify-between gap-4">
+                            <span className="text-[salmon]">Female:</span>
+                            <span className="font-mono">
+                              {female?.toLocaleString()}
+                            </span>
+                          </p>
+                          <p className="pt-1 border-top mt-1 flex justify-between gap-4 font-bold border-t border-slate-100">
+                            <span className="text-slate-500">Total:</span>
+                            <span className="font-mono text-slate-700">
+                              {((male || 0) + (female || 0)).toLocaleString()}
+                            </span>
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  );
-                }
-                return null;
-              }}
-            />
-            <Bar
-              dataKey="maleNegative"
-              stackId="stack"
-              fill="steelblue"
-              radius={[2, 0, 0, 2]}
-            />
-            <Bar
-              dataKey="female"
-              stackId="stack"
-              fill="salmon"
-              radius={[0, 2, 2, 0]}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Bar
+                dataKey="maleNegative"
+                stackId="stack"
+                fill="steelblue"
+                radius={[2, 0, 0, 2]}
+              />
+              <Bar
+                dataKey="female"
+                stackId="stack"
+                fill="salmon"
+                radius={[0, 2, 2, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
       </div>
 
       <div className="p-3 bg-white border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400">

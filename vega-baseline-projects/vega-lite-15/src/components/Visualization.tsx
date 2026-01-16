@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import vegaEmbed from "vega-embed";
 import type { VisualizationSpec } from "vega-embed";
+import vegaEmbed from "vega-embed";
 
 export function Visualization() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -143,7 +143,7 @@ export function Visualization() {
           tickSize: 5,
         },
         axisY: {
-          title: "Price ($)",
+          title: "Price ($)" as any,
           labelFontSize: 11,
           titleFontSize: 13,
           grid: true,
@@ -156,7 +156,7 @@ export function Visualization() {
           titleFontSize: 13,
           columns: 3,
           symbolType: "stroke",
-          title: "Stock Symbol",
+          title: "Stock Symbol" as any,
         },
         view: { stroke: null },
       },
@@ -164,7 +164,6 @@ export function Visualization() {
 
     vegaEmbed(containerRef.current, spec, {
       actions: false,
-      responsive: true,
     }).catch(console.error);
   }, []);
 

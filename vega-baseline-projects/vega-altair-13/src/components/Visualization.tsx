@@ -143,9 +143,9 @@ export function Visualization() {
                 borderRadius: "8px",
                 border: "1px solid #ccc",
               }}
-              formatter={(value: number, name: string) => [
-                formatPopulation(value),
-                name === "male" ? "Male" : "Female",
+              formatter={(value: any, name: any) => [
+                formatPopulation(Number(value)),
+                name,
               ]}
               labelFormatter={(label) => `Age: ${label}`}
             />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import vegaEmbed from "vega-embed";
+import vegaEmbed, { type VisualizationSpec } from "vega-embed";
 import { penguinsData } from "@/lib/penguins_data";
 
 export function Visualization() {
@@ -10,7 +10,7 @@ export function Visualization() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const spec: any = {
+    const spec: VisualizationSpec = {
       $schema: "https://vega.github.io/schema/vega-lite/v5.json",
       description: "Density plots of penguin measurements",
       data: {
@@ -128,7 +128,6 @@ export function Visualization() {
 
     vegaEmbed(containerRef.current, spec, {
       actions: false,
-      responsive: true,
     }).catch(console.error);
   }, []);
 

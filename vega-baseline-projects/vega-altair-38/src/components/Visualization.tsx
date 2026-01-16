@@ -1,7 +1,6 @@
 "use client";
 
-import processedData from "@/lib/processed_data.json";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import {
   CartesianGrid,
   ComposedChart,
@@ -12,15 +11,16 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import processedData from "@/lib/processed_data.json";
 
 interface TooltipProps {
   active?: boolean;
-  payload?: any[];
-  label?: any;
+  payload?: { value: number }[];
+  label?: number;
 }
 
 const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
-  if (active && payload && payload.length) {
+  if (active && payload && payload.length && label !== undefined) {
     const date = new Date(label);
     return (
       <div className="bg-white p-3 border border-zinc-200 shadow-lg rounded-lg text-sm">

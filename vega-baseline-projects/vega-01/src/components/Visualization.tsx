@@ -7,7 +7,7 @@ export function Visualization() {
   const containerRef = useRef<HTMLDivElement>(null);
   const controlsRef = useRef<HTMLDivElement>(null);
 
-  const spec: unknown = {
+  const spec = {
     $schema: "https://vega.github.io/schema/vega/v6.json",
     description:
       "Interactive cross-filtering among histograms of flight statistics.",
@@ -649,7 +649,8 @@ export function Visualization() {
 
   useEffect(() => {
     if (containerRef.current && controlsRef.current) {
-      vegaEmbed(containerRef.current, spec, {
+      // biome-ignore lint/suspicious/noExplicitAny: Vega spec has properties like 'name' on Axis that are valid in Vega but not in current types
+      vegaEmbed(containerRef.current, spec as any, {
         actions: false,
         width: containerRef.current.clientWidth - 65,
         bind: controlsRef.current,

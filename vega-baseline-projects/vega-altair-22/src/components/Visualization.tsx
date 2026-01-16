@@ -6,13 +6,8 @@ import type { VisualizationSpec } from "vega-embed";
 
 import data from "../lib/data.json";
 
-
-
 export function Visualization() {
-
   const spec: VisualizationSpec = {
-
-
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
 
     description:

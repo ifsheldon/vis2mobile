@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import vegaEmbed from "vega-embed";
+import vegaEmbed, { VisualizationSpec } from "vega-embed";
 
 export function Visualization() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -9,7 +9,7 @@ export function Visualization() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const spec = {
+    const spec: VisualizationSpec = {
       $schema: "https://vega.github.io/schema/vega-lite/v5.json",
       description:
         "Source: https://vega.github.io/vega-lite/examples/layer_text_heatmap.html ",

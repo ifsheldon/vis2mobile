@@ -1,28 +1,28 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import embed from "vega-embed";
 import type { VisualizationSpec } from "vega-embed";
+import embed from "vega-embed";
+
+const data = [
+  { label: "Begin", amount: 4000 },
+  { label: "Jan", amount: 1707 },
+  { label: "Feb", amount: -1425 },
+  { label: "Mar", amount: -1030 },
+  { label: "Apr", amount: 1812 },
+  { label: "May", amount: -1067 },
+  { label: "Jun", amount: -1481 },
+  { label: "Jul", amount: 1228 },
+  { label: "Aug", amount: 1176 },
+  { label: "Sep", amount: 1146 },
+  { label: "Oct", amount: 1205 },
+  { label: "Nov", amount: -1388 },
+  { label: "Dec", amount: 1492 },
+  { label: "End", amount: 0 },
+];
 
 export function Visualization() {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const data = [
-    { label: "Begin", amount: 4000 },
-    { label: "Jan", amount: 1707 },
-    { label: "Feb", amount: -1425 },
-    { label: "Mar", amount: -1030 },
-    { label: "Apr", amount: 1812 },
-    { label: "May", amount: -1067 },
-    { label: "Jun", amount: -1481 },
-    { label: "Jul", amount: 1228 },
-    { label: "Aug", amount: 1176 },
-    { label: "Sep", amount: 1146 },
-    { label: "Oct", amount: 1205 },
-    { label: "Nov", amount: -1388 },
-    { label: "Dec", amount: 1492 },
-    { label: "End", amount: 0 },
-  ];
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -168,10 +168,10 @@ export function Visualization() {
         view: { stroke: null },
         font: "system-ui, -apple-system, sans-serif",
       },
-    } as any;
+    };
 
     embed(containerRef.current, spec, { actions: false });
-  }, [data]);
+  }, []);
 
   return (
     <div className="w-full h-full flex flex-col bg-white overflow-hidden">

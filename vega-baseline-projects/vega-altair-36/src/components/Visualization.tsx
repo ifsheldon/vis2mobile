@@ -1,9 +1,8 @@
 "use client";
 
+import { Car, Filter, Info } from "lucide-react";
 import type React from "react";
-
 import { useEffect, useMemo, useState } from "react";
-
 import {
   Cell,
   ResponsiveContainer,
@@ -14,8 +13,6 @@ import {
   YAxis,
   ZAxis,
 } from "recharts";
-
-import { Car, Filter, Info } from "lucide-react";
 
 import carsDataRaw from "@/lib/cars.json";
 
@@ -65,13 +62,11 @@ export function Visualization() {
   const filteredData = useMemo(() => {
     return carsData
 
-      .filter(
-        (d) => {
-          const hp = d.Horsepower;
+      .filter((d) => {
+        const hp = d.Horsepower;
 
-          return hp !== null && hp >= hpRange[0] && hp <= hpRange[1];
-        },
-      )
+        return hp !== null && hp >= hpRange[0] && hp <= hpRange[1];
+      })
 
       .slice(0, 15); // Original spec limited to 15
   }, [hpRange]);

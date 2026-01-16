@@ -53,7 +53,9 @@ export function Visualization() {
 							tick={{ fontSize: 12 }}
 						/>
 						<Tooltip
-							formatter={(value: number) => value.toFixed(2)}
+							formatter={(value: any) =>
+								typeof value === "number" ? value.toFixed(2) : value
+							}
 							contentStyle={{
 								borderRadius: "8px",
 								border: "none",

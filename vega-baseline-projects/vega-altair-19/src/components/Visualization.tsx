@@ -93,7 +93,6 @@ export function Visualization() {
 
     vegaEmbed(visRef.current, spec, {
       actions: false,
-      theme: "pure",
     }).catch(console.error);
   }, []);
 

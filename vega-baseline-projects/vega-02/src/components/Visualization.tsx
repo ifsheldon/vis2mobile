@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import vegaEmbed from "vega-embed";
+import { useEffect, useRef } from "react";
+import vegaEmbed, { type VisualizationSpec } from "vega-embed";
 
 export function Visualization() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -9,7 +9,7 @@ export function Visualization() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const spec: any = {
+    const spec: VisualizationSpec = {
       $schema: "https://vega.github.io/schema/vega/v6.json",
       description:
         "An interactive scatter plot example supporting pan and zoom.",

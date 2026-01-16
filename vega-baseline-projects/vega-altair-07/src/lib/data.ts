@@ -2,7 +2,7 @@ export interface NonfarmData {
   month: string;
   nonfarm_change: number;
   nonfarm: number;
-  [key: string]: any;
+  [key: string]: number | string;
 }
 
 export const data: NonfarmData[] = [

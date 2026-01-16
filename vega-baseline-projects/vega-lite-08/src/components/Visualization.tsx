@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import vegaEmbed from "vega-embed";
+import type { TopLevelSpec } from "vega-lite";
 
 export function Visualization() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -9,7 +10,7 @@ export function Visualization() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const spec: any = {
+    const spec: TopLevelSpec = {
       $schema: "https://vega.github.io/schema/vega-lite/v6.json",
       description: "Binned heatmap of movie ratings.",
       data: { url: "/movies.json" },
@@ -91,7 +92,8 @@ export function Visualization() {
 
     vegaEmbed(containerRef.current, spec, {
       actions: false,
-      theme: "pure",
+      // biome-ignore lint/suspicious/noExplicitAny: Theme 'pure' is valid but not typed
+      theme: "pure" as any,
     }).catch(console.error);
   }, []);
 

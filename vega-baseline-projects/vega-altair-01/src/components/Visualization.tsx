@@ -143,7 +143,6 @@ export function Visualization() {
 
     vegaEmbed(containerRef.current, mobileSpec, {
       actions: false,
-      responsive: true,
     }).catch(console.error);
   }, []);
 

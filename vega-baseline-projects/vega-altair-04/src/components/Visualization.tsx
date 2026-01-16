@@ -56,7 +56,7 @@ export function Visualization() {
               width={45}
             />
             <Tooltip
-              formatter={(value: number) => `${(value * 100).toFixed(1)}%`}
+              formatter={(value: any) => `${(value * 100).toFixed(1)}%`}
               contentStyle={{
                 borderRadius: "12px",
                 border: "none",

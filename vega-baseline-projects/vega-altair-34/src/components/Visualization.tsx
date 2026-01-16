@@ -1,7 +1,7 @@
 "use client";
 
+import { Cell, Pie, PieChart, Tooltip } from "recharts";
 import { data } from "@/lib/data";
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 const COLORS = [
   "#3b82f6", // blue-500

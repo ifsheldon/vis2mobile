@@ -77,7 +77,9 @@ export function Visualization() {
             />
 
             <Tooltip
-              formatter={(value: number) => value.toFixed(1)}
+              formatter={(value) =>
+                typeof value === "number" ? value.toFixed(1) : (value ?? "")
+              }
               contentStyle={{
                 borderRadius: "8px",
                 border: "none",
@@ -118,7 +120,9 @@ export function Visualization() {
                 <LabelList
                   dataKey={site}
                   position="inside"
-                  formatter={(val: number) => (val > 40 ? val.toFixed(0) : "")}
+                  formatter={(val) =>
+                    typeof val === "number" && val > 40 ? val.toFixed(0) : ""
+                  }
                   style={{
                     fill: "#fff",
                     fontSize: "10px",
@@ -133,7 +137,9 @@ export function Visualization() {
               <LabelList
                 dataKey="total"
                 position="right"
-                formatter={(val: number) => val.toFixed(0)}
+                formatter={(val) =>
+                  typeof val === "number" ? val.toFixed(0) : (val ?? "")
+                }
                 style={{
                   fill: "#71717a",
                   fontSize: "10px",

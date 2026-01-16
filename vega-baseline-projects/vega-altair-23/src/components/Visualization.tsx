@@ -1,18 +1,18 @@
 "use client";
 
 import {
-  ComposedChart,
-  Bar,
   Area,
+  Bar,
+  CartesianGrid,
+  Cell,
+  ComposedChart,
+  Legend,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  type TooltipContentProps,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  ReferenceLine,
-  Legend,
-  Cell,
-  TooltipProps,
 } from "recharts";
 import processedData from "../lib/processed_data.json";
 
@@ -20,7 +20,10 @@ export function Visualization() {
   const { mean_rating, bins, total_count } = processedData;
 
   // Custom tooltip to show both frequency and cumulative percentage
-  const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: TooltipContentProps<number, string>) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       const percentage = ((data.cumulative / total_count) * 100).toFixed(1);
@@ -108,7 +111,7 @@ export function Visualization() {
                 offset: 10,
               }}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={CustomTooltip} />
 
             <Area
               yAxisId="right"

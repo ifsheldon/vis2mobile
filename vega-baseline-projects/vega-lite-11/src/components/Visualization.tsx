@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import vegaEmbed, { type VisualizationSpec } from "vega-embed";
 import { medians, values } from "@/lib/data";

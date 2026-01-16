@@ -47,8 +47,11 @@ export function Visualization() {
           <LineChart
             data={data}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-            onMouseMove={(e) => {
-              if (e.activePayload) {
+            onMouseMove={(
+              // biome-ignore lint/suspicious/noExplicitAny: recharts event type is complex
+              e: any,
+            ) => {
+              if (e?.activePayload) {
                 setHoveredX(e.activeLabel);
               }
             }}
@@ -75,7 +78,7 @@ export function Visualization() {
               domain={["auto", "auto"]}
             />
             <Tooltip
-              content={null} // Custom tooltip handled by the UI below
+              content={<div className="hidden" />} // Custom tooltip handled by the UI below
               trigger="click"
             />
             {hoveredX !== null && (

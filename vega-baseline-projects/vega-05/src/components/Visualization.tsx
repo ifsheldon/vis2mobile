@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import vegaEmbed from "vega-embed";
+import vegaEmbed, { type VisualizationSpec } from "vega-embed";
 
 export function Visualization() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -216,7 +216,7 @@ export function Visualization() {
       ],
     };
 
-    vegaEmbed(containerRef.current, spec, {
+    vegaEmbed(containerRef.current, spec as VisualizationSpec, {
       actions: false,
       renderer: "canvas",
     }).catch(console.error);

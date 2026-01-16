@@ -1,6 +1,7 @@
 export interface CategoryData {
   category: string;
   value: number;
+  [key: string]: string | number;
 }
 
 export const data: CategoryData[] = [

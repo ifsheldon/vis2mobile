@@ -15,7 +15,7 @@ import { observationData } from "@/lib/data";
 
 interface CustomTooltipProps {
   active?: boolean;
-  payload?: any[];
+  payload?: { value: number; [key: string]: unknown }[];
   label?: string;
 }
 

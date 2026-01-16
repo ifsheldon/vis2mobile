@@ -98,7 +98,7 @@ export function Visualization() {
       },
     };
 
-    vegaEmbed(containerRef.current, spec, { actions: false }).catch(
+    vegaEmbed(containerRef.current, spec as any, { actions: false }).catch(
       console.error,
     );
   }, []);

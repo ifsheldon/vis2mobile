@@ -132,7 +132,7 @@ export function Visualization() {
 
       <div className="flex-1 flex flex-col items-center justify-center min-h-[380px]">
         <div className="w-full flex justify-center">
-          <VegaEmbed spec={spec} options={{ actions: false }} />
+          <VegaEmbed spec={spec as any} options={{ actions: false }} />
         </div>
       </div>
 

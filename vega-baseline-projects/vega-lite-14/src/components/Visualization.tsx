@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import vegaEmbed from "vega-embed";
 import type { VisualizationSpec } from "vega-embed";
+import vegaEmbed from "vega-embed";
 import { weatherData } from "@/lib/weatherData";
 
 export function Visualization() {

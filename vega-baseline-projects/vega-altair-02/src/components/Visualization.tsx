@@ -57,7 +57,7 @@ export function Visualization() {
                 border: "none",
                 boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
               }}
-              formatter={(value: number, name: string) => {
+              formatter={(value: any, name: any) => {
                 if (name === "y1") return [value, "Base (0-50)"];
                 if (name === "y2") return [value, "Over (50+)"];
                 return [value, name];

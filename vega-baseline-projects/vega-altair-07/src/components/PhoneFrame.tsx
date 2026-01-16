@@ -1,5 +1,5 @@
 // DO NOT MODIFY THIS FILE
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface PhoneFrameProps {
   children: ReactNode;

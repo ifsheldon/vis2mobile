@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import vegaEmbed from "vega-embed";
+import vegaEmbed, { type VisualizationSpec } from "vega-embed";
 import gapminderData from "@/lib/gapminder.json";
 
 export function Visualization() {
@@ -12,7 +12,7 @@ export function Visualization() {
     if (!containerRef.current) return;
 
     try {
-      const spec: any = {
+      const spec: VisualizationSpec = {
         $schema: "https://vega.github.io/schema/vega-lite/v6.json",
         data: { values: gapminderData },
         width: 300,
@@ -174,8 +174,8 @@ export function Visualization() {
       }).catch((err) => {
         setError(err.message);
       });
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     }
   }, []);
 
