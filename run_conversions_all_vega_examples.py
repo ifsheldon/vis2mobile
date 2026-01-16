@@ -55,7 +55,7 @@ PROJECTS = [
     # "vega-altair-25",  # finished
     # "vega-altair-26",  # finished
     # "vega-altair-27",  # finished
-    "vega-altair-28",  # failed: gemini failed with code -15
+    # "vega-altair-28",  # failed: gemini failed with code -15
     # "vega-altair-29",  # finished
     "vega-altair-30",  # failed: gemini failed with code -15
     # "vega-altair-31",  # finished
@@ -65,30 +65,30 @@ PROJECTS = [
     # "vega-altair-35",  # finished
     # "vega-altair-36",  # finished
     # "vega-altair-37",  # finished
-    "vega-altair-38",  # failed: gemini failed with code -15
+    # "vega-altair-38",  # failed: gemini failed with code -15
     "vega-altair-39",  # failed: gemini failed with code -15
     # "vega-altair-40",  # finished
     # "vega-altair-41",  # finished
     # vega_lite
     # "vega-lite-01",  # finished
     # "vega-lite-02",  # finished
-    "vega-lite-03",  # failed: gemini failed with code 1
-    "vega-lite-04",  # failed: gemini failed with code -15
+    # "vega-lite-03",  # failed: gemini failed with code 1
+    # "vega-lite-04",  # failed: gemini failed with code -15
     # "vega-lite-05",  # finished
-    "vega-lite-06",  # failed: gemini failed with code -15
-    "vega-lite-07",  # failed: gemini failed with code -15
+    # "vega-lite-06",  # failed: gemini failed with code -15
+    # "vega-lite-07",  # failed: gemini failed with code -15
     # "vega-lite-08",  # finished
-    "vega-lite-09",  # failed: gemini failed with code -15
+    # "vega-lite-09",  # failed: gemini failed with code -15
     # "vega-lite-10",  # finished
-    "vega-lite-11",  # failed: gemini failed with code -15
-    "vega-lite-12",  # failed: gemini failed with code -15
-    "vega-lite-13",  # failed: gemini failed with code -15
-    "vega-lite-14",  # failed: gemini failed with code -15
-    "vega-lite-15",  # failed: gemini failed with code -15
+    # "vega-lite-11",  # failed: gemini failed with code -15
+    # "vega-lite-12",  # failed: gemini failed with code -15
+    # "vega-lite-13",  # failed: gemini failed with code -15
+    # "vega-lite-14",  # failed: gemini failed with code -15
+    # "vega-lite-15",  # failed: gemini failed with code -15
     # "vega-lite-16",  # finished
     # "vega-lite-17",  # finished
     # "vega-lite-18",  # finished
-    "vega-lite-19",  # failed: gemini failed with code 1
+    # "vega-lite-19",  # failed: gemini failed with code 1
     # "vega-lite-20",  # finished
     # "vega-lite-21",  # finished
     # "vega-lite-22",  # finished

@@ -1,57 +1,45 @@
-export interface PlanData {
-  sector: string;
-  republican: number;
-  passed: number;
-  democratic: number;
+export interface BulletData {
+  title: string;
+  subtitle: string;
+  ranges: number[];
+  measures: number[];
+  markers: number[];
 }
 
-export const data: PlanData[] = [
+export const data: BulletData[] = [
   {
-    "sector": "Small-business aid",
-    "republican": 200,
-    "passed": 1010,
-    "democratic": 0
+    title: "Revenue",
+    subtitle: "US$, in thousands",
+    ranges: [150, 225, 300],
+    measures: [220, 270],
+    markers: [250],
   },
   {
-    "sector": "Other measures",
-    "republican": 81,
-    "passed": 627,
-    "democratic": 302
+    title: "Profit",
+    subtitle: "%",
+    ranges: [20, 25, 30],
+    measures: [21, 23],
+    markers: [26],
   },
   {
-    "sector": "Business tax breaks",
-    "republican": 203,
-    "passed": 346,
-    "democratic": 36
+    title: "Order Size",
+    subtitle: "US$, average",
+    ranges: [350, 500, 600],
+    measures: [100, 320],
+    markers: [550],
   },
   {
-    "sector": "Stimulus checks",
-    "republican": 300,
-    "passed": 293,
-    "democratic": 436
+    title: "New Customers",
+    subtitle: "count",
+    ranges: [1400, 2000, 2500],
+    measures: [1000, 1650],
+    markers: [2100],
   },
   {
-    "sector": "Health care",
-    "republican": 111,
-    "passed": 277,
-    "democratic": 382
+    title: "Satisfaction",
+    subtitle: "out of 5",
+    ranges: [3.5, 4.25, 5],
+    measures: [3.2, 4.7],
+    markers: [4.4],
   },
-  {
-    "sector": "Unemployment benefits",
-    "republican": 110,
-    "passed": 274,
-    "democratic": 437
-  },
-  {
-    "sector": "State and local aid",
-    "republican": 105,
-    "passed": 256,
-    "democratic": 1118
-  },
-  {
-    "sector": "Safety net and other tax cuts",
-    "republican": 18,
-    "passed": 83,
-    "democratic": 736
-  }
 ];
