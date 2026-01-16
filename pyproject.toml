@@ -32,5 +32,5 @@ members = [
     "mobile-vis-template",
     "vega-mobile-projects/*",
     "vega-baseline-projects/*",
-    "html-baseline-projects/*",
+    "cicero-baseline-projects/*",
 ]

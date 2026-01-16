@@ -5,7 +5,7 @@
     "": {
       "name": "vis2mobile",
     },
-    "html-baseline-projects/bar": {
+    "cicero-baseline-projects/bar": {
       "name": "html_baseline-bar",
       "version": "0.1.0",
       "dependencies": {
@@ -25,7 +25,7 @@
         "typescript": "^5.9.3",
       },
     },
-    "html-baseline-projects/budgets": {
+    "cicero-baseline-projects/budgets": {
       "name": "html_baseline-budgets",
       "version": "0.1.0",
       "dependencies": {
@@ -44,7 +44,7 @@
         "typescript": "^5.9.3",
       },
     },
-    "html-baseline-projects/cost": {
+    "cicero-baseline-projects/cost": {
       "name": "html_baseline-cost",
       "version": "0.1.0",
       "dependencies": {
@@ -63,7 +63,7 @@
         "typescript": "^5.9.3",
       },
     },
-    "html-baseline-projects/french-election": {
+    "cicero-baseline-projects/french-election": {
       "name": "html_baseline-french-election",
       "version": "0.1.0",
       "dependencies": {
@@ -82,7 +82,7 @@
         "typescript": "^5.9.3",
       },
     },
-    "html-baseline-projects/kennedy": {
+    "cicero-baseline-projects/kennedy": {
       "name": "html_baseline-kennedy",
       "version": "0.1.0",
       "dependencies": {
@@ -101,7 +101,7 @@
         "typescript": "^5.9.3",
       },
     },
-    "html-baseline-projects/line": {
+    "cicero-baseline-projects/line": {
       "name": "html_baseline-line",
       "version": "0.1.0",
       "dependencies": {
@@ -121,7 +121,7 @@
         "typescript": "^5.9.3",
       },
     },
-    "html-baseline-projects/pie": {
+    "cicero-baseline-projects/pie": {
       "name": "html_baseline-pie",
       "version": "0.1.0",
       "dependencies": {
@@ -3424,19 +3424,19 @@
 
     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
 
-    "html_baseline-bar": ["html_baseline-bar@workspace:html-baseline-projects/bar"],
+    "html_baseline-bar": ["html_baseline-bar@workspace:cicero-baseline-projects/bar"],
 
-    "html_baseline-budgets": ["html_baseline-budgets@workspace:html-baseline-projects/budgets"],
+    "html_baseline-budgets": ["html_baseline-budgets@workspace:cicero-baseline-projects/budgets"],
 
-    "html_baseline-cost": ["html_baseline-cost@workspace:html-baseline-projects/cost"],
+    "html_baseline-cost": ["html_baseline-cost@workspace:cicero-baseline-projects/cost"],
 
-    "html_baseline-french-election": ["html_baseline-french-election@workspace:html-baseline-projects/french-election"],
+    "html_baseline-french-election": ["html_baseline-french-election@workspace:cicero-baseline-projects/french-election"],
 
-    "html_baseline-kennedy": ["html_baseline-kennedy@workspace:html-baseline-projects/kennedy"],
+    "html_baseline-kennedy": ["html_baseline-kennedy@workspace:cicero-baseline-projects/kennedy"],
 
-    "html_baseline-line": ["html_baseline-line@workspace:html-baseline-projects/line"],
+    "html_baseline-line": ["html_baseline-line@workspace:cicero-baseline-projects/line"],
 
-    "html_baseline-pie": ["html_baseline-pie@workspace:html-baseline-projects/pie"],
+    "html_baseline-pie": ["html_baseline-pie@workspace:cicero-baseline-projects/pie"],
 
     "iconv-lite": ["iconv-lite@0.6.3", "", { "dependencies": { "safer-buffer": ">= 2.1.2 < 3.0.0" } }, "sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw=="],
 
