@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="icon" type="image/png" href="image/cicero-icon-32x32.png" sizes="16x16" />
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <style>
+    html,
+    body,
+    div,
+    input,
+    span,
+    textarea,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    svg,
+    text {
+      font-family: "Arial", sans-serif !important;
+    }
+
+    pre.code {
+      white-space: pre-wrap;
+      font-size: 12px;
+    }
+
+    pre.code::before {
+      counter-reset: listing;
+    }
+
+    pre.code code {
+      counter-increment: listing;
+    }
+
+    pre.code code::before {
+      content: counter(listing);
+      display: inline-block;
+      width: 2.5em;
+      /* now works */
+      padding-left: auto;
+      /* now works */
+      margin-left: auto;
+      /* now works */
+      text-align: left;
+      /* now works */
+      color: #aaaaaa;
+    }
+
+    pre.code annotate {
+      color: #00aa00;
+      padding-left: 1em;
+    }
+
+    #fronto-view,
+    .fronto-view-transform {
+      border-radius: .25rem;
+      background-color: white;
+      overflow: scroll;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      width: fit-content;
+      padding-left: 20px;
+      padding-right: 20px;
+      border: 1px solid rgba(0, 0, 0, .125);
+    }
+
+    div[data-role=fronto-view] {
+      position: absolute;
+    }
+
+    .card-header {
+      font-size: 0.8rem;
+    }
+
+    .card-header strong {
+      font-weight: 500;
+    }
+  </style>
+  <title>Justice Kennedy (Desktop → Mobile)</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 pt-3">
+        <div class="card collapse" id="desktop-view-spec">
+          <div class="card-body pb-0">
+            <pre class="code">
+<code>{</code>
+<code>  "name": "kennedy",</code>
+<code>  "layout": {</code>
+<code>    "width": 800,</code>
+<code>    "height": 180,</code>
+<code>    "composition": "single",</code>
+<code>    "column": [</code>
+<code>      {</code>
+<code>        "field": "percentage",</code>
+<code>        "scale": {</code>
+<code>          "domain": [</code>
+<code>            35,</code>
+<code>            95</code>
+<code>          ]</code>
+<code>        }</code>
+<code>      }</code>
+<code>    ],</code>
+<code>    "haxis": {</code><annotate>// horizontal axis design</annotate>
+<code>      "grid": true,</code>
+<code>      "gridColor": "#cccccc",</code>
+<code>      "gridDash": [</code>
+<code>        3,</code>
+<code>        1</code>
+<code>      ]</code>
+<code>    }</code>
+<code>  },</code>
+<code>  "layer": [</code>
+<code>    {</code>
+<code>      "mark": {</code>
+<code>        "type": "circle",</code><annotate>// dot mark</annotate>
+<code>        "color": {</code>
+<code>          "value": "black"</code>
+<code>        },</code>
+<code>        "size": {</code>
+<code>          "value": 80</code>
+<code>        }</code>
+<code>      },</code>
+<code>      "text": [</code><annotate>// axis values</annotate>
+<code>        {</code>
+<code>          "type": "on-axis",</code>
+<code>          "field": "percentage",</code>
+<code>          "values": [</code>
+<code>            40,</code>
+<code>            50,</code>
+<code>            60,</code>
+<code>            70,</code>
+<code>            80,</code>
+<code>            90</code>
+<code>          ],</code>
+<code>          "orient": "top",</code>
+<code>          "padding": 10,</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontSize": 13,</code>
+<code>              "color": "black",</code>
+<code>              "expression": "datum.value + '%'"</code>
+<code>            }</code>
+<code>          ]</code>
+<code>        },</code>
+<code>        {</code><annotate>// general positionoing of mark labels</annotate>
+<code>          "type": "on-mark",</code>
+<code>          "field": "justice",</code>
+<code>          "orient": "bottom-center",</code>
+<code>          "dy": 20,</code>
+<code>          "dx": -2,</code>
+<code>          "values": [</code>
+<code>            "Gorsuch",</code>
+<code>            "White",</code>
+<code>            "O'Connor",</code>
+<code>            "Roberts",</code>
+<code>            "Thomas",</code>
+<code>            "Scalia",</code>
+<code>            "Alito",</code>
+<code>            "Blackmun",</code>
+<code>            "Souter",</code>
+<code>            "Brennan",</code>
+<code>            "Kagan",</code>
+<code>            "Sotomayor",</code>
+<code>            "Marshall"</code>
+<code>          ],</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontWeight": 100,</code>
+<code>              "fontSize": 13</code>
+<code>            }</code>
+<code>          ],</code>
+<code>          "angle": 45</code>
+<code>        },</code>
+<code>        {</code><annotate>// specific positioning of overlapping mark labels</annotate>
+<code>          "type": "on-mark",</code>
+<code>          "field": "justice",</code>
+<code>          "orient": "bottom-center",</code>
+<code>          "dy": 53,</code>
+<code>          "dx": 29,</code>
+<code>          "values": [</code>
+<code>            "Rehnquist"</code>
+<code>          ],</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontWeight": 100,</code>
+<code>              "fontSize": 13,</code>
+<code>              "expression": "', ' + datum.value"</code>
+<code>            }</code>
+<code>          ],</code>
+<code>          "angle": 45</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-mark",</code>
+<code>          "field": "justice",</code>
+<code>          "orient": "bottom-center",</code>
+<code>          "dy": 63,</code>
+<code>          "dx": 39,</code>
+<code>          "values": [</code>
+<code>            "Breyer"</code>
+<code>          ],</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontWeight": 100,</code>
+<code>              "fontSize": 13,</code>
+<code>              "expression": "', ' + datum.value"</code>
+<code>            }</code>
+<code>          ],</code>
+<code>          "angle": 45</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-mark",</code>
+<code>          "field": "justice",</code>
+<code>          "orient": "bottom-center",</code>
+<code>          "dy": 54,</code>
+<code>          "dx": 30,</code>
+<code>          "values": [</code>
+<code>            "Stevens"</code>
+<code>          ],</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontWeight": 100,</code>
+<code>              "fontSize": 13,</code>
+<code>              "expression": "', ' + datum.value"</code>
+<code>            }</code>
+<code>          ],</code>
+<code>          "angle": 45</code>
+<code>        },</code>
+<code>        {</code>
+<code>          "type": "on-mark",</code>
+<code>          "field": "justice",</code>
+<code>          "orient": "bottom-center",</code>
+<code>          "dy": 55,</code>
+<code>          "dx": 33,</code>
+<code>          "values": [</code>
+<code>            "Ginsburg"</code>
+<code>          ],</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontWeight": 100,</code>
+<code>              "fontSize": 13,</code>
+<code>              "expression": "', ' + datum.value"</code>
+<code>            }</code>
+<code>          ],</code>
+<code>          "angle": 45</code>
+<code>        },</code>
+<code>        {</code><annotate>// special design for a mark label (Kennedy)</annotate>
+<code>          "type": "on-mark",</code>
+<code>          "field": "justice",</code>
+<code>          "orient": "bottom-center",</code>
+<code>          "dy": 15,</code>
+<code>          "dx": -7,</code>
+<code>          "width": 65,</code>
+<code>          "values": [</code>
+<code>            "Kennedy"</code>
+<code>          ],</code>
+<code>          "items": [</code>
+<code>            {</code>
+<code>              "fontWeight": 900,</code>
+<code>              "fontSize": 13</code>
+<code>            }</code>
+<code>          ],</code>
+<code>          "fill": "#ffe100",</code>
+<code>          "padding": 5,</code>
+<code>          "radius": 5,</code>
+<code>          "angle": 45</code>
+<code>        }</code>
+<code>      ]</code>
+<code>    }</code>
+<code>  ],</code>
+<code>  "nondata": {</code>
+<code>    "items": [</code>
+<code>      {</code><annotate>// manually drawing an axis domain line</annotate>
+<code>        "name": "domain",</code>
+<code>        "type": "mark",</code>
+<code>        "mark": {</code>
+<code>          "shape": "rule",</code>
+<code>          "stroke": "black"</code>
+<code>        },</code>
+<code>        "width": 800,</code>
+<code>        "height": 1,</code>
+<code>        "x": 0,</code>
+<code>        "y": 106</code>
+<code>      },</code>
+<code>      {</code><annotate>// nondata annotation</annotate>
+<code>        "type": "text",</code>
+<code>        "x": 9,</code>
+<code>        "y": 75,</code>
+<code>        "width": 240,</code>
+<code>        "text": [</code>
+<code>          {</code>
+<code>            "align": "left",</code>
+<code>            "fontColor": "#999999",</code>
+<code>            "text": "Percentage of votes in the majority,<br/>over each justice’s career",</code>
+<code>            "lineHeight": "120%"</code>
+<code>          }</code>
+<code>        ],</code>
+<code>        "box": {</code>
+<code>          "fill": "white"</code>
+<code>        }</code>
+<code>      }</code>
+<code>    ]</code>
+<code>  },</code>
+<code>  "title": {</code><annotate>// title</annotate>
+<code>    "width": 350,</code>
+<code>    "items": [</code>
+<code>      {</code>
+<code>        "text": "In close decisions, Kennedy voted in the majority 76 percent of the time.",</code>
+<code>        "fontSize": 22,</code>
+<code>        "fontWeight": 700,</code>
+<code>        "offset": 30</code>
+<code>      }</code>
+<code>    ]</code>
+<code>  },</code>
+<code>  "data": [</code><annotate>// dataset for the visualization</annotate>
+<code>    {</code>
+<code>      "justice": "Gorsuch",</code>
+<code>      "percentage": 82,</code>
+<code>      "_index_": 0</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Kennedy",</code>
+<code>      "percentage": 76,</code>
+<code>      "_index_": 1</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "White",</code>
+<code>      "percentage": 68,</code>
+<code>      "_index_": 2</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "O'Connor",</code>
+<code>      "percentage": 66,</code>
+<code>      "_index_": 3</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Roberts",</code>
+<code>      "percentage": 65,</code>
+<code>      "_index_": 4</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Rehnquist",</code>
+<code>      "percentage": 65,</code>
+<code>      "_index_": 5</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Thomas",</code>
+<code>      "percentage": 63,</code>
+<code>      "_index_": 6</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Scalia",</code>
+<code>      "percentage": 62,</code>
+<code>      "_index_": 7</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Alito",</code>
+<code>      "percentage": 61,</code>
+<code>      "_index_": 8</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Blackmun",</code>
+<code>      "percentage": 57,</code>
+<code>      "_index_": 9</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Souter",</code>
+<code>      "percentage": 47,</code>
+<code>      "_index_": 10</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Stevens",</code>
+<code>      "percentage": 46,</code>
+<code>      "_index_": 11</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Brennan",</code>
+<code>      "percentage": 46,</code>
+<code>      "_index_": 12</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Kagan",</code>
+<code>      "percentage": 45,</code>
+<code>      "_index_": 13</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Sotomayor",</code>
+<code>      "percentage": 44,</code>
+<code>      "_index_": 14</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Breyer",</code>
+<code>      "percentage": 44,</code>
+<code>      "_index_": 15</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Ginsburg",</code>
+<code>      "percentage": 42,</code>
+<code>      "_index_": 16</code>
+<code>    },</code>
+<code>    {</code>
+<code>      "justice": "Marshall",</code>
+<code>      "percentage": 42,</code>
+<code>      "_index_": 17</code>
+<code>    }</code>
+<code>  ]</code>
+<code>}</code>
+</pre>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 pt-3">
+        <div id="fronto-view" class="mb-3" style="position: relative; width: 900px; height: 320px;">
+          <div id="title-kennedy" data-role="fronto-title">
+            <div style="position: relative; font-size: 14px;">
+              <div data-role="title"
+                style="width: 400px; margin-left: auto; margin-right: auto; margin-bottom: 30px; font-size: 22px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 700;">
+                In close decisions, Kennedy voted in the majority 76 percent of the time.</div>
+            </div>
+          </div>
+          <div id="view-kennedy" data-role="fronto-view" class="vega-embed"
+            style="left: 50%; transform: translate(-50%);">
+            <div class="chart-wrapper fit-x fit-y" role="graphics-document" aria-roledescription="visualization"
+              aria-label="Vega visualization" style="cursor: default; position: relative;"><svg
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                class="marks" width="810" height="190" viewBox="0 0 810 190" style="background-color: white;">
+                <g fill="none" stroke-miterlimit="10" transform="translate(5,28)">
+                  <g class="mark-group role-frame root" role="graphics-object"
+                    aria-roledescription="group mark container">
+                    <g transform="translate(0,0)">
+                      <path class="background" aria-hidden="true" d="M0,0h800v157h-800Z" fill="transparent"></path>
+                      <g>
+                        <g class="mark-group role-axis" aria-hidden="true">
+                          <g transform="translate(0.5,0.5)">
+                            <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path>
+                            <g>
+                              <g class="mark-rule role-axis-grid" pointer-events="none">
+                                <line transform="translate(67,0)" x2="0" y2="157" stroke="#cccccc" stroke-width="1"
+                                  stroke-dasharray="3,1" opacity="1"></line>
+                                <line transform="translate(200,0)" x2="0" y2="157" stroke="#cccccc" stroke-width="1"
+                                  stroke-dasharray="3,1" opacity="1"></line>
+                                <line transform="translate(333,0)" x2="0" y2="157" stroke="#cccccc" stroke-width="1"
+                                  stroke-dasharray="3,1" opacity="1"></line>
+                                <line transform="translate(467,0)" x2="0" y2="157" stroke="#cccccc" stroke-width="1"
+                                  stroke-dasharray="3,1" opacity="1"></line>
+                                <line transform="translate(600,0)" x2="0" y2="157" stroke="#cccccc" stroke-width="1"
+                                  stroke-dasharray="3,1" opacity="1"></line>
+                                <line transform="translate(733,0)" x2="0" y2="157" stroke="#cccccc" stroke-width="1"
+                                  stroke-dasharray="3,1" opacity="1"></line>
+                              </g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                            </path>
+                          </g>
+                        </g>
+                        <g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis"
+                          aria-label="X-axis for a linear scale with values from 35 to 95">
+                          <g transform="translate(0.5,0.5)">
+                            <path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"></path>
+                            <g>
+                              <g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="middle"
+                                  transform="translate(66.66666666666666,-13)" font-family="sans-serif" font-size="13px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p1660</text><text text-anchor="middle"
+                                  transform="translate(200,-13)" font-family="sans-serif" font-size="13px" fill="#000"
+                                  fill-opacity="0.5" opacity="0">$-x-p1691</text><text text-anchor="middle"
+                                  transform="translate(333.33333333333337,-13)" font-family="sans-serif"
+                                  font-size="13px" fill="#000" fill-opacity="0.5" opacity="0">$-x-p1722</text><text
+                                  text-anchor="middle" transform="translate(466.6666666666667,-13)"
+                                  font-family="sans-serif" font-size="13px" fill="#000" fill-opacity="0.5"
+                                  opacity="0">$-x-p1753</text><text text-anchor="middle" transform="translate(600,-13)"
+                                  font-family="sans-serif" font-size="13px" fill="#000" fill-opacity="0.5"
+                                  opacity="0">$-x-p1784</text><text text-anchor="middle"
+                                  transform="translate(733.3333333333333,-13)" font-family="sans-serif" font-size="13px"
+                                  fill="#000" fill-opacity="0.5" opacity="0">$-x-p1815</text></g>
+                            </g>
+                            <path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none">
+                            </path>
+                          </g>
+                        </g>
+                        <g class="mark-symbol role-mark mark_0_marks" role="graphics-object"
+                          aria-roledescription="symbol mark container">
+                          <path aria-label="percentage: 82" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(626.6666666666666,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 76" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(546.6666666666666,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 68" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(440.00000000000006,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 66" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(413.33333333333337,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 65" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(400,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 65" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(400,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 63" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(373.3333333333333,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 62" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(360,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 61" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(346.6666666666667,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 57" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(293.3333333333333,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 47" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(160,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 46" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(146.66666666666666,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 46" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(146.66666666666666,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 45" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(133.33333333333331,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 44" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(120,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 44" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(120,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 42" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(93.33333333333333,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                          <path aria-label="percentage: 42" role="graphics-symbol" aria-roledescription="circle"
+                            transform="translate(93.33333333333333,78.5)"
+                            d="M4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,-4.47213595499958,0A4.47213595499958,4.47213595499958,0,1,1,4.47213595499958,0"
+                            fill="black" stroke-width="2" opacity="0.7"></path>
+                        </g>
+                      </g>
+                      <path class="foreground" aria-hidden="true" d="" display="none"></path>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+              <form class="vega-bindings"></form>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-0"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 631.667px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Gorsuch</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-2"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 445px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">White</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-3"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 418.333px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">O'Connor</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-4"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 405px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Roberts</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-6"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 378.333px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Thomas</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-7"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 365px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Scalia</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-8"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 351.667px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Alito</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-9"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 298.333px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Blackmun</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-10"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 165px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Souter</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-12"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 151.667px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Brennan</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-13"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 138.333px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Kagan</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-14"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 125px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Sotomayor</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-17"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 98.3333px; top: 110.972px; transform: translateX(-2px) translateY(20px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">Marshall</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-5"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 405px; top: 110.972px; transform: translateX(29px) translateY(53px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">, Rehnquist</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-15"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 125px; top: 110.972px; transform: translateX(39px) translateY(63px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">, Breyer</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-11"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 151.667px; top: 110.972px; transform: translateX(30px) translateY(54px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">, Stevens</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-16"
+                style="display: block; box-sizing: border-box; width: 68.1739px; height: auto; position: absolute; left: 98.3333px; top: 110.972px; transform: translateX(33px) translateY(55px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 0px; border-radius: 0px; background-color: transparent; border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 100;">, Ginsburg</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="on-mark-anno-justice-1"
+                style="display: block; box-sizing: border-box; width: 65px; height: auto; position: absolute; left: 551.667px; top: 110.972px; transform: translateX(-7px) translateY(15px) rotate(45deg); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 5px; border-radius: 5px; background-color: rgb(255, 225, 0); border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="font-size: 13px; font-weight: 900;">Kennedy</div>
+              </annotation>
+              <annotation data-role="internalAnnotation" data-name="nondata_text_1"
+                style="display: block; box-sizing: border-box; width: 240px; height: auto; position: absolute; left: 9px; top: 75px; transform: translateY(-50%); opacity: 1; font-size: 14px; line-height: 120%; color: rgb(34, 34, 34); text-align: left; font-weight: 400; text-overflow: ellipsis; padding: 3px; border-radius: 0px; background-color: rgb(255, 255, 255); border-color: rgb(34, 34, 34); border-style: solid; border-width: 0px;">
+                <div style="text-align: left; font-weight: 400; line-height: 120%; color: rgb(153, 153, 153);">
+                  Percentage of votes in the majority,<br>over each justice’s career</div>
+              </annotation>
+              <emphasis data-role="informaltionalMarks" data-name="domain"
+                style="display: block; box-sizing: border-box; width: 800px; height: 1px; position: absolute; left: 0px; top: 106px; transform: translateY(-50%) rotate(0.07deg); opacity: 1; font-size: 1px; background-color: rgb(0, 0, 0); border-radius: 0px; border-color: rgb(0, 0, 0); border-style: solid; border-width: 0px;">
+              </emphasis>
+            </div>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 2.5px; left: 72.1667px;">
+              <div class="$-x-p1660">
+                <div style="color: black; font-size: 13px; text-align: left;">40%</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 2.5px; left: 205.5px;">
+              <div class="$-x-p1691">
+                <div style="color: black; font-size: 13px; text-align: left;">50%</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 2.5px; left: 338.833px;">
+              <div class="$-x-p1722">
+                <div style="color: black; font-size: 13px; text-align: left;">60%</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 2.5px; left: 472.167px;">
+              <div class="$-x-p1753">
+                <div style="color: black; font-size: 13px; text-align: left;">70%</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 2.5px; left: 605.5px;">
+              <div class="$-x-p1784">
+                <div style="color: black; font-size: 13px; text-align: left;">80%</div>
+              </div>
+            </replacement>
+            <replacement data-role="text-replacement" class="fronto-label-axis-x"
+              style="position: absolute; line-height: 100%; transform: translateX(-50%); top: 2.5px; left: 738.833px;">
+              <div class="$-x-p1815">
+                <div style="color: black; font-size: 13px; text-align: left;">90%</div>
+              </div>
+            </replacement>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
