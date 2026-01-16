@@ -8,6 +8,13 @@ resolution-markers = [
 
 [manifest]
 members = [
+    "html-baseline-bar",
+    "html-baseline-budgets",
+    "html-baseline-cost",
+    "html-baseline-french-election",
+    "html-baseline-kennedy",
+    "html-baseline-line",
+    "html-baseline-pie",
     "mobile-vis-template",
     "vega-baseline-vega-01",
     "vega-baseline-vega-02",
@@ -612,6 +619,115 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963/h11-0.16.0.tar.gz", hash = "sha256:4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1", size = 101250, upload-time = "2025-04-24T03:35:25.427Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl", hash = "sha256:63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86", size = 37515, upload-time = "2025-04-24T03:35:24.344Z" },
+]
+
+[[package]]
+name = "html-baseline-bar"
+version = "0.1.0"
+source = { virtual = "html-baseline-projects/bar" }
+dependencies = [
+    { name = "pillow" },
+    { name = "playwright" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pillow", specifier = ">=12.0.0" },
+    { name = "playwright", specifier = ">=1.57.0" },
+]
+
+[[package]]
+name = "html-baseline-budgets"
+version = "0.1.0"
+source = { virtual = "html-baseline-projects/budgets" }
+dependencies = [
+    { name = "pillow" },
+    { name = "playwright" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pillow", specifier = ">=12.0.0" },
+    { name = "playwright", specifier = ">=1.57.0" },
+]
+
+[[package]]
+name = "html-baseline-cost"
+version = "0.1.0"
+source = { virtual = "html-baseline-projects/cost" }
+dependencies = [
+    { name = "beautifulsoup4" },
+    { name = "pillow" },
+    { name = "playwright" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "beautifulsoup4", specifier = ">=4.14.3" },
+    { name = "pillow", specifier = ">=12.0.0" },
+    { name = "playwright", specifier = ">=1.57.0" },
+]
+
+[[package]]
+name = "html-baseline-french-election"
+version = "0.1.0"
+source = { virtual = "html-baseline-projects/french-election" }
+dependencies = [
+    { name = "beautifulsoup4" },
+    { name = "pillow" },
+    { name = "playwright" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "beautifulsoup4", specifier = ">=4.14.3" },
+    { name = "pillow", specifier = ">=12.0.0" },
+    { name = "playwright", specifier = ">=1.57.0" },
+]
+
+[[package]]
+name = "html-baseline-kennedy"
+version = "0.1.0"
+source = { virtual = "html-baseline-projects/kennedy" }
+dependencies = [
+    { name = "pillow" },
+    { name = "playwright" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pillow", specifier = ">=12.0.0" },
+    { name = "playwright", specifier = ">=1.57.0" },
+]
+
+[[package]]
+name = "html-baseline-line"
+version = "0.1.0"
+source = { virtual = "html-baseline-projects/line" }
+dependencies = [
+    { name = "pillow" },
+    { name = "playwright" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pillow", specifier = ">=12.0.0" },
+    { name = "playwright", specifier = ">=1.57.0" },
+]
+
+[[package]]
+name = "html-baseline-pie"
+version = "0.1.0"
+source = { virtual = "html-baseline-projects/pie" }
+dependencies = [
+    { name = "pillow" },
+    { name = "playwright" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pillow", specifier = ">=12.0.0" },
+    { name = "playwright", specifier = ">=1.57.0" },
 ]
 
 [[package]]
