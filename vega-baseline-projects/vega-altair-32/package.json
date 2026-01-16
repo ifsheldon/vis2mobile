@@ -1,5 +1,5 @@
 {
-  "name": "mobile-vis-template",
+  "name": "mobile-vis-template10",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,10 @@
     "lucide-react": "^0.562.0",
     "next": "16.1.2",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "vega": "^6.2.0",
+    "vega-embed": "^7.1.0",
+    "vega-lite": "^6.4.2"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.11",
