@@ -57,16 +57,16 @@ PROJECTS = [
     # "vega-altair-27",  # finished
     # "vega-altair-28",  # failed: gemini failed with code -15
     # "vega-altair-29",  # finished
-    "vega-altair-30",  # failed: gemini failed with code -15
+    # "vega-altair-30",  # failed: gemini failed with code -15
     # "vega-altair-31",  # finished
-    "vega-altair-32",  # failed: bun install failed with code 1
-    "vega-altair-33",  # failed: bun install failed with code 1
+    # "vega-altair-32",  # failed: bun install failed with code 1
+    # "vega-altair-33",  # failed: bun install failed with code 1
     # "vega-altair-34",  # finished
     # "vega-altair-35",  # finished
     # "vega-altair-36",  # finished
     # "vega-altair-37",  # finished
     # "vega-altair-38",  # failed: gemini failed with code -15
-    "vega-altair-39",  # failed: gemini failed with code -15
+    # "vega-altair-39",  # failed: gemini failed with code -15
     # "vega-altair-40",  # finished
     # "vega-altair-41",  # finished
     # vega_lite
@@ -95,7 +95,7 @@ PROJECTS = [
 ]
 
 # Number of concurrent projects to run
-CONCURRENCY = 6
+CONCURRENCY = 1
 
 
 def run_project(
