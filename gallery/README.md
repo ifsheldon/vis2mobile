@@ -22,7 +22,8 @@ This project focuses on codifying data from static assets and presenting them in
 
 ## 📂 Project Structure
 
-- `components/`: Contains the interactive chart components (e.g., `SalesChart.tsx`, `SalesLineChart.tsx`).
+- `components/cicero/`: Cicero example components, organized per visualization (e.g., `components/cicero/bar/SalesChart.tsx`).
+- `components/vega/`: Vega/Vega-Lite/Vega-Altair examples, organized per visualization.
 - `app/preview/[type]/page.tsx`: Standalone mobile preview pages for each chart (iframe targets).
 - `app/page.tsx`: **Gallery Dashboard** (Desktop view) that showcases all mobile charts in various device frames.
 - `public/`: Stores the original reference SVGs.
@@ -34,7 +35,7 @@ When adding a new example (e.g., `NewChart.svg`):
 
 1. **Analyze**: Study the SVG to understand the data structure, coordinate system, colors, and specific values.
 2. **Implement**:
-    - Create a new component in `components/`.
+    - Create a new component in `components/cicero/<example>/` (or `components/vega/<example>/` if it's a Vega variant).
     - **Codify the data**: Do not hardcode magic numbers if possible; calculate values based on the SVG coordinate system (like `calculateValue(y)`).
     - Match the colors and style of the original but enhance it for mobile.
 3. **Preview**:

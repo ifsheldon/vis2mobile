@@ -1,4 +1,4 @@
-import { BudgetsMobileChart } from "@/components/BudgetsMobileChart";
+import { BudgetsMobileChart } from "@/components/cicero/budgets/BudgetsMobileChart";
 
 export default function Page() {
 	return (

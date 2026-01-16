@@ -1,4 +1,4 @@
-import { KennedyChart } from "@/components/KennedyChart";
+import { KennedyChart } from "@/components/cicero/kennedy/KennedyChart";
 
 export default function Page() {
 	return (

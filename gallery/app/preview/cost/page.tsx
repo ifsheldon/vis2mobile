@@ -1,4 +1,4 @@
-import DisasterCostBarChart from "@/components/DisasterCostBarChart";
+import DisasterCostBarChart from "@/components/cicero/cost/DisasterCostBarChart";
 
 export default function Page() {
 	return (

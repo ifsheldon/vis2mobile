@@ -1,6 +1,6 @@
 "use client";
 
-import SalesPieChart from "@/components/SalesPieChart";
+import SalesPieChart from "@/components/cicero/pie/SalesPieChart";
 
 export default function PiePreviewPage() {
 	return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingDown, TrendingUp } from "lucide-react";
-import SalesChart from "@/components/SalesChart";
+import SalesChart from "@/components/cicero/bar/SalesChart";
 
 export default function BarPreviewPage() {
 	return (

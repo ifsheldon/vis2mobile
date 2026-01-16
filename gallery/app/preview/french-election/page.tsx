@@ -1,6 +1,6 @@
 "use client";
 
-import { FrenchElectionChart } from "@/components/FrenchElectionChart";
+import { FrenchElectionChart } from "@/components/cicero/french-election/FrenchElectionChart";
 
 export default function Page() {
 	return (
