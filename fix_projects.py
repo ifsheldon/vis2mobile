@@ -15,6 +15,7 @@ import tomllib
 ROOTS = (
     ("vega-baseline-projects", "vega_baseline"),
     ("vega-mobile-projects", "vega_mobile"),
+    ("html-baseline-projects", "html_baseline"),
 )
 
 # Match lines like: name = "..." or name='...'
