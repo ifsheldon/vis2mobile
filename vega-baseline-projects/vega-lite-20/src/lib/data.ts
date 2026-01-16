@@ -1,57 +1,55 @@
-export interface PlanData {
-  sector: string;
-  republican: number;
-  passed: number;
-  democratic: number;
+export interface GenreRating {
+  genre: string;
+  mean_rating: number;
 }
 
-export const data: PlanData[] = [
+export const movieData: GenreRating[] = [
   {
-    "sector": "Small-business aid",
-    "republican": 200,
-    "passed": 1010,
-    "democratic": 0
+    genre: "Documentary",
+    mean_rating: 6.997297297297297,
   },
   {
-    "sector": "Other measures",
-    "republican": 81,
-    "passed": 627,
-    "democratic": 302
+    genre: "Western",
+    mean_rating: 6.8428571428571425,
   },
   {
-    "sector": "Business tax breaks",
-    "republican": 203,
-    "passed": 346,
-    "democratic": 36
+    genre: "Black Comedy",
+    mean_rating: 6.81875,
   },
   {
-    "sector": "Stimulus checks",
-    "republican": 300,
-    "passed": 293,
-    "democratic": 436
+    genre: "Drama",
+    mean_rating: 6.773441734417345,
   },
   {
-    "sector": "Health care",
-    "republican": 111,
-    "passed": 277,
-    "democratic": 382
+    genre: "Musical",
+    mean_rating: 6.4479999999999995,
   },
   {
-    "sector": "Unemployment benefits",
-    "republican": 110,
-    "passed": 274,
-    "democratic": 437
+    genre: "Thriller/Suspense",
+    mean_rating: 6.3609442060085835,
   },
   {
-    "sector": "State and local aid",
-    "republican": 105,
-    "passed": 256,
-    "democratic": 1118
+    genre: "Adventure",
+    mean_rating: 6.345019920318726,
   },
   {
-    "sector": "Safety net and other tax cuts",
-    "republican": 18,
-    "passed": 83,
-    "democratic": 736
-  }
+    genre: "Concert/Performance",
+    mean_rating: 6.325,
+  },
+  {
+    genre: "Action",
+    mean_rating: 6.114795918367347,
+  },
+  {
+    genre: "Romantic Comedy",
+    mean_rating: 5.873076923076923,
+  },
+  {
+    genre: "Comedy",
+    mean_rating: 5.853858267716535,
+  },
+  {
+    genre: "Horror",
+    mean_rating: 5.676076555023923,
+  },
 ];

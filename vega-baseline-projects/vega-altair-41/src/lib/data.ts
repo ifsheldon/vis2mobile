@@ -1,57 +1,23 @@
-export interface PlanData {
-  sector: string;
-  republican: number;
-  passed: number;
-  democratic: number;
+export interface CarData {
+  Origin: string;
+  Cylinders: number;
+  Count: number;
 }
 
-export const data: PlanData[] = [
-  {
-    "sector": "Small-business aid",
-    "republican": 200,
-    "passed": 1010,
-    "democratic": 0
-  },
-  {
-    "sector": "Other measures",
-    "republican": 81,
-    "passed": 627,
-    "democratic": 302
-  },
-  {
-    "sector": "Business tax breaks",
-    "republican": 203,
-    "passed": 346,
-    "democratic": 36
-  },
-  {
-    "sector": "Stimulus checks",
-    "republican": 300,
-    "passed": 293,
-    "democratic": 436
-  },
-  {
-    "sector": "Health care",
-    "republican": 111,
-    "passed": 277,
-    "democratic": 382
-  },
-  {
-    "sector": "Unemployment benefits",
-    "republican": 110,
-    "passed": 274,
-    "democratic": 437
-  },
-  {
-    "sector": "State and local aid",
-    "republican": 105,
-    "passed": 256,
-    "democratic": 1118
-  },
-  {
-    "sector": "Safety net and other tax cuts",
-    "republican": 18,
-    "passed": 83,
-    "democratic": 736
-  }
+export const carData: CarData[] = [
+  { Origin: "USA", Cylinders: 8, Count: 108 },
+  { Origin: "USA", Cylinders: 6, Count: 74 },
+  { Origin: "USA", Cylinders: 4, Count: 72 },
+  { Origin: "Europe", Cylinders: 4, Count: 66 },
+  { Origin: "Europe", Cylinders: 6, Count: 4 },
+  { Origin: "Europe", Cylinders: 5, Count: 3 },
+  { Origin: "Japan", Cylinders: 4, Count: 69 },
+  { Origin: "Japan", Cylinders: 3, Count: 4 },
+  { Origin: "Japan", Cylinders: 6, Count: 6 },
 ];
+
+export const originTotals = {
+  USA: 254,
+  Europe: 73,
+  Japan: 79,
+};
