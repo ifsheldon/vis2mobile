@@ -6,9 +6,9 @@ import { PhonePreview } from "./components/PhonePreview";
 import { SideMenu } from "./components/SideMenu";
 
 const MOBILE_RATIOS = [
+	{ name: "iPhone 14 Pro Max", width: 430, height: 932 },
 	{ name: "iPhone X", width: 375, height: 812 },
 	{ name: "Pixel 7", width: 412, height: 915 },
-	{ name: "iPhone 14 Pro Max", width: 430, height: 932 },
 	{ name: "Galaxy S20 Ultra", width: 412, height: 915 },
 ];
 
