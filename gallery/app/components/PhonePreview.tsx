@@ -41,9 +41,9 @@ export function PhonePreview({
 				)}
 			</div>
 
-			<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 overflow-hidden">
+			<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-2 md:p-8 overflow-hidden">
 				<div
-					className="bg-white dark:bg-black shadow-2xl rounded-[3rem] border-[8px] border-zinc-900 overflow-hidden relative"
+					className="bg-white dark:bg-black shadow-2xl rounded-[2rem] md:rounded-[3rem] border-[4px] md:border-[8px] border-zinc-900 overflow-hidden relative"
 					style={{
 						width: phoneWidth * phoneScale,
 						height: phoneHeight * phoneScale,

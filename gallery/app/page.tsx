@@ -443,9 +443,18 @@ export default function GalleryPage() {
 
 	useEffect(() => {
 		const updateScale = () => {
+			const width = window.innerWidth;
 			// Scale down phones on wider screens (3 columns at 2xl = 1536px)
-			if (window.innerWidth >= 1536) {
+			if (width >= 1536) {
 				setPhoneScale(0.85);
+			} else if (width < 640) {
+				// Mobile: Calculate scale to fit width
+				// Page padding: px-2 (8px * 2 = 16px)
+				// Preview padding: p-2 (8px * 2 = 16px)
+				// Total chrome: ~32px
+				// We leave a bit more buffer for borders/shadows
+				const availableWidth = width - 48;
+				setPhoneScale(Math.min(1, availableWidth / selectedRatio.width));
 			} else {
 				setPhoneScale(1);
 			}
@@ -454,7 +463,7 @@ export default function GalleryPage() {
 		updateScale();
 		window.addEventListener("resize", updateScale);
 		return () => window.removeEventListener("resize", updateScale);
-	}, []);
+	}, [selectedRatio]);
 
 	return (
 		<main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
@@ -499,7 +508,7 @@ export default function GalleryPage() {
 			</div> */}
 
 			{/* Gallery Section */}
-			<div className="max-w-[1800px] mx-auto px-6 py-6 space-y-4">
+			<div className="max-w-[1800px] mx-auto px-2 md:px-6 py-6 space-y-4">
 				{/* Controls */}
 				<div className="flex justify-end sticky top-6 z-40">
 					<div className="flex items-center gap-3 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-2 rounded-full border border-zinc-200 dark:border-zinc-800 shadow-sm">
