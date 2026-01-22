@@ -474,16 +474,16 @@ export default function GalleryPage() {
 						Proteus Mobile Visualization Gallery
 					</h1>
 					<p className="text-lg md:text-xl text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-						Proteus automatically transforms desktop visualizations into
-						mobile-optimized versions.
+						<span className="italic">Proteus</span> automatically transforms
+						desktop visualizations into mobile-optimized versions.
 					</p>
 
 					{/* Intro Text */}
 					<p className="text-base text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto leading-relaxed pt-2 text-justify">
-						Proteus is a multi-agent framework designed to automatically adapt
-						desktop visualizations for mobile devices. Proteus analyzes the
-						original visualization, identifies adaptation strategies within our
-						proposed Multi-level design space, and generates the corresponding
+						<span className="italic">Proteus</span> is a multi-agent framework
+						designed to automatically adapt desktop visualizations for mobile
+						devices. <span className="italic">Proteus</span> analyzes the original
+						visualization, identifies adaptation strategies within our proposed Multi-level design space, and generates the corresponding
 						code to create a responsive mobile-optimized version that preserves
 						the original intent while ensuring readability on smaller screens.
 						You can explore and interact with the mobile visualizations below, or
