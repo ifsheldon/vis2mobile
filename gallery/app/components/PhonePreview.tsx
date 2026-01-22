@@ -24,21 +24,32 @@ export function PhonePreview({
 }: PhonePreviewProps) {
 	return (
 		<div className="space-y-4">
-			<div className="flex items-center justify-between">
-				<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+			<div className="flex items-center justify-between gap-4">
+				<h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 shrink-0">
 					{title}
 				</h2>
-				{originalSrc && (
+				<div className="flex flex-wrap justify-end gap-2">
 					<a
-						href={originalSrc}
+						href={`/mobile-view?src=${encodeURIComponent(previewSrc)}&width=${phoneWidth}&height=${phoneHeight}&title=${encodeURIComponent(title)}`}
 						target="_blank"
 						rel="noopener noreferrer"
 						className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
 					>
-						{originalLabel}
+						Mobile
 						<ExternalLink className="w-3 h-3" />
 					</a>
-				)}
+					{originalSrc && (
+						<a
+							href={originalSrc}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors"
+						>
+							{originalLabel}
+							<ExternalLink className="w-3 h-3" />
+						</a>
+					)}
+				</div>
 			</div>
 
 			<div className="flex justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-2 md:p-8 overflow-hidden">

@@ -481,14 +481,16 @@ export default function GalleryPage() {
 					{/* Intro Text */}
 					<p className="text-base text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto leading-relaxed pt-2 text-justify">
 						Proteus is a multi-agent framework designed to automatically adapt
-						desktop visualizations for mobile devices. By leveraging large
-						language models (LLMs) and computer vision, Proteus analyzes the
+						desktop visualizations for mobile devices. Proteus analyzes the
 						original visualization, identifies adaptation strategies within our
 						proposed Multi-level design space, and generates the corresponding
 						code to create a responsive mobile-optimized version that preserves
 						the original intent while ensuring readability on smaller screens.
 						You can explore and interact with the mobile visualizations below, or
-						click "Original HTML" to view the original desktop versions. You can click the dropdown menu on the top right to change the phone size.
+						click "Original HTML" to view the original desktop versions. Click
+						"Mobile" to open the visualization in a standalone mobile view. You
+						can also click the dropdown menu on the top right to change the
+						phone size.
 					</p>
 				</div>
 			</div>
