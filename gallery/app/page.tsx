@@ -3,7 +3,6 @@
 import { Smartphone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PhonePreview } from "./components/PhonePreview";
-import { SideMenu } from "./components/SideMenu";
 
 const MOBILE_RATIOS = [
 	{ name: "iPhone 14 Pro Max", width: 430, height: 932 },
@@ -458,22 +457,53 @@ export default function GalleryPage() {
 	}, []);
 
 	return (
-		<main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-8 font-sans">
-			<SideMenu />
-			<div className="max-w-7xl mx-auto space-y-8">
-				{/* Header */}
-				<div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-					<div>
-						<h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
-							Mobile Visualizations Generated Using <i>Proteus</i>
-						</h1>
-						<p className="text-zinc-500 dark:text-zinc-400 mt-1">
-							You can interact with the mobile visualizations below, or click Original HTML/SVG to view the corresponding desktop versions.
-						</p>
-					</div>
+		<main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
+			{/* Hero Section */}
+			<div className="bg-white dark:bg-zinc-900 pt-20 pb-10 px-6 border-b border-zinc-200 dark:border-zinc-800">
+				<div className="max-w-3xl mx-auto text-center space-y-6">
+					<h1 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+						Proteus Mobile Visualization Gallery
+					</h1>
+					<p className="text-lg md:text-xl text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+						Proteus automatically transforms desktop visualizations into
+						mobile-optimized versions.
+					</p>
 
-					<div className="flex items-center gap-3 bg-white dark:bg-zinc-900 p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm">
-						<Smartphone className="w-5 h-5 text-zinc-500" />
+					{/* Intro Text */}
+					<p className="text-base text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto leading-relaxed pt-2 text-justify">
+						Proteus is a multi-agent framework designed to automatically adapt
+						desktop visualizations for mobile devices. By leveraging large
+						language models (LLMs) and computer vision, Proteus analyzes the
+						original visualization, identifies adaptation strategies within our
+						proposed Multi-level design space, and generates the corresponding
+						code to create a responsive mobile-optimized version that preserves
+						the original intent while ensuring readability on smaller screens.
+						You can explore and interact with the mobile visualizations below, or
+						click "Original HTML" to view the original desktop versions. You can click the dropdown menu on the top right to change the phone size.
+					</p>
+				</div>
+			</div>
+
+			{/* Pipeline Section - Hidden */}
+			{/* <div className="max-w-[1800px] mx-auto px-6 py-10 border-b border-zinc-200 dark:border-zinc-800">
+				<div className="flex flex-col items-center space-y-6">
+					<h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+						Pipeline
+					</h2>
+					<img
+						src="/pipeline.png"
+						alt="Proteus Pipeline"
+						className="w-full max-w-5xl rounded-lg"
+					/>
+				</div>
+			</div> */}
+
+			{/* Gallery Section */}
+			<div className="max-w-[1800px] mx-auto px-6 py-6 space-y-4">
+				{/* Controls */}
+				<div className="flex justify-end sticky top-6 z-40">
+					<div className="flex items-center gap-3 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-2 rounded-full border border-zinc-200 dark:border-zinc-800 shadow-sm">
+						<Smartphone className="w-5 h-5 text-zinc-500 ml-2" />
 						<select
 							value={selectedRatio.name}
 							onChange={(e) => {
@@ -482,7 +512,7 @@ export default function GalleryPage() {
 								);
 								if (ratio) setSelectedRatio(ratio);
 							}}
-							className="bg-transparent border-none text-sm font-medium text-zinc-900 dark:text-zinc-100 focus:ring-0 cursor-pointer"
+							className="bg-transparent border-none text-sm font-medium text-zinc-900 dark:text-zinc-100 focus:ring-0 cursor-pointer pr-8 py-1"
 						>
 							{MOBILE_RATIOS.map((ratio) => (
 								<option key={ratio.name} value={ratio.name}>
@@ -494,14 +524,14 @@ export default function GalleryPage() {
 				</div>
 
 				{/* Cicero Examples Section */}
-				<section className="space-y-6" id="cicero">
-					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
-						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+				<section className="space-y-8" id="cicero">
+					<div className="flex items-baseline gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+						<h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
 							Cicero Examples
 						</h2>
 					</div>
 
-					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-12 items-start">
+					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-12 items-start">
 						{CICERO_EXAMPLES.map((example) => (
 							<PhonePreview
 								key={example.previewSrc}
@@ -518,14 +548,14 @@ export default function GalleryPage() {
 				</section>
 
 				{/* Vega Examples Section */}
-				<section className="space-y-6" id="vega">
-					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
-						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+				<section className="space-y-8" id="vega">
+					<div className="flex items-baseline gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+						<h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
 							Vega Examples
 						</h2>
 					</div>
 
-					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-12 items-start">
+					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-12 items-start">
 						{VEGA_EXAMPLES.map((example) => (
 							<PhonePreview
 								key={example.previewSrc}
@@ -542,14 +572,14 @@ export default function GalleryPage() {
 				</section>
 
 				{/* Vega Altair Examples Section */}
-				<section className="space-y-6" id="vega-altair">
-					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
-						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+				<section className="space-y-8" id="vega-altair">
+					<div className="flex items-baseline gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+						<h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
 							Vega Altair Examples
 						</h2>
 					</div>
 
-					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-12 items-start">
+					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-12 items-start">
 						{VEGA_ALTAIR_EXAMPLES.map((example) => (
 							<PhonePreview
 								key={example.previewSrc}
@@ -566,14 +596,14 @@ export default function GalleryPage() {
 				</section>
 
 				{/* Vega-Lite Examples Section */}
-				<section className="space-y-6" id="vega-lite">
-					<div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
-						<h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+				<section className="space-y-8" id="vega-lite">
+					<div className="flex items-baseline gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+						<h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
 							Vega-Lite Examples
 						</h2>
 					</div>
 
-					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-12 items-start">
+					<div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-12 items-start">
 						{VEGA_LITE_EXAMPLES.map((example) => (
 							<PhonePreview
 								key={example.previewSrc}
