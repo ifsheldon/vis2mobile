@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import * as d3 from "d3";
+import * as d3Geo from "d3-geo";
 import * as topojson from "topojson-client";
 import { motion, AnimatePresence } from "framer-motion";
 import { Maximize2, Minimize2, Info, MapPin, Search } from "lucide-react";
@@ -109,8 +110,8 @@ export function Visualization() {
 
 	// Projection and path generator
 	const { projection, pathGenerator } = useMemo(() => {
-		const projection = d3.geoAlbersUsa();
-		const pathGenerator = d3.geoPath().projection(projection);
+		const projection = d3Geo.geoAlbersUsa();
+		const pathGenerator = d3Geo.geoPath().projection(projection);
 
 		if (geoData && dimensions.width > 0) {
 			// Adjust map to fit the container width

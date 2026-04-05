@@ -92,6 +92,7 @@ export function Visualization() {
 						<ResponsiveContainer width="100%" height="100%">
 							<PieChart>
 								<Pie
+									// @ts-ignore
 									activeIndex={activeIndex ?? undefined}
 									activeShape={renderActiveShape}
 									data={data}

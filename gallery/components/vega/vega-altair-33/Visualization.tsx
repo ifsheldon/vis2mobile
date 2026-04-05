@@ -465,7 +465,7 @@ export function Visualization() {
 													dataKey="count"
 													radius={[0, 6, 6, 0]}
 													barSize={24}
-													onClick={(data) => handleStateClick(data.name)}
+													onClick={(data: any) => data.name && handleStateClick(data.name)}
 												>
 													{topStates.map((entry) => (
 														<Cell
