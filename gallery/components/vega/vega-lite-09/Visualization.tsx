@@ -67,15 +67,19 @@ const COLORS = {
 };
 
 interface CustomTickProps {
-	x: number;
-	y: number;
-	payload: {
+	x?: number | string;
+	y?: number | string;
+	payload?: {
 		value: string;
 	};
 }
 
 const CustomYAxisTick = (props: CustomTickProps) => {
-	const { x, y, payload } = props;
+	const { payload } = props;
+	if (!payload) return null;
+	const x = Number(props.x || 0);
+	const y = Number(props.y || 0);
+
 	const item = DATA.find((d) => d.range === payload.value);
 	if (!item) return null;
 

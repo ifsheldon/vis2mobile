@@ -259,7 +259,7 @@ export function Visualization() {
 								<Scatter
 									name="Movies"
 									data={chartData}
-									onClick={(e) => setSelectedMovie(e)}
+									onClick={(e: any) => setSelectedMovie(e)}
 									animationDuration={800}
 								>
 									{chartData.map((entry) => (

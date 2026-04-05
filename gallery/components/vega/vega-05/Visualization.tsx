@@ -184,7 +184,7 @@ export function Visualization() {
 							tick={({ y, payload }) => (
 								<text
 									x={0}
-									y={y - 18}
+									y={Number(y) - 18}
 									fill="#18181b"
 									fontSize={13}
 									fontWeight={700}

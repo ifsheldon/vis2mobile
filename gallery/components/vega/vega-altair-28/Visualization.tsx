@@ -267,7 +267,7 @@ export function Visualization() {
 
 							<Scatter
 								data={yearData}
-								onClick={(node) =>
+								onClick={(node: any) =>
 									setSelectedCountry(
 										node.country === selectedCountry ? null : node.country,
 									)

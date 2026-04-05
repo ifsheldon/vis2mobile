@@ -153,12 +153,7 @@ export function Visualization() {
 											</p>
 											<div className="space-y-1">
 												{payload.map(
-													(entry: {
-														name: string;
-														dataKey: string;
-														color: string;
-														value: number;
-													}) => (
+													(entry: any) => (
 														<div
 															key={entry.name}
 															className="flex items-center justify-between gap-4"
