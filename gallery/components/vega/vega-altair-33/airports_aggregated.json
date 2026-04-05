@@ -1,0 +1,338 @@
+[
+  {
+    "state": "AK",
+    "latitude": 61.33431076155894,
+    "longitude": -152.68717293231938,
+    "count": 263
+  },
+  {
+    "state": "AL",
+    "latitude": 32.63330898452055,
+    "longitude": -86.76992225205478,
+    "count": 73
+  },
+  {
+    "state": "AR",
+    "latitude": 35.07320609648649,
+    "longitude": -92.23667599851352,
+    "count": 74
+  },
+  {
+    "state": "AS",
+    "latitude": 14.243716390000001,
+    "longitude": -169.9348184,
+    "count": 3
+  },
+  {
+    "state": "AZ",
+    "latitude": 34.000363902881354,
+    "longitude": -111.4947230881356,
+    "count": 59
+  },
+  {
+    "state": "CA",
+    "latitude": 36.98096231302439,
+    "longitude": -120.09465190439025,
+    "count": 205
+  },
+  {
+    "state": "CO",
+    "latitude": 39.19933508489796,
+    "longitude": -105.6264690612245,
+    "count": 49
+  },
+  {
+    "state": "CQ",
+    "latitude": 15.6036509025,
+    "longitude": -145.58963519999998,
+    "count": 4
+  },
+  {
+    "state": "CT",
+    "latitude": 41.55935152,
+    "longitude": -72.70859701866668,
+    "count": 15
+  },
+  {
+    "state": "DC",
+    "latitude": 38.86872333,
+    "longitude": -77.00747583,
+    "count": 1
+  },
+  {
+    "state": "DE",
+    "latitude": 39.247358722,
+    "longitude": -75.549719612,
+    "count": 5
+  },
+  {
+    "state": "FL",
+    "latitude": 28.1985112087,
+    "longitude": -81.99087211989999,
+    "count": 100
+  },
+  {
+    "state": "GA",
+    "latitude": 32.694875200206184,
+    "longitude": -83.45712495144329,
+    "count": 97
+  },
+  {
+    "state": "GU",
+    "latitude": 13.48345,
+    "longitude": -144.7959825,
+    "count": 1
+  },
+  {
+    "state": "HI",
+    "latitude": 20.988745763125,
+    "longitude": -157.20869994375,
+    "count": 16
+  },
+  {
+    "state": "IA",
+    "latitude": 41.94750209076923,
+    "longitude": -93.4316228774359,
+    "count": 78
+  },
+  {
+    "state": "ID",
+    "latitude": 44.58138512162162,
+    "longitude": -114.94265784054055,
+    "count": 37
+  },
+  {
+    "state": "IL",
+    "latitude": 40.26787428,
+    "longitude": -88.9556687625,
+    "count": 88
+  },
+  {
+    "state": "IN",
+    "latitude": 40.163398602769234,
+    "longitude": -86.19105122276922,
+    "count": 65
+  },
+  {
+    "state": "KS",
+    "latitude": 38.42146234666667,
+    "longitude": -98.08560158871795,
+    "count": 78
+  },
+  {
+    "state": "KY",
+    "latitude": 37.5194446172,
+    "longitude": -85.4926812832,
+    "count": 50
+  },
+  {
+    "state": "LA",
+    "latitude": 31.189169711999998,
+    "longitude": -92.05054183327272,
+    "count": 55
+  },
+  {
+    "state": "MA",
+    "latitude": 42.1798975,
+    "longitude": -71.55575236133333,
+    "count": 30
+  },
+  {
+    "state": "MD",
+    "latitude": 38.97602171333333,
+    "longitude": -76.81425541777779,
+    "count": 18
+  },
+  {
+    "state": "ME",
+    "latitude": 44.845315065294116,
+    "longitude": -69.25283734441176,
+    "count": 34
+  },
+  {
+    "state": "MI",
+    "latitude": 43.67083025414893,
+    "longitude": -84.88541961287234,
+    "count": 94
+  },
+  {
+    "state": "MN",
+    "latitude": 45.6859403,
+    "longitude": -94.22007025595505,
+    "count": 89
+  },
+  {
+    "state": "MO",
+    "latitude": 38.27735146378379,
+    "longitude": -92.32851701945945,
+    "count": 74
+  },
+  {
+    "state": "MS",
+    "latitude": 32.87465806333333,
+    "longitude": -89.54541928597222,
+    "count": 72
+  },
+  {
+    "state": "MT",
+    "latitude": 47.07493570366197,
+    "longitude": -110.15612226619719,
+    "count": 71
+  },
+  {
+    "state": "NC",
+    "latitude": 35.49967047388889,
+    "longitude": -79.10223033152778,
+    "count": 72
+  },
+  {
+    "state": "ND",
+    "latitude": 47.53318373903846,
+    "longitude": -99.87728714653846,
+    "count": 52
+  },
+  {
+    "state": "NE",
+    "latitude": 41.27923812027397,
+    "longitude": -98.79016148986301,
+    "count": 73
+  },
+  {
+    "state": "NH",
+    "latitude": 43.40460396857143,
+    "longitude": -71.65968882928571,
+    "count": 14
+  },
+  {
+    "state": "NJ",
+    "latitude": 40.21945002428572,
+    "longitude": -74.63439847628571,
+    "count": 35
+  },
+  {
+    "state": "NM",
+    "latitude": 34.437567608627454,
+    "longitude": -105.96413909215686,
+    "count": 51
+  },
+  {
+    "state": "NV",
+    "latitude": 38.6258707025,
+    "longitude": -116.7215876,
+    "count": 32
+  },
+  {
+    "state": "NY",
+    "latitude": 42.48277663484536,
+    "longitude": -75.35484467360826,
+    "count": 97
+  },
+  {
+    "state": "OH",
+    "latitude": 40.3966796334,
+    "longitude": -82.8862456198,
+    "count": 100
+  },
+  {
+    "state": "OK",
+    "latitude": 35.52994365460784,
+    "longitude": -97.30023279715687,
+    "count": 102
+  },
+  {
+    "state": "OR",
+    "latitude": 44.34036465859649,
+    "longitude": -121.88639315438597,
+    "count": 57
+  },
+  {
+    "state": "PA",
+    "latitude": 40.69615224183099,
+    "longitude": -77.75397075535211,
+    "count": 71
+  },
+  {
+    "state": "PR",
+    "latitude": 18.303694975454547,
+    "longitude": -66.1364047709091,
+    "count": 11
+  },
+  {
+    "state": "RI",
+    "latitude": 41.54868175833334,
+    "longitude": -71.49908652833334,
+    "count": 6
+  },
+  {
+    "state": "SC",
+    "latitude": 33.9143985675,
+    "longitude": -80.74432705576922,
+    "count": 52
+  },
+  {
+    "state": "SD",
+    "latitude": 44.298703372105265,
+    "longitude": -99.72353599438597,
+    "count": 57
+  },
+  {
+    "state": "TN",
+    "latitude": 35.815482384285716,
+    "longitude": -86.44272393228572,
+    "count": 70
+  },
+  {
+    "state": "TX",
+    "latitude": 31.484807044066986,
+    "longitude": -98.1336945492823,
+    "count": 209
+  },
+  {
+    "state": "UT",
+    "latitude": 39.25406539657143,
+    "longitude": -111.57359078285715,
+    "count": 35
+  },
+  {
+    "state": "VA",
+    "latitude": 37.5184503606383,
+    "longitude": -78.43496725170212,
+    "count": 47
+  },
+  {
+    "state": "VI",
+    "latitude": 18.092371056,
+    "longitude": -64.843413056,
+    "count": 5
+  },
+  {
+    "state": "VT",
+    "latitude": 44.07502047,
+    "longitude": -72.75660341846154,
+    "count": 13
+  },
+  {
+    "state": "WA",
+    "latitude": 47.468242474307694,
+    "longitude": -120.97048133384617,
+    "count": 65
+  },
+  {
+    "state": "WI",
+    "latitude": 44.34315650797619,
+    "longitude": -89.70765831964286,
+    "count": 84
+  },
+  {
+    "state": "WV",
+    "latitude": 38.67690177041667,
+    "longitude": -80.83515037125001,
+    "count": 24
+  },
+  {
+    "state": "WY",
+    "latitude": 42.8602263725,
+    "longitude": -107.65900348125,
+    "count": 32
+  }
+]

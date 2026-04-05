@@ -131,11 +131,23 @@ const VEGA_ALTAIR_EXAMPLES = [
 		previewSrc: "/preview/vega/vega-altair-07",
 		originalSrc: "/vega-originals/vega_altair/07.html",
 	},
+	// Vega Altair 08
+	{
+		title: "Barley Varieties",
+		previewSrc: "/preview/vega/vega-altair-08",
+		originalSrc: "/vega-originals/vega_altair/08.html",
+	},
 	// Vega Altair 09
 	{
 		title: "Barley Yields",
 		previewSrc: "/preview/vega/vega-altair-09",
 		originalSrc: "/vega-originals/vega_altair/09.html",
+	},
+	// Vega Altair 10
+	{
+		title: "Population Distribution",
+		previewSrc: "/preview/vega/vega-altair-10",
+		originalSrc: "/vega-originals/vega_altair/10.html",
 	},
 	// Vega Altair 11
 	{
@@ -263,6 +275,18 @@ const VEGA_ALTAIR_EXAMPLES = [
 		previewSrc: "/preview/vega/vega-altair-31",
 		originalSrc: "/vega-originals/vega_altair/31.html",
 	},
+	// Vega Altair 32
+	{
+		title: "Unemployment Choropleth",
+		previewSrc: "/preview/vega/vega-altair-32",
+		originalSrc: "/vega-originals/vega_altair/32.html",
+	},
+	// Vega Altair 33
+	{
+		title: "US Airport Density",
+		previewSrc: "/preview/vega/vega-altair-33",
+		originalSrc: "/vega-originals/vega_altair/33.html",
+	},
 	// Vega Altair 34
 	{
 		title: "Bar Chart Highlight",
@@ -375,6 +399,12 @@ const VEGA_LITE_EXAMPLES = [
 		previewSrc: "/preview/vega/vega-lite-10",
 		originalSrc: "/vega-originals/vega_lite/10.html",
 	},
+	// Vega-Lite 11: User Feedback
+	{
+		title: "User Feedback",
+		previewSrc: "/preview/vega/vega-lite-11",
+		originalSrc: "/vega-originals/vega_lite/11.html",
+	},
 	// Vega-Lite 12: Seattle Weather
 	{
 		title: "Seattle Weather",
@@ -404,6 +434,12 @@ const VEGA_LITE_EXAMPLES = [
 		title: "Driving vs. Gas Prices",
 		previewSrc: "/preview/vega/vega-lite-16",
 		originalSrc: "/vega-originals/vega_lite/16.html",
+	},
+	// Vega-Lite 17: Distribution
+	{
+		title: "Category Distribution",
+		previewSrc: "/preview/vega/vega-lite-17",
+		originalSrc: "/vega-originals/vega_lite/17.html",
 	},
 	// Vega-Lite 18: Data Distribution
 	{
