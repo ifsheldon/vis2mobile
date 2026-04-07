@@ -97,17 +97,19 @@ export function Visualization() {
 		};
 		if (cx == null || cy == null || !payload) return null;
 
-		// Calculate cell width to scale nicely, recharts passes an exact cx, cy.
-		// Usually width is about 26px and height 24px in 350x850.
+		// Visible cell is 24x24, but the actual pitch between data points is
+		// larger, so we add an invisible larger hit rect to cover the gap and
+		// catch clicks that fall between the visible cells.
 		const cellWidth = 24;
 		const cellHeight = 24;
+		const hitWidth = 36;
+		const hitHeight = 32;
 
 		const isSelected = selectedDay && selectedDay.date === payload.date;
 
 		return (
 			// biome-ignore lint/a11y/useSemanticElements: SVG <g> cannot be a <button>
 			<g
-				transform={`translate(${cx - cellWidth / 2}, ${cy - cellHeight / 2})`}
 				onClick={() => setSelectedDay(payload)}
 				onKeyDown={(e) => {
 					if (e.key === "Enter" || e.key === " ") {
@@ -119,6 +121,15 @@ export function Visualization() {
 				className="cursor-pointer transition-transform active:scale-95"
 			>
 				<rect
+					x={cx - hitWidth / 2}
+					y={cy - hitHeight / 2}
+					width={hitWidth}
+					height={hitHeight}
+					fill="transparent"
+				/>
+				<rect
+					x={cx - cellWidth / 2}
+					y={cy - cellHeight / 2}
 					width={cellWidth}
 					height={cellHeight}
 					fill={colorScale(payload.temp_max)}
@@ -126,6 +137,7 @@ export function Visualization() {
 					strokeWidth={isSelected ? 2 : 0}
 					rx={4}
 					ry={4}
+					pointerEvents="none"
 				/>
 			</g>
 		);
