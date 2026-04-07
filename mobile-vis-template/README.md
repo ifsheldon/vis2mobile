@@ -2,7 +2,7 @@
 
 This is a template for transforming a visualization tailored for desktop to a mobile version.
 
-You should implement the mobile-friendly version of the visualization in the `src/components/Visualization.tsx` file.
+You should implement the mobile-friendly version of the visualization in the `src/components/Visualization.tsx` file. During the implementation, **you should try to keep the original color palette as much as possible.**
 
 Carefully read the following files for instructions and more information:
 
