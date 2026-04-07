@@ -14,10 +14,10 @@ from random import randint
 from copy import deepcopy
 
 USE_CODEX = False
-USE_FLASH = True
+USE_FLASH = False
 
 # Base directory for vega mobile projects
-PROJECTS_DIR = "vega-baseline-projects"
+PROJECTS_DIR = "vega-mobile-projects"
 
 # All projects to process
 PROJECTS = [
@@ -67,7 +67,7 @@ PROJECTS = [
     # "vega-altair-37",  # finished
     # "vega-altair-38",  # failed: gemini failed with code -15
     # "vega-altair-39",  # failed: gemini failed with code -15
-    # "vega-altair-40",  # finished
+    "vega-altair-40",  # re-run
     # "vega-altair-41",  # finished
     # vega_lite
     # "vega-lite-01",  # finished
@@ -106,7 +106,7 @@ def run_project(
     Returns (project_name, success, error_message)
     """
     project_dir = projects_dir / project_name
-    log_file = base_dir / "vega_baseline_logs" / f"{project_name}.log"
+    log_file = base_dir / "vega_mobile_logs" / f"{project_name}.log"
 
     if not project_dir.exists():
         return (project_name, False, f"Project directory {project_dir} does not exist")
@@ -172,7 +172,7 @@ def run_project(
                         "gemini",
                         "--yolo",
                         "--model",
-                        "gemini-3-pro-preview",
+                        "gemini-3.1-pro-preview",
                         "--prompt",
                         prompt,
                     ]
