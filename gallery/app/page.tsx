@@ -151,7 +151,7 @@ const VEGA_ALTAIR_EXAMPLES = [
 	},
 	// Vega Altair 11
 	{
-		title: "Gantt Overview",
+		title: "Project Task Schedule",
 		previewSrc: "/preview/vega/vega-altair-11",
 		originalSrc: "/vega-originals/vega_altair/11.html",
 	},
@@ -181,61 +181,61 @@ const VEGA_ALTAIR_EXAMPLES = [
 	},
 	// Vega Altair 16
 	{
-		title: "London Tube Lines",
+		title: "Natural Disaster Deaths",
 		previewSrc: "/preview/vega/vega-altair-16",
 		originalSrc: "/vega-originals/vega_altair/16.html",
 	},
 	// Vega Altair 17
 	{
-		title: "Radial Chart",
+		title: "Barley Yields by Site",
 		previewSrc: "/preview/vega/vega-altair-17",
 		originalSrc: "/vega-originals/vega_altair/17.html",
 	},
 	// Vega Altair 18
 	{
-		title: "Car Horsepower",
+		title: "CO2 Concentration Trends",
 		previewSrc: "/preview/vega/vega-altair-18",
 		originalSrc: "/vega-originals/vega_altair/18.html",
 	},
 	// Vega Altair 19
 	{
-		title: "Stock Price Comparison",
+		title: "Penguin Body Mass vs Flipper",
 		previewSrc: "/preview/vega/vega-altair-19",
 		originalSrc: "/vega-originals/vega_altair/19.html",
 	},
 	// Vega Altair 20
 	{
-		title: "Grouped Bar Chart",
+		title: "Category Composition",
 		previewSrc: "/preview/vega/vega-altair-20",
 		originalSrc: "/vega-originals/vega_altair/20.html",
 	},
 	// Vega Altair 21
 	{
-		title: "Cars Scatter Matrix",
+		title: "Penguin Measurement Densities",
 		previewSrc: "/preview/vega/vega-altair-21",
 		originalSrc: "/vega-originals/vega_altair/21.html",
 	},
 	// Vega Altair 22
 	{
-		title: "Seattle Weather Heatmap",
+		title: "Trial Measurements Histogram",
 		previewSrc: "/preview/vega/vega-altair-22",
 		originalSrc: "/vega-originals/vega_altair/22.html",
 	},
 	// Vega Altair 23
 	{
-		title: "Simple Bar Chart",
+		title: "Movie Ratings Histogram",
 		previewSrc: "/preview/vega/vega-altair-23",
 		originalSrc: "/vega-originals/vega_altair/23.html",
 	},
 	// Vega Altair 24
 	{
-		title: "Stacked Bar Chart",
+		title: "Industry Unemployment Trend",
 		previewSrc: "/preview/vega/vega-altair-24",
 		originalSrc: "/vega-originals/vega_altair/24.html",
 	},
 	// Vega Altair 25
 	{
-		title: "Horizontal Stacked Bar",
+		title: "Movie Ratings Heatmap",
 		previewSrc: "/preview/vega/vega-altair-25",
 		originalSrc: "/vega-originals/vega_altair/25.html",
 	},
@@ -247,31 +247,31 @@ const VEGA_ALTAIR_EXAMPLES = [
 	},
 	// Vega Altair 27
 	{
-		title: "Layered Histogram",
+		title: "Categories Line Chart",
 		previewSrc: "/preview/vega/vega-altair-27",
 		originalSrc: "/vega-originals/vega_altair/27.html",
 	},
 	// Vega Altair 28
 	{
-		title: "Interactive Average",
+		title: "Gapminder Wealth & Health",
 		previewSrc: "/preview/vega/vega-altair-28",
 		originalSrc: "/vega-originals/vega_altair/28.html",
 	},
 	// Vega Altair 29
 	{
-		title: "US Population",
+		title: "Tech Stock Prices",
 		previewSrc: "/preview/vega/vega-altair-29",
 		originalSrc: "/vega-originals/vega_altair/29.html",
 	},
 	// Vega Altair 30
 	{
-		title: "Donut Chart",
+		title: "Sine Wave with Arrows",
 		previewSrc: "/preview/vega/vega-altair-30",
 		originalSrc: "/vega-originals/vega_altair/30.html",
 	},
 	// Vega Altair 31
 	{
-		title: "CO2 Emissions",
+		title: "Barley Yields Slope Graph",
 		previewSrc: "/preview/vega/vega-altair-31",
 		originalSrc: "/vega-originals/vega_altair/31.html",
 	},
@@ -289,49 +289,49 @@ const VEGA_ALTAIR_EXAMPLES = [
 	},
 	// Vega Altair 34
 	{
-		title: "Bar Chart Highlight",
+		title: "Donut Chart",
 		previewSrc: "/preview/vega/vega-altair-34",
 		originalSrc: "/vega-originals/vega_altair/34.html",
 	},
 	// Vega Altair 35
 	{
-		title: "Stocks Quantile Plot",
+		title: "Hourly Observations",
 		previewSrc: "/preview/vega/vega-altair-35",
 		originalSrc: "/vega-originals/vega_altair/35.html",
 	},
 	// Vega Altair 36
 	{
-		title: "Unemployment",
+		title: "Cars MPG vs Horsepower",
 		previewSrc: "/preview/vega/vega-altair-36",
 		originalSrc: "/vega-originals/vega_altair/36.html",
 	},
 	// Vega Altair 37
 	{
-		title: "Faceted Scatter",
+		title: "Penguins Scatter Plot",
 		previewSrc: "/preview/vega/vega-altair-37",
 		originalSrc: "/vega-originals/vega_altair/37.html",
 	},
 	// Vega Altair 38
 	{
-		title: "Airport Connections",
+		title: "Seattle Weather Trend",
 		previewSrc: "/preview/vega/vega-altair-38",
 		originalSrc: "/vega-originals/vega_altair/38.html",
 	},
 	// Vega Altair 39
 	{
-		title: "Ranged Dot Plot",
+		title: "Movie Ratings Strip Plot",
 		previewSrc: "/preview/vega/vega-altair-39",
 		originalSrc: "/vega-originals/vega_altair/39.html",
 	},
 	// Vega Altair 40
 	{
-		title: "County Unemployment",
+		title: "Seattle Weather Heatmap",
 		previewSrc: "/preview/vega/vega-altair-40",
 		originalSrc: "/vega-originals/vega_altair/40.html",
 	},
 	// Vega Altair 41
 	{
-		title: "Iowa Electricity",
+		title: "Cars by Origin & Cylinders",
 		previewSrc: "/preview/vega/vega-altair-41",
 		originalSrc: "/vega-originals/vega_altair/41.html",
 	},
@@ -449,7 +449,7 @@ const VEGA_LITE_EXAMPLES = [
 	},
 	// Vega-Lite 19: Movie Ratings Distribution
 	{
-		title: "Movie Ratings Distribution",
+		title: "IMDB vs Rotten Tomatoes",
 		previewSrc: "/preview/vega/vega-lite-19",
 		originalSrc: "/vega-originals/vega_lite/19.html",
 	},
@@ -461,7 +461,7 @@ const VEGA_LITE_EXAMPLES = [
 	},
 	// Vega-Lite 21: Power Stats
 	{
-		title: "Power Stats",
+		title: "Horsepower by Cylinders",
 		previewSrc: "/preview/vega/vega-lite-21",
 		originalSrc: "/vega-originals/vega_lite/21.html",
 	},
