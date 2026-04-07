@@ -85,7 +85,7 @@ async def get_plan(
         media_resolution="MEDIA_RESOLUTION_HIGH",
     )
     response = await client.models.generate_content(
-        model="gemini-3-flash-preview" if use_flash else "gemini-3-pro-preview",
+        model="gemini-3-flash-preview" if use_flash else "gemini-3.1-pro-preview",
         contents=prompt,
         config=generate_content_config,
     )
