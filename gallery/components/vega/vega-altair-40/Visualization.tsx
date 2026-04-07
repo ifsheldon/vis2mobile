@@ -1,248 +1,249 @@
 "use client";
 
 import { scaleSequential } from "d3-scale";
-import { interpolateRdYlBu } from "d3-scale-chromatic";
+import { interpolateYlGnBu } from "d3-scale-chromatic";
 import {
+	Cloud,
 	CloudDrizzle,
 	CloudFog,
 	CloudRain,
-	Droplets,
 	Snowflake,
 	Sun,
-	Wind,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import type React from "react";
 import { useMemo, useState } from "react";
-import data from "@/components/vega/vega-altair-40/data.json";
+import {
+	ResponsiveContainer,
+	Scatter,
+	ScatterChart,
+	XAxis,
+	YAxis,
+} from "recharts";
+import rawData from "@/components/vega/vega-altair-40/data.json";
 
-interface WeatherRecord {
+const WEATHER_ICONS: Record<string, React.ReactNode> = {
+	sun: <Sun className="text-yellow-500 w-8 h-8" />,
+	rain: <CloudRain className="text-blue-500 w-8 h-8" />,
+	snow: <Snowflake className="text-cyan-400 w-8 h-8" />,
+	drizzle: <CloudDrizzle className="text-blue-400 w-8 h-8" />,
+	fog: <CloudFog className="text-gray-400 w-8 h-8" />,
+};
+
+type WeatherData = {
 	date: string;
-	precipitation: number;
+	monthIndex: number;
+	dayOfMonth: number;
 	temp_max: number;
 	temp_min: number;
+	precipitation: number;
 	wind: number;
 	weather: string;
-}
-
-const MONTHS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
-
-const WEATHER_ICONS: Record<string, ReactNode> = {
-	sun: <Sun className="w-6 h-6 text-yellow-500" />,
-	rain: <CloudRain className="w-6 h-6 text-blue-500" />,
-	snow: <Snowflake className="w-6 h-6 text-blue-200" />,
-	drizzle: <CloudDrizzle className="w-6 h-6 text-blue-400" />,
-	fog: <CloudFog className="w-6 h-6 text-gray-400" />,
 };
 
 export function Visualization() {
-	const [selectedDate, setSelectedDate] = useState<WeatherRecord | null>(null);
+	const data: WeatherData[] = useMemo(() => {
+		const grouped = new Map<string, WeatherData>();
+		for (const d of rawData as Record<string, unknown>[]) {
+			const dateStr = String(d.date).split("T")[0];
+			const [_year, month, day] = dateStr.split("-");
+			const monthIndex = parseInt(month, 10) - 1;
+			const dayOfMonth = parseInt(day, 10);
+			const key = `${monthIndex}-${dayOfMonth}`;
 
-	// Process data into a grid: months (0-11) x days (1-31)
-	const gridData = useMemo(() => {
-		const grid: (WeatherRecord | null)[][] = Array.from({ length: 31 }, () =>
-			Array.from({ length: 12 }, () => null),
-		);
+			const mapped = {
+				...(d as unknown as WeatherData),
+				monthIndex,
+				dayOfMonth,
+			};
 
-		let maxTemp = -Infinity;
-		let minTemp = Infinity;
-
-		(data as WeatherRecord[]).forEach((d) => {
-			const date = new Date(d.date);
-			const m = date.getMonth();
-			const day = date.getDate() - 1; // 0-indexed for grid
-			if (day < 31) {
-				grid[day][m] = d;
-				if (d.temp_max > maxTemp) maxTemp = d.temp_max;
-				if (d.temp_max < minTemp) minTemp = d.temp_max;
+			if (
+				!grouped.has(key) ||
+				mapped.temp_max > (grouped.get(key)?.temp_max ?? -Infinity)
+			) {
+				grouped.set(key, mapped);
 			}
-		});
-
-		return { grid, minTemp, maxTemp };
+		}
+		return Array.from(grouped.values());
 	}, []);
 
-	// Use a red-yellow-blue scale (inverted because RdYlBu has red at 0 and blue at 1)
-	const colorScale = useMemo(() => {
-		return scaleSequential()
-			.domain([gridData.maxTemp, gridData.minTemp])
-			.interpolator(interpolateRdYlBu);
-	}, [gridData.minTemp, gridData.maxTemp]);
+	const tempMaxArray = data.map((d) => d.temp_max);
+	const minTemp = Math.min(...tempMaxArray);
+	const maxTemp = Math.max(...tempMaxArray);
 
-	const handleCellClick = (record: WeatherRecord | null) => {
-		if (record) {
-			setSelectedDate(record);
-		}
-	};
+	const colorScale = scaleSequential(interpolateYlGnBu).domain([
+		minTemp,
+		maxTemp,
+	]);
 
-	const formatDate = (dateStr: string) => {
-		const date = new Date(dateStr);
-		return date.toLocaleDateString("en-US", {
-			month: "long",
-			day: "numeric",
-			year: "numeric",
-		});
+	const [selectedDay, setSelectedDay] = useState<WeatherData | null>(
+		data.find((d) => d.temp_max === maxTemp) || data[0],
+	);
+
+	const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+	const yTicks = [1, 5, 10, 15, 20, 25, 30];
+
+	const gradientStops = Array.from({ length: 10 })
+		.map((_, i) => {
+			const val = i / 9;
+			return `${interpolateYlGnBu(val)} ${val * 100}%`;
+		})
+		.join(", ");
+
+	const CustomShape = (props: Record<string, unknown>) => {
+		const { cx, cy, payload } = props as {
+			cx?: number;
+			cy?: number;
+			payload?: WeatherData;
+		};
+		if (cx == null || cy == null || !payload) return null;
+
+		// Calculate cell width to scale nicely, recharts passes an exact cx, cy.
+		// Usually width is about 26px and height 24px in 350x850.
+		const cellWidth = 24;
+		const cellHeight = 24;
+
+		const isSelected = selectedDay && selectedDay.date === payload.date;
+
+		return (
+			// biome-ignore lint/a11y/useSemanticElements: SVG <g> cannot be a <button>
+			<g
+				transform={`translate(${cx - cellWidth / 2}, ${cy - cellHeight / 2})`}
+				onClick={() => setSelectedDay(payload)}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						setSelectedDay(payload);
+					}
+				}}
+				role="button"
+				tabIndex={0}
+				className="cursor-pointer transition-transform active:scale-95"
+			>
+				<rect
+					width={cellWidth}
+					height={cellHeight}
+					fill={colorScale(payload.temp_max)}
+					stroke={isSelected ? "#1e293b" : "none"}
+					strokeWidth={isSelected ? 2 : 0}
+					rx={4}
+					ry={4}
+				/>
+			</g>
+		);
 	};
 
 	return (
-		<div className="flex flex-col h-full bg-slate-50 font-sans text-slate-900 overflow-hidden">
+		<div className="flex flex-col w-full h-full bg-slate-50 relative overflow-hidden font-sans">
 			{/* Header */}
-			<div className="p-4 bg-white border-b border-slate-200 shadow-sm z-10">
-				<h1 className="text-xl font-bold text-slate-800">
-					Seattle Weather 2012
+			<div className="px-4 pt-10 pb-4 bg-white shadow-sm z-10 flex flex-col gap-2 shrink-0">
+				<h1 className="text-xl font-bold text-slate-800 tracking-tight">
+					Seattle Daily Max Temp
 				</h1>
-				<p className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
-					Daily Max Temperatures (°C)
-				</p>
 
 				{/* Legend */}
-				<div className="mt-4 flex items-center gap-2">
-					<span className="text-[10px] text-slate-400 font-bold uppercase">
-						{gridData.minTemp}°C
-					</span>
+				<div className="flex items-center gap-2 text-xs font-medium text-slate-500 mt-1">
+					<span>{Math.round(minTemp)}°C</span>
 					<div
 						className="flex-1 h-3 rounded-full"
 						style={{
-							background: `linear-gradient(to right, ${interpolateRdYlBu(1)}, ${interpolateRdYlBu(0.5)}, ${interpolateRdYlBu(0)})`,
+							background: `linear-gradient(to right, ${gradientStops})`,
 						}}
 					/>
-					<span className="text-[10px] text-slate-400 font-bold uppercase">
-						{gridData.maxTemp}°C
-					</span>
+					<span>{Math.round(maxTemp)}°C</span>
 				</div>
 			</div>
 
-			{/* Heatmap Area */}
-			<div className="flex-1 overflow-auto p-4 pb-40">
-				<div className="relative inline-block min-w-full">
-					{/* X-Axis Labels (Months) */}
-					<div className="flex mb-1 ml-7 gap-0.5">
-						{MONTHS.map((m, i) => (
-							<div
-								// biome-ignore lint/suspicious/noArrayIndexKey: Month order is fixed.
-								key={`month-${i}`}
-								className="flex-1 text-center text-[10px] font-bold text-slate-400"
-							>
-								{m}
-							</div>
-						))}
-					</div>
-
-					{/* Grid */}
-					<div className="flex flex-col gap-0.5">
-						{gridData.grid.map((row, dayIdx) => (
-							<div
-								// biome-ignore lint/suspicious/noArrayIndexKey: Day order is fixed.
-								key={`day-row-${dayIdx}`}
-								className="flex gap-0.5 items-center"
-							>
-								{/* Y-Axis Labels (Days) */}
-								<div className="w-7 text-right text-[10px] font-bold text-slate-400 pr-2">
-									{(dayIdx + 1) % 5 === 0 || dayIdx === 0 ? dayIdx + 1 : ""}
-								</div>
-
-								{/* Month Cells */}
-								{row.map((cell, monthIdx) => (
-									<button
-										type="button"
-										// biome-ignore lint/suspicious/noArrayIndexKey: Cell grid positions are fixed.
-										key={`cell-${dayIdx}-${monthIdx}`}
-										onClick={() => handleCellClick(cell)}
-										aria-label={
-											cell ? `Weather for ${formatDate(cell.date)}` : "No data"
-										}
-										className={`flex-1 aspect-square rounded-[1px] transition-transform active:scale-95 ${
-											cell
-												? "cursor-pointer"
-												: "bg-transparent pointer-events-none"
-										} ${
-											selectedDate && cell && selectedDate.date === cell.date
-												? "ring-2 ring-slate-800 ring-offset-0 z-20"
-												: ""
-										}`}
-										style={{
-											backgroundColor: cell
-												? colorScale(cell.temp_max)
-												: "transparent",
-										}}
-									/>
-								))}
-							</div>
-						))}
-					</div>
+			{/* Scrollable Chart Area */}
+			<div className="flex-1 overflow-y-auto w-full relative pb-48 custom-scrollbar">
+				<div className="w-full h-[900px]">
+					<ResponsiveContainer width="100%" height="100%">
+						<ScatterChart margin={{ top: 30, right: 24, bottom: 20, left: 10 }}>
+							<XAxis
+								type="number"
+								dataKey="monthIndex"
+								domain={[0, 11]}
+								tickFormatter={(val) => months[val]}
+								tick={{ fontSize: 13, fill: "#64748b", fontWeight: 600 }}
+								axisLine={false}
+								tickLine={false}
+								interval={0}
+								orientation="top"
+								tickMargin={10}
+							/>
+							<YAxis
+								type="number"
+								dataKey="dayOfMonth"
+								domain={[31, 1]}
+								ticks={yTicks}
+								tick={{ fontSize: 13, fill: "#64748b", fontWeight: 500 }}
+								axisLine={false}
+								tickLine={false}
+								width={36}
+								tickMargin={8}
+							/>
+							<Scatter
+								data={data}
+								shape={<CustomShape />}
+								isAnimationActive={false}
+							/>
+						</ScatterChart>
+					</ResponsiveContainer>
 				</div>
 			</div>
 
-			{/* Detail Card (Sticky Bottom) */}
-			<div
-				className={`fixed bottom-4 left-4 right-4 transition-all duration-300 transform ${
-					selectedDate
-						? "translate-y-0 opacity-100"
-						: "translate-y-10 opacity-0 pointer-events-none"
-				}`}
-			>
-				<div className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-2xl rounded-3xl p-5 overflow-hidden">
-					{selectedDate && (
-						<div className="flex flex-col gap-4">
-							<div className="flex justify-between items-start">
-								<div>
-									<h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">
-										{formatDate(selectedDate.date)}
-									</h3>
-									<div className="flex items-center gap-2 mt-1">
-										<span className="text-4xl font-black text-slate-800 tracking-tighter">
-											{selectedDate.temp_max.toFixed(1)}°
-										</span>
-										<div className="flex flex-col">
-											<span className="text-xs font-bold text-slate-400">
-												MAX
-											</span>
-											<span className="text-xs font-bold text-slate-400 border-t border-slate-100">
-												{selectedDate.temp_min.toFixed(1)}° MIN
-											</span>
-										</div>
-									</div>
-								</div>
-								<div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 shadow-sm">
-									{WEATHER_ICONS[selectedDate.weather] || (
-										<Sun className="w-6 h-6 text-slate-400" />
-									)}
-									<p className="text-[10px] font-black uppercase mt-1 text-center text-slate-500">
-										{selectedDate.weather}
-									</p>
-								</div>
-							</div>
-
-							<div className="grid grid-cols-2 gap-3">
-								<div className="bg-slate-50/50 p-3 rounded-2xl flex items-center gap-3 border border-slate-100">
-									<div className="bg-blue-100 p-2 rounded-xl">
-										<Droplets className="w-4 h-4 text-blue-600" />
-									</div>
-									<div>
-										<p className="text-[10px] font-bold text-slate-400 uppercase">
-											Precip
-										</p>
-										<p className="text-sm font-black text-slate-700">
-											{selectedDate.precipitation}mm
-										</p>
-									</div>
-								</div>
-								<div className="bg-slate-50/50 p-3 rounded-2xl flex items-center gap-3 border border-slate-100">
-									<div className="bg-emerald-100 p-2 rounded-xl">
-										<Wind className="w-4 h-4 text-emerald-600" />
-									</div>
-									<div>
-										<p className="text-[10px] font-bold text-slate-400 uppercase">
-											Wind
-										</p>
-										<p className="text-sm font-black text-slate-700">
-											{selectedDate.wind}m/s
-										</p>
-									</div>
-								</div>
+			{/* Floating Detail Card */}
+			{selectedDay && (
+				<div className="absolute bottom-6 left-4 right-4 bg-white/85 backdrop-blur-xl border border-white/40 shadow-2xl rounded-3xl p-5 flex flex-col gap-4 z-20 transition-all">
+					<div className="flex justify-between items-start">
+						<div>
+							<p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">
+								{new Date(selectedDay.date).toLocaleDateString("en-US", {
+									month: "short",
+									day: "numeric",
+									year: "numeric",
+								})}
+							</p>
+							<div className="flex items-baseline gap-1">
+								<span className="text-4xl font-extrabold text-slate-800 tracking-tighter">
+									{selectedDay.temp_max}°
+								</span>
+								<span className="text-lg font-medium text-slate-500">Max</span>
 							</div>
 						</div>
-					)}
+						<div className="bg-slate-100 p-3 rounded-2xl shadow-inner">
+							{WEATHER_ICONS[selectedDay.weather] || (
+								<Cloud className="text-gray-400 w-8 h-8" />
+							)}
+						</div>
+					</div>
+
+					<div className="grid grid-cols-3 gap-3 mt-1 pt-4 border-t border-slate-200/60">
+						<div className="flex flex-col bg-slate-50 p-2 rounded-xl">
+							<span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-1">
+								Min Temp
+							</span>
+							<span className="text-sm font-bold text-slate-700">
+								{selectedDay.temp_min}°C
+							</span>
+						</div>
+						<div className="flex flex-col bg-slate-50 p-2 rounded-xl">
+							<span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-1">
+								Precip
+							</span>
+							<span className="text-sm font-bold text-slate-700">
+								{selectedDay.precipitation} mm
+							</span>
+						</div>
+						<div className="flex flex-col bg-slate-50 p-2 rounded-xl">
+							<span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-1">
+								Wind
+							</span>
+							<span className="text-sm font-bold text-slate-700">
+								{selectedDay.wind} m/s
+							</span>
+						</div>
+					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 }
