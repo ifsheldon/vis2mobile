@@ -12,13 +12,6 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useMemo, useState } from "react";
-import {
-	ResponsiveContainer,
-	Scatter,
-	ScatterChart,
-	XAxis,
-	YAxis,
-} from "recharts";
 import rawData from "@/components/vega/vega-altair-40/data.json";
 
 const WEATHER_ICONS: Record<string, React.ReactNode> = {
@@ -31,8 +24,6 @@ const WEATHER_ICONS: Record<string, React.ReactNode> = {
 
 type WeatherData = {
 	date: string;
-	monthIndex: number;
-	dayOfMonth: number;
 	temp_max: number;
 	temp_min: number;
 	precipitation: number;
@@ -40,47 +31,52 @@ type WeatherData = {
 	weather: string;
 };
 
+const MONTHS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+const Y_LABEL_DAYS = new Set([1, 5, 10, 15, 20, 25, 30]);
+
 export function Visualization() {
-	const data: WeatherData[] = useMemo(() => {
-		const grouped = new Map<string, WeatherData>();
-		for (const d of rawData as Record<string, unknown>[]) {
-			const dateStr = String(d.date).split("T")[0];
-			const [_year, month, day] = dateStr.split("-");
-			const monthIndex = parseInt(month, 10) - 1;
-			const dayOfMonth = parseInt(day, 10);
-			const key = `${monthIndex}-${dayOfMonth}`;
+	// Build a 31-day × 12-month grid, keeping the hottest reading for any
+	// duplicate (date, day) so the heatmap shows daily max temperature.
+	const { grid, minTemp, maxTemp } = useMemo(() => {
+		const g: (WeatherData | null)[][] = Array.from({ length: 31 }, () =>
+			Array.from({ length: 12 }, () => null),
+		);
+		let minT = Infinity;
+		let maxT = -Infinity;
 
-			const mapped = {
-				...(d as unknown as WeatherData),
-				monthIndex,
-				dayOfMonth,
-			};
+		for (const d of rawData as WeatherData[]) {
+			const [, month, day] = d.date.split("T")[0].split("-");
+			const monthIdx = parseInt(month, 10) - 1;
+			const dayIdx = parseInt(day, 10) - 1;
 
-			if (
-				!grouped.has(key) ||
-				mapped.temp_max > (grouped.get(key)?.temp_max ?? -Infinity)
-			) {
-				grouped.set(key, mapped);
+			const existing = g[dayIdx][monthIdx];
+			if (!existing || d.temp_max > existing.temp_max) {
+				g[dayIdx][monthIdx] = d;
 			}
+			if (d.temp_max < minT) minT = d.temp_max;
+			if (d.temp_max > maxT) maxT = d.temp_max;
 		}
-		return Array.from(grouped.values());
+
+		return { grid: g, minTemp: minT, maxTemp: maxT };
 	}, []);
 
-	const tempMaxArray = data.map((d) => d.temp_max);
-	const minTemp = Math.min(...tempMaxArray);
-	const maxTemp = Math.max(...tempMaxArray);
-
-	const colorScale = scaleSequential(interpolateYlGnBu).domain([
-		minTemp,
-		maxTemp,
-	]);
-
-	const [selectedDay, setSelectedDay] = useState<WeatherData | null>(
-		data.find((d) => d.temp_max === maxTemp) || data[0],
+	const colorScale = useMemo(
+		() => scaleSequential(interpolateYlGnBu).domain([minTemp, maxTemp]),
+		[minTemp, maxTemp],
 	);
 
-	const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
-	const yTicks = [1, 5, 10, 15, 20, 25, 30];
+	// Default selection: hottest day in the dataset.
+	const [selectedDay, setSelectedDay] = useState<WeatherData | null>(() => {
+		let hottest: WeatherData | null = null;
+		for (const row of grid) {
+			for (const cell of row) {
+				if (cell && (!hottest || cell.temp_max > hottest.temp_max)) {
+					hottest = cell;
+				}
+			}
+		}
+		return hottest;
+	});
 
 	const gradientStops = Array.from({ length: 10 })
 		.map((_, i) => {
@@ -89,60 +85,6 @@ export function Visualization() {
 		})
 		.join(", ");
 
-	const CustomShape = (props: Record<string, unknown>) => {
-		const { cx, cy, payload } = props as {
-			cx?: number;
-			cy?: number;
-			payload?: WeatherData;
-		};
-		if (cx == null || cy == null || !payload) return null;
-
-		// Visible cell is 24x24, but the actual pitch between data points is
-		// larger, so we add an invisible larger hit rect to cover the gap and
-		// catch clicks that fall between the visible cells.
-		const cellWidth = 24;
-		const cellHeight = 24;
-		const hitWidth = 36;
-		const hitHeight = 32;
-
-		const isSelected = selectedDay && selectedDay.date === payload.date;
-
-		return (
-			// biome-ignore lint/a11y/useSemanticElements: SVG <g> cannot be a <button>
-			<g
-				onClick={() => setSelectedDay(payload)}
-				onKeyDown={(e) => {
-					if (e.key === "Enter" || e.key === " ") {
-						setSelectedDay(payload);
-					}
-				}}
-				role="button"
-				tabIndex={0}
-				className="cursor-pointer transition-transform active:scale-95"
-			>
-				<rect
-					x={cx - hitWidth / 2}
-					y={cy - hitHeight / 2}
-					width={hitWidth}
-					height={hitHeight}
-					fill="transparent"
-				/>
-				<rect
-					x={cx - cellWidth / 2}
-					y={cy - cellHeight / 2}
-					width={cellWidth}
-					height={cellHeight}
-					fill={colorScale(payload.temp_max)}
-					stroke={isSelected ? "#1e293b" : "none"}
-					strokeWidth={isSelected ? 2 : 0}
-					rx={4}
-					ry={4}
-					pointerEvents="none"
-				/>
-			</g>
-		);
-	};
-
 	return (
 		<div className="flex flex-col w-full h-full bg-slate-50 relative overflow-hidden font-sans">
 			{/* Header */}
@@ -150,8 +92,6 @@ export function Visualization() {
 				<h1 className="text-xl font-bold text-slate-800 tracking-tight">
 					Seattle Daily Max Temp
 				</h1>
-
-				{/* Legend */}
 				<div className="flex items-center gap-2 text-xs font-medium text-slate-500 mt-1">
 					<span>{Math.round(minTemp)}°C</span>
 					<div
@@ -164,41 +104,73 @@ export function Visualization() {
 				</div>
 			</div>
 
-			{/* Scrollable Chart Area */}
-			<div className="flex-1 overflow-y-auto w-full relative pb-48 custom-scrollbar">
-				<div className="w-full h-[900px]">
-					<ResponsiveContainer width="100%" height="100%">
-						<ScatterChart margin={{ top: 30, right: 24, bottom: 20, left: 10 }}>
-							<XAxis
-								type="number"
-								dataKey="monthIndex"
-								domain={[0, 11]}
-								tickFormatter={(val) => months[val]}
-								tick={{ fontSize: 13, fill: "#64748b", fontWeight: 600 }}
-								axisLine={false}
-								tickLine={false}
-								interval={0}
-								orientation="top"
-								tickMargin={10}
-							/>
-							<YAxis
-								type="number"
-								dataKey="dayOfMonth"
-								domain={[31, 1]}
-								ticks={yTicks}
-								tick={{ fontSize: 13, fill: "#64748b", fontWeight: 500 }}
-								axisLine={false}
-								tickLine={false}
-								width={36}
-								tickMargin={8}
-							/>
-							<Scatter
-								data={data}
-								shape={<CustomShape />}
-								isAnimationActive={false}
-							/>
-						</ScatterChart>
-					</ResponsiveContainer>
+			{/* Scrollable Heatmap */}
+			<div className="flex-1 overflow-y-auto w-full px-4 pt-4 pb-56 custom-scrollbar">
+				{/* Month header row */}
+				<div className="flex items-center mb-2">
+					<div className="w-7 shrink-0" />
+					<div className="grid grid-cols-12 flex-1 gap-1">
+						{MONTHS.map((m, i) => (
+							<div
+								// biome-ignore lint/suspicious/noArrayIndexKey: month order is fixed
+								key={`month-${i}`}
+								className="text-center text-[13px] font-semibold text-slate-500"
+							>
+								{m}
+							</div>
+						))}
+					</div>
+				</div>
+
+				{/* Day rows — flex-col-reverse renders day 1 at the bottom and day 31
+				    at the top, matching the original reversed Y axis. */}
+				<div className="flex flex-col-reverse gap-1">
+					{grid.map((row, dayIdx) => {
+						const day = dayIdx + 1;
+						return (
+							<div
+								// biome-ignore lint/suspicious/noArrayIndexKey: day order is fixed
+								key={`day-${dayIdx}`}
+								className="flex items-center"
+							>
+								<div className="w-7 shrink-0 pr-2 text-right text-[13px] font-medium text-slate-500">
+									{Y_LABEL_DAYS.has(day) ? day : ""}
+								</div>
+								<div className="grid grid-cols-12 flex-1 gap-1">
+									{row.map((cell, monthIdx) => {
+										if (!cell) {
+											return (
+												<div
+													// biome-ignore lint/suspicious/noArrayIndexKey: positions are fixed
+													key={`empty-${dayIdx}-${monthIdx}`}
+													className="aspect-square"
+												/>
+											);
+										}
+										const isSelected =
+											selectedDay !== null && selectedDay.date === cell.date;
+										return (
+											<button
+												type="button"
+												// biome-ignore lint/suspicious/noArrayIndexKey: positions are fixed
+												key={`cell-${dayIdx}-${monthIdx}`}
+												onClick={() => setSelectedDay(cell)}
+												aria-label={`${cell.date.split("T")[0]}: ${cell.temp_max}°C`}
+												className={`aspect-square rounded transition-transform active:scale-95 ${
+													isSelected
+														? "ring-2 ring-slate-800 ring-offset-1 ring-offset-slate-50 z-10"
+														: ""
+												}`}
+												style={{
+													backgroundColor: colorScale(cell.temp_max),
+												}}
+											/>
+										);
+									})}
+								</div>
+							</div>
+						);
+					})}
 				</div>
 			</div>
 
